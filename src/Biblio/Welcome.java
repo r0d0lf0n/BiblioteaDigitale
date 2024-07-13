@@ -25,6 +25,8 @@ public class Welcome extends JFrame {
 			public void run() {
 				try {
 					Welcome frame = new Welcome();
+					frame.setLocationRelativeTo(null);
+					frame.setResizable(false);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -37,6 +39,7 @@ public class Welcome extends JFrame {
 	 * Create the frame.
 	 */
 	public Welcome() {
+		super.setTitle("Main Window");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 732, 679);
 		contentPane = new JPanel();
@@ -47,10 +50,10 @@ public class Welcome extends JFrame {
 //		JLabel lblNewLabel = new JLabel("Hola Chicos");
 //		contentPane.add(lblNewLabel);
 		
-		JButton btnNewButton = new JButton("Click Me!");
+		JButton btnNewButton = new JButton("Open Panel One");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(btnNewButton, "Hola chicos!");
+//				JOptionPane.showMessageDialog(btnNewButton, "Hola chicos!");
 			}
 		});
 		contentPane.add(btnNewButton);
