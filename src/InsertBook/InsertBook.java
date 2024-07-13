@@ -1,24 +1,163 @@
 package InsertBook;
 
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
-public class InsertBook {
+import Biblio.LandingPageNew;
+
+import javax.swing.JTextField;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.SpringLayout;
+import javax.swing.JTextArea;
+import javax.swing.JButton;
+
+public class InsertBook extends JFrame implements ActionListener {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+	private JTextField textFieldTitle;
+	private JTextField textFieldAuthor;
+	private JLabel lblAuthor;
+	private JTextField textYear;
+	private JLabel lblYear;
+	private JLabel lblDescription;
+	private JTextField textFieldDescription;
+	private JButton btnSave;
+	private static JFrame mainFrame;
+	static LandingPageNew landing;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+	             	landing = new LandingPageNew();
+					mainFrame = new InsertBook();
+					mainFrame.setVisible(true);
+					mainFrame.setLocationByPlatform(isDefaultLookAndFeelDecorated());
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+		
+		mainFrame.addWindowListener(new WindowAdapter() {
+	        public void windowClosing(WindowEvent e) {
+//	        	System.out.println("Window is closing...");
+				landing.setVisible(true);
+//	            // Action to perform when the window is closing
+//	            int confirmed = JOptionPane.showConfirmDialog(
+//	                mainFrame,
+//	                "Are you sure you want to exit?",
+//	                "Exit Confirmation",
+//	                JOptionPane.YES_NO_OPTION
+//	            );
+//	
+//	            if (confirmed == JOptionPane.YES_OPTION) {
+//	                // Perform additional actions here if needed
+//	                System.out.println("Window is closing...");
+//	                mainFrame.dispose();
+//	            }
+            }
+		});
+	}
 	
-	JFrame frame = new JFrame();
-	JLabel label = new JLabel("Test");
-	
-	public InsertBook(){
-		label.setBounds(100, 160, 200, 40);
-		frame.add(label);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLocationRelativeTo(null);
-		frame.setSize(600, 600);
-		frame.setLayout(null);
-		frame.setResizable(false);
-		frame.setVisible(true);
+
+
+	/**
+	 * Create the frame.
+	 */
+	public InsertBook() {
+		setTitle("Insert Book");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+		SpringLayout sl_contentPane = new SpringLayout();
+		contentPane.setLayout(sl_contentPane);
+		
+		JLabel lblTitle = new JLabel("Title:");
+		sl_contentPane.putConstraint(SpringLayout.NORTH, lblTitle, 20, SpringLayout.NORTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.WEST, lblTitle, 10, SpringLayout.WEST, contentPane);
+		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		contentPane.add(lblTitle);
+		
+		textFieldTitle = new JTextField();
+		sl_contentPane.putConstraint(SpringLayout.NORTH, textFieldTitle, 6, SpringLayout.SOUTH, lblTitle);
+		sl_contentPane.putConstraint(SpringLayout.WEST, textFieldTitle, 0, SpringLayout.WEST, lblTitle);
+		sl_contentPane.putConstraint(SpringLayout.EAST, textFieldTitle, -277, SpringLayout.EAST, contentPane);
+		contentPane.add(textFieldTitle);
+		textFieldTitle.setColumns(10);
+		
+		textFieldAuthor = new JTextField();
+		sl_contentPane.putConstraint(SpringLayout.NORTH, textFieldAuthor, 0, SpringLayout.NORTH, textFieldTitle);
+		sl_contentPane.putConstraint(SpringLayout.WEST, textFieldAuthor, 55, SpringLayout.EAST, textFieldTitle);
+		sl_contentPane.putConstraint(SpringLayout.EAST, textFieldAuthor, -69, SpringLayout.EAST, contentPane);
+		textFieldAuthor.setColumns(10);
+		contentPane.add(textFieldAuthor);
+		
+		lblAuthor = new JLabel("Author:");
+		sl_contentPane.putConstraint(SpringLayout.NORTH, lblAuthor, 0, SpringLayout.NORTH, lblTitle);
+		sl_contentPane.putConstraint(SpringLayout.EAST, lblAuthor, -174, SpringLayout.EAST, contentPane);
+		lblAuthor.setHorizontalAlignment(SwingConstants.CENTER);
+		contentPane.add(lblAuthor);
+		
+		textYear = new JTextField();
+		sl_contentPane.putConstraint(SpringLayout.WEST, textYear, 10, SpringLayout.WEST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.EAST, textYear, 0, SpringLayout.EAST, textFieldTitle);
+		textYear.setColumns(10);
+		contentPane.add(textYear);
+		
+		lblYear = new JLabel("Year:");
+		sl_contentPane.putConstraint(SpringLayout.NORTH, textYear, 6, SpringLayout.SOUTH, lblYear);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, lblYear, 28, SpringLayout.SOUTH, textFieldTitle);
+		sl_contentPane.putConstraint(SpringLayout.WEST, lblYear, 0, SpringLayout.WEST, lblTitle);
+		lblYear.setHorizontalAlignment(SwingConstants.CENTER);
+		contentPane.add(lblYear);
+		
+		lblDescription = new JLabel("Description:");
+		sl_contentPane.putConstraint(SpringLayout.NORTH, lblDescription, 0, SpringLayout.NORTH, lblYear);
+		sl_contentPane.putConstraint(SpringLayout.WEST, lblDescription, 179, SpringLayout.EAST, lblYear);
+		lblDescription.setHorizontalAlignment(SwingConstants.CENTER);
+		contentPane.add(lblDescription);
+		
+		textFieldDescription = new JTextField();
+		sl_contentPane.putConstraint(SpringLayout.NORTH, textFieldDescription, 0, SpringLayout.NORTH, textYear);
+		sl_contentPane.putConstraint(SpringLayout.WEST, textFieldDescription, 0, SpringLayout.WEST, textFieldAuthor);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, textFieldDescription, -42, SpringLayout.SOUTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.EAST, textFieldDescription, -30, SpringLayout.EAST, contentPane);
+		textFieldDescription.setColumns(10);
+		contentPane.add(textFieldDescription);
+		
+		btnSave = new JButton("Save");
+		btnSave.addActionListener(this);
+		sl_contentPane.putConstraint(SpringLayout.WEST, btnSave, 0, SpringLayout.WEST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnSave, -10, SpringLayout.SOUTH, contentPane);
+		contentPane.add(btnSave);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnSave) {
+			textFieldDescription.setText("");
+			textYear.setText("");
+			textFieldAuthor.setText("");
+			textFieldTitle.setText("");
+			JOptionPane.showMessageDialog(null, "Book saved successfully!", "Book saved", JOptionPane.PLAIN_MESSAGE);
+//			this.dispose();
+		}
 	}
 }

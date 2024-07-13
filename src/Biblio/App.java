@@ -17,29 +17,11 @@ import java.awt.event.ActionEvent;
 
 public class App {
 
-//	private static final long serialVersionUID = 1L;
-//	private JPanel contentPane;
-
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		LandingPage landing = new LandingPage();
-		
-		
-		
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-////					App frame = new App();
-////					frame.setLocationRelativeTo(null);
-////					frame.setResizable(false);
-////					frame.setVisible(true);
-////					LandingPage landing = new LandingPage();
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
+		LandingPageNew landing = new LandingPageNew();
+		landing.setVisible(true);
 	}
 }
