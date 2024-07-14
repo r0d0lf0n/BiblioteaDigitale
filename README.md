@@ -1,2 +1,2 @@
-# BiblioteaDigitale
+# BibliotecaDigitale
 Java final project
