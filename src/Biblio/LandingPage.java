@@ -9,9 +9,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import InsertBook.InsertBook;
-import ShowCatalog.ShowCatalog;
-import ShowCatalog.ShowCatalog;
+import InsertBook.InsertBookView;
+import ShowCatalog.ShowCatalogView;
+import ShowCatalog.ShowCatalogView;
 
 public class LandingPage implements ActionListener {
 	
@@ -43,13 +43,13 @@ public class LandingPage implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == insertBookButton) {
 //			frame.setVisible(false);
-			InsertBook insertBook = new InsertBook();
+			InsertBookView insertBook = new InsertBookView();
 			insertBook.setVisible(true);
 		} 
 		
 		if (e.getSource() == showCatalogButton) {
 //			frame.setVisible(false);
-			ShowCatalog showCatalog = new ShowCatalog();
+			ShowCatalogView showCatalog = new ShowCatalogView();
 			showCatalog.setVisible(true);
 //			showCatalog.main(null);
 	    }

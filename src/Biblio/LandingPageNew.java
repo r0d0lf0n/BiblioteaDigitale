@@ -6,8 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import InsertBook.InsertBook;
-import ShowCatalog.ShowCatalog;
+import InsertBook.InsertBookView;
+import ShowCatalog.ShowCatalogView;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -50,7 +50,7 @@ public class LandingPageNew extends JFrame {
 		JButton btnInsertBook = new JButton("Open Insert Book Window");
 		btnInsertBook.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				InsertBook insertBook = new InsertBook();
+				InsertBookView insertBook = new InsertBookView();
 				insertBook.setVisible(true);
 			}
 		});
@@ -65,7 +65,7 @@ public class LandingPageNew extends JFrame {
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnShowCatalog, 0, SpringLayout.WEST, btnInsertBook);
 		btnShowCatalog.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ShowCatalog showCatalog = new ShowCatalog();
+				ShowCatalogView showCatalog = new ShowCatalogView();
 				showCatalog.setVisible(true);
 			}
 		});

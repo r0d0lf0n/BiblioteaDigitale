@@ -20,7 +20,7 @@ import javax.swing.SpringLayout;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 
-public class InsertBook extends JFrame implements ActionListener {
+public class InsertBookView extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -43,7 +43,7 @@ public class InsertBook extends JFrame implements ActionListener {
 //			public void run() {
 //				try {
 	             	landing = new LandingPageNew();
-					mainFrame = new InsertBook();
+					mainFrame = new InsertBookView();
 					mainFrame.setVisible(true);
 					mainFrame.setLocationByPlatform(isDefaultLookAndFeelDecorated());
 //				} catch (Exception e) {
@@ -78,7 +78,7 @@ public class InsertBook extends JFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 */
-	public InsertBook() {
+	public InsertBookView() {
 		setTitle("Insert Book");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
