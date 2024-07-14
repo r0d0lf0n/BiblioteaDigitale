@@ -1,4 +1,4 @@
-package Biblio;
+package bibliotecaDigitale;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -9,9 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import InsertBook.InsertBookView;
-import ShowCatalog.ShowCatalogView;
-import ShowCatalog.ShowCatalogView;
+import views.InsertBookView;
+import views.ShowCatalogView;
 
 public class LandingPage implements ActionListener {
 	

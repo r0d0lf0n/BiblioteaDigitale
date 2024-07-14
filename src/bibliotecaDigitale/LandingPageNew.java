@@ -1,4 +1,4 @@
-package Biblio;
+package bibliotecaDigitale;
 
 import java.awt.EventQueue;
 
@@ -6,8 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import InsertBook.InsertBookView;
-import ShowCatalog.ShowCatalogView;
+import views.InsertBookView;
+import views.ShowCatalogView;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;

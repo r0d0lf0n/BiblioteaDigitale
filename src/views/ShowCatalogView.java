@@ -1,4 +1,4 @@
-package ShowCatalog;
+package views;
 
 import java.awt.EventQueue;
 import java.awt.Frame;
@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-import Biblio.LandingPageNew;
+import bibliotecaDigitale.LandingPageNew;
 
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
