@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
+import bibliotecaDigitale.CatalogMain;
 import controllers.UserAdminController;
 import models.Observer;
 
@@ -73,8 +74,9 @@ public class UserAdminView extends JFrame implements Observer{
         sl_contentPane.putConstraint(SpringLayout.WEST, btnShowCatalog, 0, SpringLayout.WEST, btnInsertBook);
         btnShowCatalog.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                CatalogView catalog = new CatalogView();
-                catalog.setVisible(true);
+            	CatalogMain catalog = new CatalogMain();
+//                CatalogView catalog = new CatalogView();
+//                catalog.setVisible(true);
             }
         });
         contentPane.add(btnShowCatalog);
