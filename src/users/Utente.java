@@ -13,21 +13,23 @@ public abstract class Utente {
 	private String codiceFiscale = "";
 	private Roles ruolo;
 	private int idTessera;
-	
+
 	public Utente(Roles ruolo) {
 		this.ruolo = ruolo;
 	}
-	
 
 	public String getNome() {
 		return nome;
 	}
+
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+
 	public String getCognome() {
 		return cognome;
 	}
+
 	public void setCognome(String cognome) {
 		this.cognome = cognome;
 	}
@@ -36,11 +38,9 @@ public abstract class Utente {
 		return codiceFiscale;
 	}
 
-
 	public void setCodiceFiscale(String codiceFiscale) {
 		this.codiceFiscale = codiceFiscale;
 	}
-
 
 	public Roles getRuolo() {
 		return ruolo;
@@ -49,7 +49,7 @@ public abstract class Utente {
 	public void setIdTessera(int idTessera) {
 		this.idTessera = idTessera;
 	}
-	
+
 	public int getIdTessera() {
 		return idTessera;
 	}

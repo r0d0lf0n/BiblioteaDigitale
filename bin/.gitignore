@@ -1,11 +1,5 @@
-/Biblio/
-/InsertBook/
-/ShowCatalog/
-/module-info.class
-/users/
 /bibliotecaDigitale/
-/model/
-/view/
+/views/
 /controllers/
 /models/
-/views/
+/users/

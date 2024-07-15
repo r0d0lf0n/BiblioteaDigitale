@@ -1,56 +1,79 @@
 package bibliotecaDigitale;
 
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.EventQueue;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import controllers.CatalogController;
 import views.InsertBookView;
-import views.ShowCatalogView;
+import views.CatalogView;
 
-public class LandingPage implements ActionListener {
-	
-	JFrame frame = new JFrame();
-	JButton insertBookButton = new JButton("Open Insert Book Frame");
-	JButton showCatalogButton = new JButton("Open Book catalog");
-	
-    LandingPage() {
-		insertBookButton.setBounds(100, 160, 200, 40);
-		insertBookButton.setFocusable(false);
-		insertBookButton.addActionListener(this);
-		
-		showCatalogButton.setBounds(100, 160, 200, 40);
-		showCatalogButton.setFocusable(false);
-		showCatalogButton.addActionListener(this);
-		
-		frame.add(insertBookButton);
-		frame.add(showCatalogButton);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		frame.setLocationRelativeTo(null);
-		frame.pack();
-		frame.setSize(600, 600);
-		frame.setLayout(new FlowLayout());
-		frame.setResizable(false);
-		frame.setVisible(true);
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.SpringLayout;
+import javax.swing.JLabel;
+
+public class LandingPage extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					LandingPage frame = new LandingPage();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == insertBookButton) {
-//			frame.setVisible(false);
-			InsertBookView insertBook = new InsertBookView();
-			insertBook.setVisible(true);
-		} 
-		
-		if (e.getSource() == showCatalogButton) {
-//			frame.setVisible(false);
-			ShowCatalogView showCatalog = new ShowCatalogView();
-			showCatalog.setVisible(true);
-//			showCatalog.main(null);
-	    }
-    }
+	/**
+	 * Create the frame.
+	 */
+	public LandingPage() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		setContentPane(contentPane);
+
+		JButton btnInsertBook = new JButton("Open Insert Book Window");
+		btnInsertBook.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				InsertBookView insertBook = new InsertBookView();
+				insertBook.setVisible(true);
+			}
+		});
+		SpringLayout sl_contentPane = new SpringLayout();
+		sl_contentPane.putConstraint(SpringLayout.NORTH, btnInsertBook, 10, SpringLayout.NORTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.WEST, btnInsertBook, 17, SpringLayout.WEST, contentPane);
+		contentPane.setLayout(sl_contentPane);
+		contentPane.add(btnInsertBook);
+
+		JButton btnShowCatalog = new JButton("Open Show Catalog Window");
+		sl_contentPane.putConstraint(SpringLayout.NORTH, btnShowCatalog, 19, SpringLayout.SOUTH, btnInsertBook);
+		sl_contentPane.putConstraint(SpringLayout.WEST, btnShowCatalog, 0, SpringLayout.WEST, btnInsertBook);
+		btnShowCatalog.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CatalogMain catalog = new CatalogMain();
+			}
+		});
+		contentPane.add(btnShowCatalog);
+
+		JLabel lblNewLabel = new JLabel("LANDING PAGE (To Be Designed)");
+		sl_contentPane.putConstraint(SpringLayout.NORTH, lblNewLabel, 68, SpringLayout.SOUTH, btnShowCatalog);
+		sl_contentPane.putConstraint(SpringLayout.EAST, lblNewLabel, -101, SpringLayout.EAST, contentPane);
+		contentPane.add(lblNewLabel);
+	}
 }

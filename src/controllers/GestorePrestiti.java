@@ -11,21 +11,21 @@ import models.Prestito;
  * 
  */
 public class GestorePrestiti {
-	
+
 	/**
 	 * singleton
 	 */
 	private GestorePrestiti _instance = null;
 	private int idTransazione = 0;
-	
+
 	private HashSet<Prestito> storicoPrestiti = null;
-	
+
 	private GestorePrestiti() {
 		storicoPrestiti = new HashSet<Prestito>();
 	}
-	
+
 	public GestorePrestiti getInstance() {
-		if(_instance == null)
+		if (_instance == null)
 			_instance = new GestorePrestiti();
 		return _instance;
 	}
@@ -39,7 +39,5 @@ public class GestorePrestiti {
 		p.setIdTransazione(idTransazione);
 		storicoPrestiti.add(p);
 	}
-	
-	
-	
+
 }

@@ -9,25 +9,28 @@ import java.util.Date;
  * 
  */
 public class Prestito {
-	
+
 	private int idTransazione;
 	private Date dataPresito;
 	private Date dataConsegna;
 	private Libro libroConsultato;
-	
+
 	public Prestito() {
 		// default constructor
 	}
-	
+
 	public Date getDataPresito() {
 		return dataPresito;
 	}
+
 	public void setDataPresito(Date dataPresito) {
 		this.dataPresito = dataPresito;
 	}
+
 	public Date getDataConsegna() {
 		return dataConsegna;
 	}
+
 	public void setDataConsegna(Date dataConsegna) {
 		this.dataConsegna = dataConsegna;
 	}
@@ -47,6 +50,5 @@ public class Prestito {
 	public void setIdTransazione(int idTransazione) {
 		this.idTransazione = idTransazione;
 	}
-	
 
 }

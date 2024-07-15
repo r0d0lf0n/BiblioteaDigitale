@@ -6,6 +6,6 @@ package models;
 /**
  * 
  */
-public class Libro implements LibroIF{
+public class Libro implements LibroIF {
 
 }

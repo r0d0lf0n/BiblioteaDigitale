@@ -21,7 +21,7 @@ public class App {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		LandingPageNew landing = new LandingPageNew();
+		LandingPage landing = new LandingPage();
 		landing.setVisible(true);
 	}
 }

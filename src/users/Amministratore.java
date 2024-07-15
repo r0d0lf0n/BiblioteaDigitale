@@ -14,5 +14,5 @@ public class Amministratore extends Utente {
 		setCognome(cognome);
 		setCodiceFiscale(codiceFiscale);
 	}
-	
+
 }

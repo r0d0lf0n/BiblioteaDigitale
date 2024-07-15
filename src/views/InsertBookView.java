@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import bibliotecaDigitale.LandingPageNew;
+import bibliotecaDigitale.LandingPage;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -33,7 +33,7 @@ public class InsertBookView extends JFrame implements ActionListener {
 	private JTextField textFieldDescription;
 	private JButton btnSave;
 	private static JFrame mainFrame;
-	static LandingPageNew landing;
+	static LandingPage landing;
 
 	/**
 	 * Launch the application.
@@ -42,18 +42,18 @@ public class InsertBookView extends JFrame implements ActionListener {
 //		EventQueue.invokeLater(new Runnable() {
 //			public void run() {
 //				try {
-	             	landing = new LandingPageNew();
-					mainFrame = new InsertBookView();
-					mainFrame.setVisible(true);
-					mainFrame.setLocationByPlatform(isDefaultLookAndFeelDecorated());
+		landing = new LandingPage();
+		mainFrame = new InsertBookView();
+		mainFrame.setVisible(true);
+		mainFrame.setLocationByPlatform(isDefaultLookAndFeelDecorated());
 //				} catch (Exception e) {
 //					e.printStackTrace();
 //				}
 //			}
 //		});
-		
+
 		mainFrame.addWindowListener(new WindowAdapter() {
-	        public void windowClosing(WindowEvent e) {
+			public void windowClosing(WindowEvent e) {
 //	        	System.out.println("Window is closing...");
 				landing.setVisible(true);
 //	            // Action to perform when the window is closing
@@ -69,11 +69,9 @@ public class InsertBookView extends JFrame implements ActionListener {
 //	                System.out.println("Window is closing...");
 //	                mainFrame.dispose();
 //	            }
-            }
+			}
 		});
 	}
-	
-
 
 	/**
 	 * Create the frame.
@@ -88,52 +86,52 @@ public class InsertBookView extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 		SpringLayout sl_contentPane = new SpringLayout();
 		contentPane.setLayout(sl_contentPane);
-		
+
 		JLabel lblTitle = new JLabel("Title:");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, lblTitle, 20, SpringLayout.NORTH, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.WEST, lblTitle, 10, SpringLayout.WEST, contentPane);
 		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblTitle);
-		
+
 		textFieldTitle = new JTextField();
 		sl_contentPane.putConstraint(SpringLayout.NORTH, textFieldTitle, 6, SpringLayout.SOUTH, lblTitle);
 		sl_contentPane.putConstraint(SpringLayout.WEST, textFieldTitle, 0, SpringLayout.WEST, lblTitle);
 		sl_contentPane.putConstraint(SpringLayout.EAST, textFieldTitle, -277, SpringLayout.EAST, contentPane);
 		contentPane.add(textFieldTitle);
 		textFieldTitle.setColumns(10);
-		
+
 		textFieldAuthor = new JTextField();
 		sl_contentPane.putConstraint(SpringLayout.NORTH, textFieldAuthor, 0, SpringLayout.NORTH, textFieldTitle);
 		sl_contentPane.putConstraint(SpringLayout.WEST, textFieldAuthor, 55, SpringLayout.EAST, textFieldTitle);
 		sl_contentPane.putConstraint(SpringLayout.EAST, textFieldAuthor, -69, SpringLayout.EAST, contentPane);
 		textFieldAuthor.setColumns(10);
 		contentPane.add(textFieldAuthor);
-		
+
 		lblAuthor = new JLabel("Author:");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, lblAuthor, 0, SpringLayout.NORTH, lblTitle);
 		sl_contentPane.putConstraint(SpringLayout.EAST, lblAuthor, -174, SpringLayout.EAST, contentPane);
 		lblAuthor.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblAuthor);
-		
+
 		textYear = new JTextField();
 		sl_contentPane.putConstraint(SpringLayout.WEST, textYear, 10, SpringLayout.WEST, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.EAST, textYear, 0, SpringLayout.EAST, textFieldTitle);
 		textYear.setColumns(10);
 		contentPane.add(textYear);
-		
+
 		lblYear = new JLabel("Year:");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, textYear, 6, SpringLayout.SOUTH, lblYear);
 		sl_contentPane.putConstraint(SpringLayout.NORTH, lblYear, 28, SpringLayout.SOUTH, textFieldTitle);
 		sl_contentPane.putConstraint(SpringLayout.WEST, lblYear, 0, SpringLayout.WEST, lblTitle);
 		lblYear.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblYear);
-		
+
 		lblDescription = new JLabel("Description:");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, lblDescription, 0, SpringLayout.NORTH, lblYear);
 		sl_contentPane.putConstraint(SpringLayout.WEST, lblDescription, 179, SpringLayout.EAST, lblYear);
 		lblDescription.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblDescription);
-		
+
 		textFieldDescription = new JTextField();
 		sl_contentPane.putConstraint(SpringLayout.NORTH, textFieldDescription, 0, SpringLayout.NORTH, textYear);
 		sl_contentPane.putConstraint(SpringLayout.WEST, textFieldDescription, 0, SpringLayout.WEST, textFieldAuthor);
@@ -141,7 +139,7 @@ public class InsertBookView extends JFrame implements ActionListener {
 		sl_contentPane.putConstraint(SpringLayout.EAST, textFieldDescription, -30, SpringLayout.EAST, contentPane);
 		textFieldDescription.setColumns(10);
 		contentPane.add(textFieldDescription);
-		
+
 		btnSave = new JButton("Save");
 		btnSave.addActionListener(this);
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnSave, 0, SpringLayout.WEST, contentPane);
