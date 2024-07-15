@@ -14,17 +14,17 @@ import models.Observer;
  */
 public class UserAdminController implements Observable{
 	
-	private List<Observer> observers = new ArrayList<Observer>();
+	private List<Observer> observers = null;
     private Object obj;
 	
 	
 	public UserAdminController() {
-		// empty
+		observers = new ArrayList<Observer>();
 	}
 
-    public void setChanged(Object obj) {
+    public void setChanged(String type, Object obj) {
         this.obj = obj;
-        notifyObservers(obj); // Notifica gli osservatori con il nuovo stato
+        notifyObservers(type, obj); // Notifica gli osservatori con il nuovo stato
     }
 
     @Override
@@ -38,9 +38,9 @@ public class UserAdminController implements Observable{
     }
 
     @Override
-    public void notifyObservers(Object arg) {
+    public void notifyObservers(String type, Object arg) {
         for (Observer observer : observers) {
-            observer.update(arg); // Aggiorna ciascun osservatore con il nuovo stato
+            observer.update(type, arg); // Aggiorna ciascun osservatore con il nuovo stato
         }
     }
 	

@@ -3,6 +3,8 @@
  */
 package bibliotecaDigitale;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,22 +36,70 @@ public class Orchestrator {
 
 	public void startApp() {
 
-		SwingUtilities.invokeLater(() -> {
-           new UserAdminView(admin.getNome(), admin.getCognome(), admin.getCodiceFiscale()).setVisible(true);
+		
+		 SwingUtilities.invokeLater(() -> {
+	            int totalFrames = 1 + externalUsers.size() + registeredUsers.size(); // Total number of frames to display
+	            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	            int frameWidth = 400;
+	            int frameHeight = 300;
+	            int rows = 2;
+	            int cols = 3;
+	            int gap = 10;
+	            int startX = (screenSize.width - (cols * frameWidth + (cols - 1) * gap)) / 2;
+	            int startY = (screenSize.height - (rows * frameHeight + (rows - 1) * gap)) / 2;
+
+	            // Position the admin view
+	            UserAdminView adminFrame = new UserAdminView(admin.getNome(), admin.getCognome(), admin.getCodiceFiscale());
+	            adminFrame.setLocation(startX, startY);
+	            adminFrame.setVisible(true);
+
+	            int x = startX;
+	            int y = startY + frameHeight + gap;
+
+	            // Position the external user views
+	            for (Utente user : externalUsers) {
+	                ExternalUserView externalUserFrame = new ExternalUserView();
+	                externalUserFrame.setLocation(x, y);
+	                externalUserFrame.setVisible(true);
+	                x += frameWidth + gap;
+	                if (x + frameWidth > screenSize.width) {
+	                    x = startX;
+	                    y += frameHeight + gap;
+	                }
+	            }
+
+	            // Position the registered user views
+	            for (Utente user : registeredUsers) {
+	                RegisteredUserView registeredUserFrame = new RegisteredUserView(user);
+	                registeredUserFrame.setLocation(x, y);
+	                registeredUserFrame.setVisible(true);
+	                x += frameWidth + gap;
+	                if (x + frameWidth > screenSize.width) {
+	                    x = startX;
+	                    y += frameHeight + gap;
+	                }
+	            }
+	        });
+	/*	SwingUtilities.invokeLater(() -> {
+           UserAdminView frame = new UserAdminView(admin.getNome(), admin.getCognome(), admin.getCodiceFiscale());
+           frame.setVisible(true);
         });
 		
 		for (int i = 0; i < externalUsers.size(); i++) {
 			SwingUtilities.invokeLater(() -> {
-				new ExternalUserView().setVisible(true);
+				ExternalUserView frame = new ExternalUserView();
+				frame.setVisible(true);
 			});
 		}
 		
 		for (int i = 0; i < registeredUsers.size(); i++) {
 			Utente utente = registeredUsers.get(i);
 			SwingUtilities.invokeLater(() -> {
-				new RegisteredUserView(utente).setVisible(true);
+				RegisteredUserView frame = new RegisteredUserView(utente);
+				frame.setVisible(true);
 			});
-		}
+		}*/
+		
 		
 	}
 
@@ -76,3 +126,4 @@ public class Orchestrator {
 	}
 
 }
+

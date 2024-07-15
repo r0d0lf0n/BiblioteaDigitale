@@ -89,20 +89,10 @@ public class UserAdminView extends JFrame implements Observer{
 
 
 	@Override
-	public void update(Object arg) {
+	public void update(String type, Object arg) {
 		// TODO Auto-generated method stub
 		System.out.println("Observer Notification");
 		
 	}
 
-  /*  public static void main(String[] args) {
-        String firstName = "Mario";
-        String lastName = "Rossi";
-        String codiceFiscale = "RSSMRA80A01H501U";
-
-        SwingUtilities.invokeLater(() -> {
-            UserAdminPanel adminPanel = new UserAdminPanel(firstName, lastName, codiceFiscale);
-            adminPanel.setVisible(true);
-        });
-    } */
 }

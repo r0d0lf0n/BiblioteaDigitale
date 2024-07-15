@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -19,9 +20,13 @@ public class RegisteredUserView extends JFrame implements Observer {
 
     private static final long serialVersionUID = 1L;
     private final RegisteredUserController controller;
+    private DefaultComboBoxModel<String> comboGenereModel = null;
 
+    
     public RegisteredUserView(Utente utente) {
+    	//new
         controller = new RegisteredUserController();
+        comboGenereModel = new DefaultComboBoxModel<String>();
 
         // Impostazioni del layout per il pannello
         setLayout(new BorderLayout());
@@ -58,11 +63,15 @@ public class RegisteredUserView extends JFrame implements Observer {
         userDataPanel.add(txtNumeroTessera);
 
         // Pannello per i campi di ricerca
-        JPanel searchPanel = new JPanel();
+        JPanel searchPanel = new JPanel(new GridLayout(4,1,10,5));
+        searchPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Aggiunge margine
+
         searchPanel.add(new JLabel("Genere letterario:"));
-        searchPanel.add(new JComboBox<>(new String[]{"Romanzo", "Fantasy", "Thriller"})); // Esempio di JComboBox
+        searchPanel.add(new JComboBox<String>(comboGenereModel)); 
+        
         searchPanel.add(new JLabel("Autore:"));
         searchPanel.add(new JTextField(15)); // Esempio di JTextField per l'autore
+        
         searchPanel.add(new JLabel("Titolo:"));
         searchPanel.add(new JTextField(15)); // Esempio di JTextField per il titolo
 
@@ -100,22 +109,28 @@ public class RegisteredUserView extends JFrame implements Observer {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Aggiunge l'observer
-        controller.addObserver(arg -> {
-            // Logica di aggiornamento, per ora stampa solo un messaggio
-            System.out.println("Observer Notification");
-        });
+        controller.addObserver(this);
+        
+        populateData();
     }
 
-    @Override
-    public void update(Object arg) {
+    private void populateData() {
+		// TODO Auto-generated method stub
+		controller.getGenereList();
+	}
+
+	@Override
+    public void update(String type, Object arg) {
         // TODO Auto-generated method stub
         System.out.println("Observer Notification");
+        
+        if(type.equals("COMBOBOX_GENERI")) {
+        	comboGenereModel.removeAllElements();
+        	for (String item : (String[])arg) {
+        		comboGenereModel.addElement(item); // Add updated items to the model
+            }
+        }
     }
 
-/*    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            RegisteredUserView frame = new RegisteredUserView();
-            frame.setVisible(true);
-        });
-    } */
+
 }

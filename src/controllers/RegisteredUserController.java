@@ -8,16 +8,16 @@ import models.Observer;
 
 public class RegisteredUserController implements Observable{
 	
-	private List<Observer> observers = new ArrayList<Observer>();
+	private List<Observer> observers = null;
     private Object obj;
 	
 	public RegisteredUserController() {
-		// empty
+		observers = new ArrayList<Observer>();
 	}
 
-    public void setChanged(Object obj) {
+    public void setChanged(String type, Object obj) {
         this.obj = obj;
-        notifyObservers(obj); // Notifica gli osservatori con il nuovo stato
+        notifyObservers(type, obj); // Notifica gli osservatori con il nuovo stato
     }
 
     @Override
@@ -31,11 +31,17 @@ public class RegisteredUserController implements Observable{
     }
 
     @Override
-    public void notifyObservers(Object arg) {
+    public void notifyObservers(String type, Object arg) {
         for (Observer observer : observers) {
-            observer.update(arg); // Aggiorna ciascun osservatore con il nuovo stato
+            observer.update(type, arg); // Aggiorna ciascun osservatore con il nuovo stato
         }
     }
+
+	public void getGenereList() {
+		String[] list = {"LISTA", "DA", "RIEMPIRE", "DA", "DB"}; //TODO itera sulle categorie, crea la lista e torna il risultato tramite observer
+		
+		setChanged("COMBOBOX_GENERI", list);
+	}
 	
 
 }

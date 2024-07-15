@@ -14,16 +14,16 @@ import models.Observer;
  */
 public class ExternalUserController implements Observable{
 	
-	private List<Observer> observers = new ArrayList<Observer>();
+	private List<Observer> observers = null;
     private Object obj;
 	
 	public ExternalUserController() {
-		// empty
+		observers = new ArrayList<Observer>();
 	}
 
-    public void setChanged(Object obj) {
+    public void setChanged(String type, Object obj) {
         this.obj = obj;
-        notifyObservers(obj); // Notifica gli osservatori con il nuovo stato
+        notifyObservers(type, obj); // Notifica gli osservatori con il nuovo stato
     }
 
     @Override
@@ -37,13 +37,25 @@ public class ExternalUserController implements Observable{
     }
 
     @Override
-    public void notifyObservers(Object arg) {
+    public void notifyObservers(String type, Object arg) {
         for (Observer observer : observers) {
-            observer.update(arg); // Aggiorna ciascun osservatore con il nuovo stato
+            observer.update(type, arg); // Aggiorna ciascun osservatore con il nuovo stato
         }
     }
 	
 	
+	public void getGenereList() {
+		String[] list = {"LISTA", "DA", "RIEMPIRE", "DA", "DB"}; //TODO itera sulle categorie, crea la lista e torna il risultato tramite observer
+		
+		setChanged("COMBOBOX_GENERI", list);
+		
+	}
 
+	public void search(String text, String text2, String string) {
+		// TODO Auto-generated method stub
+		String[] results = {};
+		
+		setChanged("SEARCH_RESULTS", results);
+	}
 
 }
