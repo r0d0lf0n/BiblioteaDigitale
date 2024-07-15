@@ -75,8 +75,6 @@ public class UserAdminView extends JFrame implements Observer{
         btnShowCatalog.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	CatalogMain catalog = new CatalogMain();
-//                CatalogView catalog = new CatalogView();
-//                catalog.setVisible(true);
             }
         });
         contentPane.add(btnShowCatalog);
