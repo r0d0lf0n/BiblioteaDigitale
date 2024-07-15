@@ -1,19 +1,14 @@
 package bibliotecaDigitale;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.Reader;
 import java.net.URI;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
 import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvValidationException;
 
 import controllers.CatalogController;
 import views.CatalogView;

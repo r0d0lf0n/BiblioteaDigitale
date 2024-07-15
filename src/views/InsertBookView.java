@@ -1,26 +1,23 @@
 package views;
 
-import java.awt.EventQueue;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import bibliotecaDigitale.LandingPage;
-
-import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.SwingConstants;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SpringLayout;
-import javax.swing.JTextArea;
-import javax.swing.JButton;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
-public class InsertBookView extends JFrame implements ActionListener {
+public class InsertBookView extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -32,17 +29,18 @@ public class InsertBookView extends JFrame implements ActionListener {
 	private JLabel lblDescription;
 	private JTextField textFieldDescription;
 	private JButton btnSave;
-	private static JFrame mainFrame;
-	static LandingPage landing;
+	private JButton btnClose;
+	//private static JFrame mainFrame;
+	//static LandingPage landing;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+/*	public static void main(String[] args) {
 //		EventQueue.invokeLater(new Runnable() {
 //			public void run() {
 //				try {
-		landing = new LandingPage();
+		//landing = new LandingPage();
 		mainFrame = new InsertBookView();
 		mainFrame.setVisible(true);
 		mainFrame.setLocationByPlatform(isDefaultLookAndFeelDecorated());
@@ -55,7 +53,7 @@ public class InsertBookView extends JFrame implements ActionListener {
 		mainFrame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 //	        	System.out.println("Window is closing...");
-				landing.setVisible(true);
+				//landing.setVisible(true);
 //	            // Action to perform when the window is closing
 //	            int confirmed = JOptionPane.showConfirmDialog(
 //	                mainFrame,
@@ -69,17 +67,20 @@ public class InsertBookView extends JFrame implements ActionListener {
 //	                System.out.println("Window is closing...");
 //	                mainFrame.dispose();
 //	            }
+				
 			}
 		});
-	}
+	}*/
 
 	/**
 	 * Create the frame.
 	 */
 	public InsertBookView() {
-		setTitle("Insert Book");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("Insert a new Book");
 		setBounds(100, 100, 450, 300);
+        setLocationRelativeTo(null);
+
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -145,6 +146,29 @@ public class InsertBookView extends JFrame implements ActionListener {
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnSave, 0, SpringLayout.WEST, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnSave, -10, SpringLayout.SOUTH, contentPane);
 		contentPane.add(btnSave);
+		
+		btnClose = new JButton("Close");
+		btnClose.addActionListener(this);
+		sl_contentPane.putConstraint(SpringLayout.EAST, btnClose, 0, SpringLayout.EAST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnClose, -10, SpringLayout.SOUTH, contentPane);
+        btnClose.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                WindowEvent windowClosing = new WindowEvent(InsertBookView.this, WindowEvent.WINDOW_CLOSING);
+                Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(windowClosing);
+            }
+        });
+		contentPane.add(btnClose);
+		
+		 this.addWindowListener(new WindowAdapter() {
+	         @Override
+	         public void windowClosing(WindowEvent e) {
+
+	             dispose();
+	         }
+	     });
+		 
+	    setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
 	}
 
 	@Override
@@ -158,4 +182,5 @@ public class InsertBookView extends JFrame implements ActionListener {
 //			this.dispose();
 		}
 	}
+	
 }
