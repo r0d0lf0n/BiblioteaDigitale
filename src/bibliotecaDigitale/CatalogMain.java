@@ -10,7 +10,7 @@ import java.util.List;
 
 import com.opencsv.CSVReader;
 
-import controllers.CatalogController;
+import controllers.views.CatalogController;
 import views.CatalogView;
 
 public class CatalogMain {

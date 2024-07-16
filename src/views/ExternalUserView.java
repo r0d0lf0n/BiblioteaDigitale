@@ -16,8 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import controllers.ExternalUserController;
-import models.Observer;
+import controllers.views.ExternalUserController;
+import utils.Observer;
 
 public class ExternalUserView extends JFrame implements Observer {
 

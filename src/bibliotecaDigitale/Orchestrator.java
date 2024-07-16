@@ -10,12 +10,12 @@ import java.util.List;
 
 import javax.swing.SwingUtilities;
 
-import controllers.GestoreUtenti;
-import users.Amministratore;
-import users.Roles;
-import users.Utente;
-import users.UtenteEsterno;
-import users.UtenteRegistrato;
+import controllers.bl.GestoreUtenti;
+import models.users.Amministratore;
+import models.users.Roles;
+import models.users.Utente;
+import models.users.UtenteEsterno;
+import models.users.UtenteRegistrato;
 import views.ExternalUserView;
 import views.RegisteredUserView;
 import views.UserAdminView;

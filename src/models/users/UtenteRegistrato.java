@@ -1,11 +1,11 @@
 /**
  * 
  */
-package users;
+package models.users;
 
 import java.util.Hashtable;
 
-import models.Prestito;
+import models.bl.Prestito;
 
 /**
  * 

@@ -1,23 +1,17 @@
-/**
- * 
- */
-package controllers;
+package controllers.views;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import models.Observable;
-import models.Observer;
+import utils.Observable;
+import utils.Observer;
 
-/**
- * 
- */
-public class ExternalUserController implements Observable{
+public class RegisteredUserController implements Observable{
 	
 	private List<Observer> observers = null;
     private Object obj;
 	
-	public ExternalUserController() {
+	public RegisteredUserController() {
 		observers = new ArrayList<Observer>();
 	}
 
@@ -42,20 +36,12 @@ public class ExternalUserController implements Observable{
             observer.update(type, arg); // Aggiorna ciascun osservatore con il nuovo stato
         }
     }
-	
-	
+
 	public void getGenereList() {
 		String[] list = {"LISTA", "DA", "RIEMPIRE", "DA", "DB"}; //TODO itera sulle categorie, crea la lista e torna il risultato tramite observer
 		
 		setChanged("COMBOBOX_GENERI", list);
-		
 	}
-
-	public void search(String text, String text2, String string) {
-		// TODO Auto-generated method stub
-		String[] results = {};
-		
-		setChanged("SEARCH_RESULTS", results);
-	}
+	
 
 }

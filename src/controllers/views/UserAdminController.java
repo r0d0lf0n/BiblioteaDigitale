@@ -1,17 +1,24 @@
-package controllers;
+/**
+ * 
+ */
+package controllers.views;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import models.Observable;
-import models.Observer;
+import utils.Observable;
+import utils.Observer;
 
-public class RegisteredUserController implements Observable{
+/**
+ * 
+ */
+public class UserAdminController implements Observable{
 	
 	private List<Observer> observers = null;
     private Object obj;
 	
-	public RegisteredUserController() {
+	
+	public UserAdminController() {
 		observers = new ArrayList<Observer>();
 	}
 
@@ -36,12 +43,6 @@ public class RegisteredUserController implements Observable{
             observer.update(type, arg); // Aggiorna ciascun osservatore con il nuovo stato
         }
     }
-
-	public void getGenereList() {
-		String[] list = {"LISTA", "DA", "RIEMPIRE", "DA", "DB"}; //TODO itera sulle categorie, crea la lista e torna il risultato tramite observer
-		
-		setChanged("COMBOBOX_GENERI", list);
-	}
 	
 
 }

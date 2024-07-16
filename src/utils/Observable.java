@@ -1,4 +1,4 @@
-package models;
+package utils;
 
 public interface Observable {
     void addObserver(Observer observer);

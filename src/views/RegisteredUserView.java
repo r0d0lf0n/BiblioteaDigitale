@@ -12,9 +12,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import controllers.RegisteredUserController;
-import models.Observer;
-import users.Utente;
+import controllers.views.RegisteredUserController;
+import models.users.Utente;
+import utils.Observer;
 
 public class RegisteredUserView extends JFrame implements Observer {
 

@@ -13,8 +13,8 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
 import bibliotecaDigitale.CatalogMain;
-import controllers.UserAdminController;
-import models.Observer;
+import controllers.views.UserAdminController;
+import utils.Observer;
 
 
 
