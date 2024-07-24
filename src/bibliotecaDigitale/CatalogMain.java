@@ -32,6 +32,32 @@ public class CatalogMain {
 		config = new DatabaseConfig();
 		connectionSource = config.getdbConnection();
 		System.out.println(connectionSource);
+		
+		
+
+	 	
+        // create an instance of Account
+		Dao<User, String> userDao = config.getUserDao();
+        User user = new User();
+        user.setName("Jim");
+        user.setSurname("Coakley");
+        user.setPhone(null);
+        user.setRole(0);
+        user.setAddress("avenue 45");
+        
+
+        // persist the account object to the database
+        try {
+			userDao.create(user);
+	        // retrieve the account from the database by its id field (name)
+//	        User userTwo = userDao.queryForId(null)
+//	        System.out.println("User: " + userTwo.getName());
+	        // close the connection source
+//	        connectionSource.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void ShowView() {
