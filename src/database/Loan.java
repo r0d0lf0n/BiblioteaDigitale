@@ -1,6 +1,5 @@
 package database;
 
-import java.awt.print.Book;
 import java.sql.Date;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -8,10 +7,10 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "loan")
 public class Loan {
 	
-	@DatabaseField(canBeNull = false, foreign = true)
+	@DatabaseField(canBeNull = false, foreign = true, columnName = "user_id")
     private User user;
     
-    @DatabaseField(canBeNull = false, foreign = true)
+    @DatabaseField(canBeNull = false, foreign = true, columnName = "book_id")
     private Book book;
 
     @DatabaseField()
