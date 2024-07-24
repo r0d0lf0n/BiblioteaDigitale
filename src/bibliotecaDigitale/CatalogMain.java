@@ -5,18 +5,33 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import com.j256.ormlite.jdbc.JdbcPooledConnectionSource;
+import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.TableUtils;
 import com.opencsv.CSVReader;
-
 import controllers.views.CatalogController;
+import database.DatabaseConfig;
+import database.User;
 import views.CatalogView;
 
 public class CatalogMain {
+	
+	DatabaseConfig config;
+	ConnectionSource connectionSource;
 
 	public CatalogMain() {
 		ShowView();
+		config = new DatabaseConfig();
+		connectionSource = config.getdbConnection();
+		System.out.println(connectionSource);
 	}
 
 	public void ShowView() {

@@ -16,5 +16,14 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/Users/rodolfo.figueroamayo/.m2/repository/com/j256/ormlite/ormlite-jdbc/6.1/ormlite-jdbc-6.1.jar" sourcepath="/Users/rodolfo.figueroamayo/.m2/repository/com/j256/ormlite/ormlite-jdbc/6.1/ormlite-jdbc-6.1-sources.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="com.j256.ormlite"/>
+			<attribute name="maven.artifactId" value="ormlite-jdbc"/>
+			<attribute name="maven.version" value="6.1"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
