@@ -13,20 +13,20 @@ public class DatabaseConfig {
 	String dbfilepath  = "jdbc:sqlite:biblio.db";
 	ConnectionSource connectionSource;
 	Dao<User, String> userDao;
-//	Dao<Loan, String> loanDao;
-//	Dao<Book, String> bookDao;
+	Dao<Loan, String> loanDao;
+	Dao<Book, String> bookDao;
 	
 	public DatabaseConfig() {
 	     try {
 		  	System.out.println("Creating DB connection...");
 	        connectionSource = new JdbcConnectionSource(dbfilepath);
+	        TableUtils.createTableIfNotExists(connectionSource, Book.class);
 	        TableUtils.createTableIfNotExists(connectionSource, User.class);
-//	        TableUtils.createTableIfNotExists(connectionSource, Loan.class);
-//	        TableUtils.createTableIfNotExists(connectionSource, Book.class);
+	        TableUtils.createTableIfNotExists(connectionSource, Loan.class);
 	        
+			bookDao = DaoManager.createDao(connectionSource, Book.class);
 			userDao = DaoManager.createDao(connectionSource, User.class);
-//			loanDao = DaoManager.createDao(connectionSource, Loan.class);
-//			bookDao = DaoManager.createDao(connectionSource, Book.class);
+			loanDao = DaoManager.createDao(connectionSource, Loan.class);
 			System.out.println("DB connection created!");
 	     } catch (Exception e) {
 	          e.printStackTrace();
@@ -47,11 +47,11 @@ public class DatabaseConfig {
 		return userDao;
 	}
 	
-//	public Dao<Loan, String> getLoanDao() {
-//		return loanDao;
-//	}
+	public Dao<Loan, String> getLoanDao() {
+		return loanDao;
+	}
 	
-//	public Dao<Book, String> getBookDao() {
-//		return bookDao;
-//	}
+	public Dao<Book, String> getBookDao() {
+		return bookDao;
+	}
 }

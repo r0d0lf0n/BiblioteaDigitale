@@ -7,21 +7,25 @@ import com.j256.ormlite.table.DatabaseTable;
 public class User {
 
     @DatabaseField(generatedId = true)
-    int id;
+    private int id;
 
-    @DatabaseField(canBeNull = false)
+    @DatabaseField()
     private String name;
+   
+    @DatabaseField()
+    private String surname;
 
-    @DatabaseField
-    private int age;
-
+    @DatabaseField()
+    private String phone;
+    
+    @DatabaseField()
+    private String address;
+    
+    @DatabaseField()
+    private int role;
+    
     public User() {
         // ORMLite needs a no-arg constructor
-    }
-
-    public User(String name, int age) {
-        this.name = name;
-        this.age = age;
     }
 
     // Getters and setters
@@ -41,11 +45,35 @@ public class User {
         this.name = name;
     }
 
-    public int getAge() {
-        return age;
-    }
+    public String getSurname() {
+		return surname;
+	}
 
-    public void setAge(int age) {
-        this.age = age;
-    }
+	public void setSurname(String surname) {
+		this.surname = surname;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public int getRole() {
+		return role;
+	}
+
+	public void setRole(int role) {
+		this.role = role;
+	}
 }
