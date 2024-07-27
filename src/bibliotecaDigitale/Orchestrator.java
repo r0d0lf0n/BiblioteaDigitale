@@ -38,7 +38,7 @@ public class Orchestrator {
 	}
 
 	public void startApp() {
-		 SwingUtilities.invokeLater(() -> {
+//		 SwingUtilities.invokeLater(() -> {
 	            int totalFrames = 1 + externalUsers.size() + registeredUsers.size(); // Total number of frames to display
 	            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	            int frameWidth = 400;
@@ -80,7 +80,7 @@ public class Orchestrator {
 	                    y += frameHeight + gap;
 	                }
 	            }
-	        });
+//	        });
 	/*	SwingUtilities.invokeLater(() -> {
            UserAdminView frame = new UserAdminView(admin.getNome(), admin.getCognome(), admin.getCodiceFiscale());
            frame.setVisible(true);
