@@ -1,7 +1,6 @@
 package database;
 
 
-import java.sql.Connection;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
@@ -9,14 +8,17 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
 
-public class DatabaseConfig {
+public final class DatabaseConfig {
+    private static DatabaseConfig INSTANCE;
+    private String info = "Initial info class";
+    
 	String dbfilepath  = "jdbc:sqlite:biblio.db";
 	ConnectionSource connectionSource;
 	Dao<User, String> userDao;
 	Dao<Loan, String> loanDao;
 	Dao<Book, String> bookDao;
 	
-	public DatabaseConfig() {
+	private DatabaseConfig() {
 	     try {
 		  	System.out.println("Creating DB connection...");
 	        connectionSource = new JdbcConnectionSource(dbfilepath);
@@ -38,6 +40,14 @@ public class DatabaseConfig {
 	          }
 	     }
 	}
+	
+	 public static synchronized DatabaseConfig getInstance() {
+        if(INSTANCE == null) {
+            INSTANCE = new DatabaseConfig();
+        }
+        
+        return INSTANCE;
+    }
 	
 	public ConnectionSource getdbConnection() {
 		return connectionSource;

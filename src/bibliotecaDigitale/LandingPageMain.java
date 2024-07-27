@@ -1,7 +1,6 @@
 package bibliotecaDigitale;
 
 import com.j256.ormlite.support.ConnectionSource;
-
 import controllers.views.LandingPageController;
 import database.DatabaseConfig;
 import views.LandingPageView;
@@ -22,7 +21,7 @@ public class LandingPageMain {
 	}
 	
 	public void configDatabase() {
-		config = new DatabaseConfig();
+		config = DatabaseConfig.getInstance();
 		connectionSource = config.getdbConnection();
 		System.out.println(connectionSource);
 	}
