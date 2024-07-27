@@ -26,6 +26,7 @@ public class CatalogMain {
 	
 	DatabaseConfig config;
 	ConnectionSource connectionSource;
+	CatalogView catalogView;
 
 	public CatalogMain() {
 		ShowView();
@@ -68,7 +69,7 @@ public class CatalogMain {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		CatalogView catalogView = new CatalogView();
+	    catalogView = new CatalogView();
 		CatalogController catalogController = new CatalogController(catalogView, book_catalog);
 	}
 	
@@ -86,5 +87,9 @@ public class CatalogMain {
 	            return csvReader.readAll();
 	        }
 	    }
+	}
+	
+	public CatalogView getView() {
+		return catalogView;
 	}
 }

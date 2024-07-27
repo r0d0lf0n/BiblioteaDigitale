@@ -28,6 +28,7 @@ public class Orchestrator {
 	private Utente admin = null;
 	private List<Utente> registeredUsers = null;
 	private List<Utente> externalUsers = null;
+	UserAdminView adminFrame;
 	
 	public Orchestrator() {
 		registeredUsers = new ArrayList<Utente>();
@@ -49,7 +50,7 @@ public class Orchestrator {
 	            int startY = (screenSize.height - (rows * frameHeight + (rows - 1) * gap)) / 2;
 
 	            // Position the admin view
-	            UserAdminView adminFrame = new UserAdminView(admin.getNome(), admin.getCognome(), admin.getCodiceFiscale());
+	            adminFrame = new UserAdminView(admin.getNome(), admin.getCognome(), admin.getCodiceFiscale());
 	            adminFrame.setLocation(startX, startY);
 	            adminFrame.setVisible(true);
 
@@ -123,6 +124,10 @@ public class Orchestrator {
 			externalUsers.add(user1);
 		}
 		
+	}
+	
+	public UserAdminView getView() {
+		return adminFrame;
 	}
 
 }

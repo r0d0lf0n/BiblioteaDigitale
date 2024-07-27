@@ -10,12 +10,12 @@ import views.CatalogView;
 public class CatalogController {
 
 	private List<String[]> book_catalog;
-	private CatalogView view;
+	private CatalogView catalogView;
 	private DefaultTableModel model;
 	private JTable catalogTable;
 
 	public CatalogController(CatalogView view, List<String[]> catalog) {
-		this.view = view;
+		catalogView = view;
 		this.book_catalog = catalog;
 		view.setVisible(true);
 		InitialiazeTable();
@@ -32,8 +32,8 @@ public class CatalogController {
 			model.addRow(new Object[] {book[0], book[1]});
 		}
 
-		catalogTable = view.getCatalogTable();
+		catalogTable = catalogView.getCatalogTable();
 		catalogTable.setModel(model);
-		view.setCatalogTable(catalogTable);
+		catalogView.setCatalogTable(catalogTable);
 	}
 }
