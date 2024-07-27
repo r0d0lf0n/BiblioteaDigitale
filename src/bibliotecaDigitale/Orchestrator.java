@@ -29,6 +29,8 @@ public class Orchestrator {
 	private List<Utente> registeredUsers = null;
 	private List<Utente> externalUsers = null;
 	UserAdminView adminFrame;
+	RegisteredUserView registeredUserFrame;
+	ExternalUserView externalUserFrame;
 	
 	public Orchestrator() {
 		registeredUsers = new ArrayList<Utente>();
@@ -36,8 +38,6 @@ public class Orchestrator {
 	}
 
 	public void startApp() {
-
-		
 		 SwingUtilities.invokeLater(() -> {
 	            int totalFrames = 1 + externalUsers.size() + registeredUsers.size(); // Total number of frames to display
 	            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -59,7 +59,7 @@ public class Orchestrator {
 
 	            // Position the external user views
 	            for (Utente user : externalUsers) {
-	                ExternalUserView externalUserFrame = new ExternalUserView();
+	                externalUserFrame = new ExternalUserView();
 	                externalUserFrame.setLocation(x, y);
 	                externalUserFrame.setVisible(true);
 	                x += frameWidth + gap;
@@ -71,7 +71,7 @@ public class Orchestrator {
 
 	            // Position the registered user views
 	            for (Utente user : registeredUsers) {
-	                RegisteredUserView registeredUserFrame = new RegisteredUserView(user);
+	                registeredUserFrame = new RegisteredUserView(user);
 	                registeredUserFrame.setLocation(x, y);
 	                registeredUserFrame.setVisible(true);
 	                x += frameWidth + gap;
@@ -126,8 +126,16 @@ public class Orchestrator {
 		
 	}
 	
-	public UserAdminView getView() {
+	public UserAdminView getUserAdminView() {
 		return adminFrame;
+	}
+	
+	public RegisteredUserView getRegisteredUserView() {
+		return registeredUserFrame;
+	}
+	
+	public ExternalUserView getExternalUserView() {
+		return externalUserFrame;
 	}
 
 }

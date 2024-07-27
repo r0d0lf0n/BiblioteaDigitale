@@ -13,14 +13,14 @@ import bibliotecaDigitale.CatalogMain;
 import bibliotecaDigitale.Orchestrator;
 import database.DatabaseConfig;
 import models.users.Roles;
+import views.ExternalUserView;
 import views.LandingPageView;
+import views.RegisteredUserView;
+import views.UserAdminView;
 
 public class LandingPageController {
-	
-	DatabaseConfig config;
-	ConnectionSource connectionSource;
 	LandingPageView landingPageView;
-	JFrame lastInstanciatedPanel;
+	List<JFrame> instanciatedPanels = new ArrayList<JFrame>();
 	private static final int adminNumber = 1;
 	private static final int regUserNumber = 3;
 	private static final int extUserNumber = 2;
@@ -31,9 +31,6 @@ public class LandingPageController {
 		landingPageView = view;	
 		System.out.println("Loading pane.......");
 		ShowView();
-		config = new DatabaseConfig();
-		connectionSource = config.getdbConnection();
-		System.out.println(connectionSource);
 	}
 	
 	public void ShowView() {
@@ -50,12 +47,9 @@ public class LandingPageController {
 		JButton openCatalog = landingPageView.getOpenCatalogButton();
 		openCatalog.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (lastInstanciatedPanel != null) {
-					lastInstanciatedPanel.setVisible(false);		
-				}
-				
+				closeOpenedPanels();		
 				CatalogMain catalog = new CatalogMain();
-				lastInstanciatedPanel = catalog.getView();
+				instanciatedPanels.add(catalog.getView());
 			}
 		});
 		
@@ -63,12 +57,9 @@ public class LandingPageController {
 		openAdvancedSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Clicking openAdvancedSearch");
-				if (lastInstanciatedPanel != null) {
-					lastInstanciatedPanel.setVisible(false);		
-				}
+				closeOpenedPanels();		
 				
 				Orchestrator orchestrator = new Orchestrator();
-				lastInstanciatedPanel = orchestrator.getView();
 				
 				//create users
 				for(int i=0; i< adminNumber; i++) {
@@ -85,6 +76,10 @@ public class LandingPageController {
 				}
 				//start main app
 				orchestrator.startApp();
+				instanciatedPanels.add(orchestrator.getUserAdminView());
+				instanciatedPanels.add(orchestrator.getRegisteredUserView());
+				instanciatedPanels.add(orchestrator.getExternalUserView());
+				System.out.println(instanciatedPanels);
 			}
 		});
 	}
@@ -143,5 +138,14 @@ public class LandingPageController {
         }
 
         return result.toString();
+    }
+    
+    private void closeOpenedPanels() {
+    	for (JFrame panel : instanciatedPanels) {
+    		if (panel != null) {
+    			System.out.println("Closing panel: " + panel.getTitle());
+    			panel.setVisible(false);
+    		}
+    	}
     }
 }
