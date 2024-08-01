@@ -4,7 +4,7 @@ import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import database.Book;
-import models.bl.BookModel;
+import models.bl.CatalogModel;
 import views.CatalogView;
 
 public class CatalogController {
@@ -13,17 +13,17 @@ public class CatalogController {
 	private CatalogView catalogView;
 	private DefaultTableModel model;
 	private JTable catalogTable;
-	BookModel bookModel;
+	CatalogModel catalogModel;
 
-	public CatalogController(CatalogView view, BookModel bookModel) {
+	public CatalogController(CatalogView view, CatalogModel bookModel) {
 		catalogView = view;
-		this.bookModel = bookModel;
+		this.catalogModel = bookModel;
 		view.setVisible(true);
 		InitialiazeTable();
 	}
 
 	public void InitialiazeTable() {
-		book_catalog = bookModel.getAllBooks();
+		book_catalog = catalogModel.getAllBooks();
 		Object[] columns = { "id", "Author", "Year" };
 		model = new DefaultTableModel();
 		model.setColumnIdentifiers(columns);

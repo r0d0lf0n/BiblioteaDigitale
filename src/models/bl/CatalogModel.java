@@ -5,11 +5,11 @@ import com.j256.ormlite.dao.Dao;
 import database.Book;
 import database.DatabaseConfig;
 
-public class BookModel {
+public class CatalogModel {
 	DatabaseConfig config;
 	Dao<Book, String> bookDao = null;
 
-	public BookModel() {
+	public CatalogModel() {
 		config = DatabaseConfig.getInstance();
 		bookDao = config.getBookDao();
 	}
