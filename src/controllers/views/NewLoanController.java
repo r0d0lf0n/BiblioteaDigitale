@@ -27,6 +27,7 @@ public class NewLoanController {
 	public NewLoanController(NewLoanView view, LoanModel loanModel) {
 		newLoanView = view;
 		this.loanModel = loanModel;
+		showView();
 //		getLoans();
 //		getComponents();
 //		helpers = new Helpers();
@@ -46,9 +47,9 @@ public class NewLoanController {
 //		InitialiazeTable();
 //	}
 //	
-//	private void showView() {
-//		loanView.setVisible(true);
-//	}
+	private void showView() {
+		newLoanView.setVisible(true);
+	}
 //	
 //	private void getComponents() {
 //		loanTable = loanView.getLoanTable();

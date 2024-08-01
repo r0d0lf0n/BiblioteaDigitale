@@ -3,7 +3,6 @@ package controllers.views;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -14,6 +13,7 @@ import bibliotecaDigitale.CatalogMain;
 import database.Loan;
 import models.bl.LoanModel;
 import utils.CustomDialog;
+import views.Loan.NewLoanView;
 import views.Loan.LoanView;
 
 public class LoansController {
@@ -43,6 +43,10 @@ public class LoansController {
 			btnOne.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					System.out.println("New loan!");
+					d.setVisible(false);
+					NewLoanView newLoanView = new NewLoanView();
+					LoanModel loanModel = new LoanModel();
+					NewLoanController newLoanController = new NewLoanController(newLoanView, loanModel);
 				}
 			});
 		    
