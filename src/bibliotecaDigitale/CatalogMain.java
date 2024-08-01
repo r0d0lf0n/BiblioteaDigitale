@@ -21,28 +21,23 @@ import controllers.views.CatalogController;
 import database.Book;
 import database.DatabaseConfig;
 import database.User;
+import models.bl.BookModel;
 import views.CatalogView;
 
 public class CatalogMain {
-	DatabaseConfig config;
-	ConnectionSource connectionSource;
 	CatalogView catalogView;
 	Dao<Book, String> bookDao = null;
+	BookModel bookModel;
 
 	public CatalogMain() {
 		ShowView();
 	}
 
 	public void ShowView() {
+		bookModel = new BookModel();
 		List<Book> book_catalog = null;
-		config = DatabaseConfig.getInstance();
-		bookDao = config.getBookDao();
-		try {
-			book_catalog = bookDao.queryForAll();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		book_catalog = bookModel.getAllBooks();
+		
 	    catalogView = new CatalogView();
 	    catalogView.setTitle("Books Catalog");
 		CatalogController catalogController = new CatalogController(catalogView, book_catalog);
