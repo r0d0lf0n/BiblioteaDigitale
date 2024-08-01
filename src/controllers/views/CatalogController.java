@@ -1,11 +1,10 @@
 package controllers.views;
 
 import java.util.List;
-
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-
 import database.Book;
+import models.bl.BookModel;
 import views.CatalogView;
 
 public class CatalogController {
@@ -14,15 +13,17 @@ public class CatalogController {
 	private CatalogView catalogView;
 	private DefaultTableModel model;
 	private JTable catalogTable;
+	BookModel bookModel;
 
-	public CatalogController(CatalogView view, List<Book> catalog) {
+	public CatalogController(CatalogView view, BookModel bookModel) {
 		catalogView = view;
-		this.book_catalog = catalog;
+		this.bookModel = bookModel;
 		view.setVisible(true);
 		InitialiazeTable();
 	}
 
 	public void InitialiazeTable() {
+		book_catalog = bookModel.getAllBooks();
 		Object[] columns = { "id", "Author", "Year" };
 		model = new DefaultTableModel();
 		model.setColumnIdentifiers(columns);

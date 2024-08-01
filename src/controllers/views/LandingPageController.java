@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import com.j256.ormlite.support.ConnectionSource;
 import bibliotecaDigitale.CatalogMain;
+import bibliotecaDigitale.LoansMain;
 import bibliotecaDigitale.Orchestrator;
 import database.DatabaseConfig;
 import models.users.Roles;
@@ -41,12 +42,16 @@ public class LandingPageController {
 		openLoans.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Clicking openLoans");
+				closeOpenedPanels();		
+				LoansMain loan = new LoansMain();
+				instanciatedPanels.add(loan.getView());
 			}
 		});
 		
 		JButton openCatalog = landingPageView.getOpenCatalogButton();
 		openCatalog.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("Clicking openCatalog");
 				closeOpenedPanels();		
 				CatalogMain catalog = new CatalogMain();
 				instanciatedPanels.add(catalog.getView());
