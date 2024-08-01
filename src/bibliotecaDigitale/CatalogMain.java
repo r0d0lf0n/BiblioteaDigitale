@@ -15,7 +15,7 @@ public class CatalogMain {
 		ShowView();
 	}
 
-	public void ShowView() {
+	private void ShowView() {
 		catalogModel = new CatalogModel();
 	    catalogView = new CatalogView();
 	    catalogView.setTitle("Books Catalog");

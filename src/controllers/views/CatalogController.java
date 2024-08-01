@@ -25,7 +25,7 @@ public class CatalogController {
 		InitialiazeTable();
 	}
 
-	public void InitialiazeTable() {
+	private void InitialiazeTable() {
 		book_catalog = catalogModel.getAllBooks();
 		Object[] columns = { "id", "Author", "Year" };
 		model = new DefaultTableModel();

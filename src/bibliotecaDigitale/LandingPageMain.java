@@ -30,20 +30,20 @@ public class LandingPageMain {
 		setDataBaseForFirstTime();
 	}
 
-	public void ShowView() {
+	private void ShowView() {
 		LandingPageView landingPageView = new LandingPageView();
 		LandingPageController landingPageController = new LandingPageController(landingPageView);
 		
 		configDatabase();
 	}
 	
-	public void configDatabase() {
+	private void configDatabase() {
 		config = DatabaseConfig.getInstance();
 		connectionSource = config.getdbConnection();
 		System.out.println(connectionSource);
 	}
 	
-	public void setDataBaseForFirstTime() {
+	private void setDataBaseForFirstTime() {
 		bookDao = config.getBookDao();
 		try {
 			books = bookDao.queryForAll();
@@ -58,7 +58,7 @@ public class LandingPageMain {
 		}
 	}
 	
-	public void createBasicBookCatalog() {
+	private void createBasicBookCatalog() {
 		System.out.println("Inserting book for the first time....");
 		List<String[]> book_catalog = new ArrayList<String[]>();
 		try {
@@ -81,7 +81,7 @@ public class LandingPageMain {
 		}	
 	}
 	
-	public List<String[]> readBookCatalog() throws Exception {
+	private List<String[]> readBookCatalog() throws Exception {
 		String filepath = "/assets/Books.csv";
 		URI resourcePath = this.getClass().getResource(filepath).toURI();
 	    Path path = Paths.get(resourcePath);

@@ -1,5 +1,6 @@
 package views;
 
+import java.awt.EventQueue;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +16,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.JTextField;
 
 public class LoanView extends JFrame {
 
@@ -23,6 +25,24 @@ public class LoanView extends JFrame {
 	private JTable LoanTable;
 	private DefaultTableModel model;
 	private JLabel lblNoLoans;
+	private JTextField textField;
+	
+	
+//	/**
+//	 * Launch the application.
+//	 */
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					Test frame = new Test();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.
@@ -49,30 +69,38 @@ public class LoanView extends JFrame {
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnClose, -10, SpringLayout.SOUTH, contentPane);
 		contentPane.add(btnClose);
 
-		JButton btnLoadData = new JButton("New");
-		sl_contentPane.putConstraint(SpringLayout.NORTH, btnLoadData, 20, SpringLayout.NORTH, contentPane);
-		btnLoadData.addActionListener(new ActionListener() {
+		JButton btnNewLoan = new JButton("New Loan");
+		sl_contentPane.putConstraint(SpringLayout.WEST, btnNewLoan, 0, SpringLayout.WEST, contentPane);
+		btnNewLoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		sl_contentPane.putConstraint(SpringLayout.WEST, btnLoadData, 0, SpringLayout.WEST, btnClose);
-		contentPane.add(btnLoadData);
+		contentPane.add(btnNewLoan);
 
-		JButton btnRefresh = new JButton("Refresh");
-		btnRefresh.addActionListener(new ActionListener() {
+		JButton btnEditLoan = new JButton("Edit Loan");
+		sl_contentPane.putConstraint(SpringLayout.NORTH, btnEditLoan, 19, SpringLayout.SOUTH, btnNewLoan);
+		sl_contentPane.putConstraint(SpringLayout.WEST, btnEditLoan, 0, SpringLayout.WEST, btnClose);
+		btnEditLoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		sl_contentPane.putConstraint(SpringLayout.NORTH, btnRefresh, 17, SpringLayout.SOUTH, btnLoadData);
-		sl_contentPane.putConstraint(SpringLayout.WEST, btnRefresh, 0, SpringLayout.WEST, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.EAST, btnRefresh, 0, SpringLayout.EAST, btnLoadData);
-		contentPane.add(btnRefresh);
+		contentPane.add(btnEditLoan);
+		
+		JButton btnReturnLoan = new JButton("Return Loan");
+		sl_contentPane.putConstraint(SpringLayout.NORTH, btnReturnLoan, 21, SpringLayout.SOUTH, btnEditLoan);
+		sl_contentPane.putConstraint(SpringLayout.WEST, btnReturnLoan, 0, SpringLayout.WEST, btnClose);
+		btnReturnLoan.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		contentPane.add(btnReturnLoan);
 
 		JScrollPane scrollPane = new JScrollPane();
-		sl_contentPane.putConstraint(SpringLayout.NORTH, scrollPane, 36, SpringLayout.NORTH, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.WEST, scrollPane, 85, SpringLayout.EAST, btnLoadData);
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, scrollPane, -20, SpringLayout.SOUTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.EAST, btnNewLoan, -41, SpringLayout.WEST, scrollPane);
+		sl_contentPane.putConstraint(SpringLayout.EAST, btnEditLoan, -41, SpringLayout.WEST, scrollPane);
 		sl_contentPane.putConstraint(SpringLayout.EAST, scrollPane, -10, SpringLayout.EAST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, scrollPane, 36, SpringLayout.NORTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, scrollPane, -20, SpringLayout.SOUTH, contentPane);
 		contentPane.add(scrollPane);
 
 		LoanTable = new JTable();
@@ -80,13 +108,27 @@ public class LoanView extends JFrame {
 		sl_contentPane.putConstraint(SpringLayout.WEST, LoanTable, 0, SpringLayout.WEST, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, LoanTable, -211, SpringLayout.NORTH, btnClose);
 		sl_contentPane.putConstraint(SpringLayout.EAST, LoanTable, -420, SpringLayout.EAST, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.NORTH, LoanTable, 85, SpringLayout.SOUTH, btnRefresh);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, LoanTable, 85, SpringLayout.SOUTH, btnEditLoan);
 		
 	    lblNoLoans = new JLabel("There are no loans yet!");
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, lblNoLoans, -6, SpringLayout.NORTH, scrollPane);
 		sl_contentPane.putConstraint(SpringLayout.EAST, lblNoLoans, -141, SpringLayout.EAST, contentPane);
 		lblNoLoans.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblNoLoans);
+		
+		textField = new JTextField();
+		sl_contentPane.putConstraint(SpringLayout.NORTH, btnNewLoan, 25, SpringLayout.SOUTH, textField);
+		sl_contentPane.putConstraint(SpringLayout.WEST, scrollPane, 20, SpringLayout.EAST, textField);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, textField, -8, SpringLayout.NORTH, scrollPane);
+		sl_contentPane.putConstraint(SpringLayout.WEST, textField, 0, SpringLayout.WEST, btnClose);
+		sl_contentPane.putConstraint(SpringLayout.EAST, textField, 135, SpringLayout.WEST, contentPane);
+		contentPane.add(textField);
+		textField.setColumns(10);
+		
+		JLabel lblNewLabel = new JLabel(" Filter Loan");
+		sl_contentPane.putConstraint(SpringLayout.NORTH, lblNewLabel, 0, SpringLayout.NORTH, lblNoLoans);
+		sl_contentPane.putConstraint(SpringLayout.EAST, lblNewLabel, 0, SpringLayout.EAST, btnClose);
+		contentPane.add(lblNewLabel);
 		
 		this.addWindowListener(new WindowAdapter() {
 	         @Override

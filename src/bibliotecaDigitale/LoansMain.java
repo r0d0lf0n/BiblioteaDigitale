@@ -15,7 +15,7 @@ public class LoansMain {
 		ShowView();
 	}
 
-	public void ShowView() {
+	private void ShowView() {
 		loanModel = new LoanModel();
 	    loanView = new LoanView();
 	    loanView.setTitle("Loans");

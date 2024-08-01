@@ -4,6 +4,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 import javax.swing.border.EmptyBorder;
+
+import java.awt.EventQueue;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
@@ -14,6 +17,22 @@ public class LandingPageView extends JFrame {
 	JButton btnOpenLoans;
 	JButton btnOpenCatalog;
 	JButton btnOpenAdvancedSearch;
+	
+//	/**
+//	 * Launch the application.
+//	 */
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					Test frame = new Test();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.
