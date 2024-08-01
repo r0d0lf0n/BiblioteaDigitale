@@ -4,7 +4,7 @@ import com.j256.ormlite.dao.Dao;
 import controllers.views.CatalogController;
 import database.Book;
 import models.bl.CatalogModel;
-import views.CatalogView;
+import views.Catalog.CatalogView;
 
 public class CatalogMain {
 	CatalogView catalogView;

@@ -17,7 +17,7 @@ import com.opencsv.CSVReader;
 import controllers.views.LandingPageController;
 import database.Book;
 import database.DatabaseConfig;
-import views.LandingPageView;
+import views.Landing.LandingPageView;
 
 public class LandingPageMain {
 	DatabaseConfig config;

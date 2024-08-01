@@ -1,4 +1,4 @@
-package views;
+package views.Landing;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;

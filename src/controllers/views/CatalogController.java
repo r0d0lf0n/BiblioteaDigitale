@@ -7,7 +7,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import database.Book;
 import models.bl.CatalogModel;
-import views.CatalogView;
+import views.Catalog.CatalogView;
 
 public class CatalogController {
 

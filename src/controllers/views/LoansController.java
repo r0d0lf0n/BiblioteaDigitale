@@ -10,11 +10,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-
 import bibliotecaDigitale.CatalogMain;
 import database.Loan;
 import models.bl.LoanModel;
-import views.LoanView;
+import utils.CustomDialog;
+import views.Loan.LoanView;
 
 public class LoansController {
 	private List<Loan> loans;
@@ -23,19 +23,38 @@ public class LoansController {
 	private JTable loanTable;
 	private JLabel noLoansBtn;
 	private LoanModel loanModel;
-	private JDialog d;
+	private CustomDialog dialog;
 
 	public LoansController(LoanView view, LoanModel loanModel) {
 		loanView = view;
 		this.loanModel = loanModel;
 		getLoans();
-		getComponents();	
+		getComponents();
+		dialog = new CustomDialog();
 		
 		if (loans.size() > 0) {
 			configView();
 		} else {
 			showNoLoansLabel(true);
-			showDialog();
+			JDialog d = dialog.showDialog(loanView, "Warning!", "There are no loand yet!", "New Loan", "Cancel");
+			JButton btnOne = dialog.getButtonOne();
+			JButton btnTwo = dialog.getButtonTwo();
+			
+			btnOne.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					System.out.println("New loan!");
+				}
+			});
+		    
+			btnTwo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					System.out.println("Closing dialog!");
+					d.setVisible(false);
+				}
+			});
+
+			
+			d.setVisible(true);
 		}
 	}
 	
@@ -63,7 +82,6 @@ public class LoansController {
 			noLoansBtn.setVisible(true);
 		} else {
 			noLoansBtn.setVisible(false);
-			showDialog();
 		}
 	}
 	
@@ -79,39 +97,5 @@ public class LoansController {
 
 		loanTable.setModel(model);
 		loanView.setLoanTable(loanTable);
-	}
-	
-	private void showDialog() {
-		d = new JDialog(loanView, "Warning!");
-
-        JLabel l = new JLabel("There are no loand yet!");
-
-        JButton newLoan = new JButton("New Loan");
-        JButton cancel = new JButton("Cancel");
-
-        newLoan.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("New loan!");
-			}
-		});
-        
-        cancel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Closing dialog!");
-				d.setVisible(false);
-			}
-		});
-
-        // create a panel
-        JPanel p = new JPanel();
-
-        p.add(newLoan);
-        p.add(cancel);
-        p.add(l);
-
-        // add panel to dialog
-        d.add(p);
-        d.setSize(280, 100);
-        d.setVisible(true);
 	}
 }

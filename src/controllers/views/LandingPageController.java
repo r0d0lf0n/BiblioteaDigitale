@@ -15,7 +15,7 @@ import bibliotecaDigitale.Orchestrator;
 import database.DatabaseConfig;
 import models.users.Roles;
 import views.ExternalUserView;
-import views.LandingPageView;
+import views.Landing.LandingPageView;
 import views.RegisteredUserView;
 import views.UserAdminView;
 

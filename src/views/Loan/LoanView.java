@@ -1,4 +1,4 @@
-package views;
+package views.Loan;
 
 import java.awt.EventQueue;
 import java.awt.Toolkit;
