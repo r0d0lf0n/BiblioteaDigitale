@@ -1,6 +1,5 @@
 package bibliotecaDigitale;
 
-import java.util.List;
 import com.j256.ormlite.dao.Dao;
 import controllers.views.LoansController;
 import database.Loan;
@@ -18,12 +17,9 @@ public class LoansMain {
 
 	public void ShowView() {
 		loanModel = new LoanModel();
-		List<Loan> loans = null;
-		loans = loanModel.getAllLoans();
-		
 	    loanView = new LoanView();
 	    loanView.setTitle("Loans");
-		LoansController loansController = new LoansController(loanView, loans);
+		LoansController loansController = new LoansController(loanView, loanModel);
 	}
 	
 	public LoanView getView() {

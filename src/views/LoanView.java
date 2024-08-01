@@ -13,6 +13,8 @@ import javax.swing.JTable;
 import javax.swing.SpringLayout;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 public class LoanView extends JFrame {
 
@@ -20,6 +22,7 @@ public class LoanView extends JFrame {
 	private JPanel contentPane;
 	private JTable LoanTable;
 	private DefaultTableModel model;
+	private JLabel lblNoLoans;
 
 	/**
 	 * Create the frame.
@@ -46,7 +49,7 @@ public class LoanView extends JFrame {
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnClose, -10, SpringLayout.SOUTH, contentPane);
 		contentPane.add(btnClose);
 
-		JButton btnLoadData = new JButton("Load data");
+		JButton btnLoadData = new JButton("New");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, btnLoadData, 20, SpringLayout.NORTH, contentPane);
 		btnLoadData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -79,10 +82,15 @@ public class LoanView extends JFrame {
 		sl_contentPane.putConstraint(SpringLayout.EAST, LoanTable, -420, SpringLayout.EAST, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.NORTH, LoanTable, 85, SpringLayout.SOUTH, btnRefresh);
 		
+	    lblNoLoans = new JLabel("There are no loans yet!");
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, lblNoLoans, -6, SpringLayout.NORTH, scrollPane);
+		sl_contentPane.putConstraint(SpringLayout.EAST, lblNoLoans, -141, SpringLayout.EAST, contentPane);
+		lblNoLoans.setHorizontalAlignment(SwingConstants.CENTER);
+		contentPane.add(lblNoLoans);
+		
 		this.addWindowListener(new WindowAdapter() {
 	         @Override
 	         public void windowClosing(WindowEvent e) {
-
 	             dispose();
 	         }
 	     });
@@ -94,5 +102,13 @@ public class LoanView extends JFrame {
 
 	public void setLoanTable(JTable LoanTable) {
 		this.LoanTable = LoanTable;
+	}
+	
+	public JLabel getNoLoanBtn() {
+		return lblNoLoans;
+	}
+
+	public void setNoLoanBtn(JLabel lblNoLoans) {
+		this.lblNoLoans = lblNoLoans;
 	}
 }

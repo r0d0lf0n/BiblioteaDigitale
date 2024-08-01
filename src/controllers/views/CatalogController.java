@@ -1,6 +1,8 @@
 package controllers.views;
 
 import java.util.List;
+
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import database.Book;
@@ -13,7 +15,8 @@ public class CatalogController {
 	private CatalogView catalogView;
 	private DefaultTableModel model;
 	private JTable catalogTable;
-	CatalogModel catalogModel;
+	private CatalogModel catalogModel;
+	private JLabel lblNoLoans;
 
 	public CatalogController(CatalogView view, CatalogModel bookModel) {
 		catalogView = view;

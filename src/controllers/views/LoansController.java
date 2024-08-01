@@ -1,10 +1,11 @@
 package controllers.views;
 
 import java.util.List;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import database.Book;
 import database.Loan;
+import models.bl.LoanModel;
 import views.LoanView;
 
 public class LoansController {
@@ -12,15 +13,18 @@ public class LoansController {
 	private LoanView loanView;
 	private DefaultTableModel model;
 	private JTable loanTable;
+	private JLabel noLoansBtn;
+	private LoanModel loanModel;
 
-	public LoansController(LoanView view, List<Loan> loans) {
+	public LoansController(LoanView view, LoanModel loanModel) {
 		loanView = view;
-		this.loans = loans;
+		this.loanModel = loanModel;
 		view.setVisible(true);
 		InitialiazeTable();
 	}
 
 	public void InitialiazeTable() {
+		loans = loanModel.getAllLoans();
 		Object[] columns = { "id", "User", "Book" };
 		model = new DefaultTableModel();
 		model.setColumnIdentifiers(columns);
@@ -31,6 +35,12 @@ public class LoansController {
 		}
 
 		loanTable = loanView.getLoanTable();
+		noLoansBtn = loanView.getNoLoanBtn();
+		if (loans.size() > 0) {
+			noLoansBtn.setVisible(false);
+		} else {
+			noLoansBtn.setVisible(true);
+		}
 		loanTable.setModel(model);
 		loanView.setLoanTable(loanTable);
 	}
