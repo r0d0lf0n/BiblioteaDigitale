@@ -7,7 +7,6 @@ import java.awt.event.WindowEvent;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -22,7 +21,6 @@ import javax.swing.table.DefaultTableModel;
 import controllers.views.LandingPageController;
 import controllers.views.LoansController;
 import models.db.LoanDAO;
-import utils.CustomDialog;
 import utils.Observer;
 
 public class LoanView extends JFrame implements Observer{
@@ -32,10 +30,8 @@ public class LoanView extends JFrame implements Observer{
 	private JTable loanTable;
 	//private DefaultTableModel model;
 	private JLabel lblNoLoans;
-	private JLabel noLoansBtn;
 	private JTextField textField;
 	private LoansController controller = null;
-	private CustomDialog dialog = null;
 	NewLoanView newLoanView = null;
 	
 
@@ -70,7 +66,9 @@ public class LoanView extends JFrame implements Observer{
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnNewLoan, 0, SpringLayout.WEST, contentPane);
 		btnNewLoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//FIXME empty
+				if(newLoanView == null)
+					newLoanView = new NewLoanView();
+				newLoanView.setVisible(true);
 			}
 		});
 		contentPane.add(btnNewLoan);
@@ -137,52 +135,53 @@ public class LoanView extends JFrame implements Observer{
 	         }
 	     });
 		
-		
-		
+		if (getLoans().size() == 0) { 
+			initializeTable();
+		}
 		controller.addObserver(this);
 		landingPageController.addObserver(this);
+		
 	}
 	
 	
-	private void buttonClicked() {
-		if (getLoans().size() > 0) { 
-			configView();
-		} else {
-			showNoLoansLabel(true);
-			JDialog d = new CustomDialog().showDialog(this, "Warning!", "There are no loand yet!", "New Loan", "Cancel");
-			JButton btnOne = dialog.getButtonOne();
-			JButton btnTwo = dialog.getButtonTwo();
-			
-			btnOne.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					System.out.println("New loan!");
-					newLoanView = new NewLoanView();
-					d.setVisible(false);
-					d.dispose();
-					newLoanView.setVisible(true);
-					//LoanModel loanModel = new LoanModel();
-					//NewLoanController newLoanController = new NewLoanController(newLoanView, loanModel);
-				}
-			});
-		    
-			btnTwo.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					System.out.println("Closing dialog!");
-					d.setVisible(false);
-					d.dispose();
-				}
-			});
+//	private void populatePanel(LandingPageController landingPageController) {
+//		if (getLoans().size() > 0) { 
+//			configView();
+//		} else {
+//			showNoLoansLabel(true);
+//			JDialog d = new CustomDialog().showDialog(this, "Warning!", "There are no loand yet!", "New Loan", "Cancel");
+//			JButton btnOne = dialog.getButtonOne();
+//			JButton btnTwo = dialog.getButtonTwo();
+//			
+//			btnOne.addActionListener(new ActionListener() {
+//				public void actionPerformed(ActionEvent e) {
+//					System.out.println("New loan!");
+//					newLoanView = new NewLoanView(landingPageController);
+//					d.setVisible(false);
+//					d.dispose();
+//					newLoanView.setVisible(true);
+//					//LoanModel loanModel = new LoanModel();
+//					//NewLoanController newLoanController = new NewLoanController(newLoanView, loanModel);
+//				}
+//			});
+//		    
+//			btnTwo.addActionListener(new ActionListener() {
+//				public void actionPerformed(ActionEvent e) {
+//					System.out.println("Closing dialog!");
+//					d.setVisible(false);
+//					d.dispose();
+//				}
+//			});
+//
+//			
+//			d.setVisible(true);
+//		}
+//	}
+	
 
-			
-			d.setVisible(true);
-		}
-	}
-	
-
-	private void configView() {
-		showNoLoansLabel(false);
-		initializeTable();
-	}
+//	private void configView() {
+//		showNoLoansLabel(false);
+//	}
 	
 	private void initializeTable() {
 		Object[] columns = { "id", "User", "Book" };
@@ -202,23 +201,6 @@ public class LoanView extends JFrame implements Observer{
 		return controller.getLoans();
 	}
 	
-	private void showNoLoansLabel(boolean flag) {
-		if (flag) {
-			noLoansBtn.setVisible(true);
-		} else {
-			noLoansBtn.setVisible(false);
-		}
-	}
-
-	
-	
-	public JLabel getNoLoanBtn() {
-		return lblNoLoans;
-	}
-
-	public void setNoLoanBtn(JLabel lblNoLoans) {
-		this.lblNoLoans = lblNoLoans;
-	}
 
 	@Override
 	public void update(String type, Object arg) {
