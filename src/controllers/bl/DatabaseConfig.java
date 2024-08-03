@@ -1,34 +1,34 @@
-package database;
+package controllers.bl;
 
 
-import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
+import models.db.BookDAO;
+import models.db.LoanDAO;
+import models.db.UserDAO;
+
 
 public final class DatabaseConfig {
     private static DatabaseConfig INSTANCE;
-    private String info = "Initial info class";
     
 	String dbfilepath  = "jdbc:sqlite:biblio.db";
 	ConnectionSource connectionSource;
-	Dao<User, String> userDao;
-	Dao<Loan, String> loanDao;
-	Dao<Book, String> bookDao;
-	
+
+
 	private DatabaseConfig() {
 	     try {
 		  	System.out.println("Creating DB connection...");
 	        connectionSource = new JdbcConnectionSource(dbfilepath);
-	        TableUtils.createTableIfNotExists(connectionSource, Book.class);
-	        TableUtils.createTableIfNotExists(connectionSource, User.class);
-	        TableUtils.createTableIfNotExists(connectionSource, Loan.class);
+	        TableUtils.createTableIfNotExists(connectionSource, BookDAO.class);
+	        TableUtils.createTableIfNotExists(connectionSource, UserDAO.class);
+	        TableUtils.createTableIfNotExists(connectionSource, LoanDAO.class);
 	        
-			bookDao = DaoManager.createDao(connectionSource, Book.class);
-			userDao = DaoManager.createDao(connectionSource, User.class);
-			loanDao = DaoManager.createDao(connectionSource, Loan.class);
+			GestoreCatalogo.getInstance().setBookDao(DaoManager.createDao(connectionSource, BookDAO.class));
+			GestoreUtenti.getInstance().setUserDao(DaoManager.createDao(connectionSource, UserDAO.class));
+			GestorePrestiti.getInstance().setLoanDao(DaoManager.createDao(connectionSource, LoanDAO.class));
 			System.out.println("DB connection created!");
 	     } catch (Exception e) {
 	          e.printStackTrace();
@@ -53,15 +53,4 @@ public final class DatabaseConfig {
 		return connectionSource;
 	}
 	
-	public Dao<User, String> getUserDao() {
-		return userDao;
-	}
-	
-	public Dao<Loan, String> getLoanDao() {
-		return loanDao;
-	}
-	
-	public Dao<Book, String> getBookDao() {
-		return bookDao;
-	}
 }

@@ -1,15 +1,15 @@
 package bibliotecaDigitale;
 
 import com.j256.ormlite.dao.Dao;
-import controllers.views.LoansController;
-import database.Loan;
+
+import controllers.views.NewLoanController;
 import models.bl.LoanModel;
-import views.LoanView;
-import views.NewLoanView;
+import models.db.LoanDAO;
+import views.Loan.NewLoanView;
 
 public class NewLoanMain {
 	NewLoanView newLoanView;
-	Dao<Loan, String> loanDao = null;
+	Dao<LoanDAO, String> loanDao = null;
 	LoanModel loanModel;
 
 	public NewLoanMain() {
@@ -18,12 +18,12 @@ public class NewLoanMain {
 
 	private void ShowView() {
 		loanModel = new LoanModel();
-		newLoanView = new LoanView();
+		newLoanView = new NewLoanView();
 		newLoanView.setTitle("New Loan");
 		NewLoanController newLoanController = new NewLoanController(newLoanView, loanModel);
 	}
 	
-	public LoanView getView() {
+	public NewLoanView getView() {
 		return newLoanView;
 	}
 }

@@ -1,17 +1,17 @@
-package database;
+package models.db;
 
 import java.sql.Date;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "loan")
-public class Loan {
+public class LoanDAO {
 	
 	@DatabaseField(canBeNull = false, foreign = true, columnName = "user_id")
-    private User user;
+    private UserDAO user;
     
     @DatabaseField(canBeNull = false, foreign = true, columnName = "book_id")
-    private Book book;
+    private BookDAO book;
 
     @DatabaseField()
     private Date start_date;
@@ -19,23 +19,23 @@ public class Loan {
     @DatabaseField()
     private Date end_date;
  
-    public Loan() {
+    public LoanDAO() {
     	// ORMLite needs a no-arg constructor
     }
 
-	public User getUser_id() {
+	public UserDAO getUser_id() {
 		return user;
 	}
 
-	public void setUser_id(User user_id) {
+	public void setUser_id(UserDAO user_id) {
 		this.user = user_id;
 	}
 
-	public Book getBook_id() {
+	public BookDAO getBook_id() {
 		return book;
 	}
 
-	public void setBook_id(Book book_id) {
+	public void setBook_id(BookDAO book_id) {
 		this.book = book_id;
 	}
 

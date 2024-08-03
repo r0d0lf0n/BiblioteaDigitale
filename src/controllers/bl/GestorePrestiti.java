@@ -3,12 +3,9 @@
  */
 package controllers.bl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import com.j256.ormlite.dao.Dao;
 
-import models.bl.Prestito;
+import models.db.LoanDAO;
 import models.users.Utente;
 
 /**
@@ -19,16 +16,18 @@ public class GestorePrestiti {
 	/**
 	 * singleton
 	 */
-	private GestorePrestiti _instance = null;
+	private static GestorePrestiti _instance = null;
 	private int idTransazione = 0;
+	Dao<LoanDAO, String> loanDao;
 
-	private Map<Utente, ArrayList<Prestito>> storicoPrestiti = null;
+
+	//private Map<Utente, ArrayList<LoanDAO>> storicoPrestiti = null;
 
 	private GestorePrestiti() {
-		storicoPrestiti = new HashMap<Utente, ArrayList<Prestito>>();
+		//storicoPrestiti = new HashMap<Utente, ArrayList<LoanDAO>>();
 	}
 
-	public GestorePrestiti getInstance() {
+	public static GestorePrestiti getInstance() {
 		if (_instance == null)
 			_instance = new GestorePrestiti();
 		return _instance;
@@ -38,34 +37,48 @@ public class GestorePrestiti {
 		return idTransazione;
 	}
 
-	public void registraTransazione(Utente utente, Prestito p) {
+	public void registraTransazione(Utente utente, LoanDAO p) {
 		
 		synchronized (this) {
 		
-			idTransazione++;
-			p.setIdTransazione(idTransazione);
-			ArrayList<Prestito> prestiti = storicoPrestiti.get(utente);
-			prestiti.add(p);
-			storicoPrestiti.replace(utente, prestiti);
+//			idTransazione++;
+//			p.setIdTransazione(idTransazione); //FIXME
+//			ArrayList<LoanDAO> prestiti = storicoPrestiti.get(utente);
+//			prestiti.add(p);
+//			storicoPrestiti.replace(utente, prestiti);
 			
 			//RENDI PERSISTENTE L'OPERAZIONE TODO
 		}
 	}
 	
-	public void registraRestituzione(Utente utente, Prestito p) {
+	public void registraRestituzione(Utente utente, LoanDAO p) {
 		
 		synchronized (this) {
 			
-			ArrayList<Prestito> prestiti = storicoPrestiti.get(utente);
-			for (Iterator<Prestito> iterator = prestiti.iterator(); iterator.hasNext();) {
-				Prestito prestito = (Prestito) iterator.next();
-				if(prestito.equals(p))
-					prestiti.remove(prestito); //probabile exception FIXME
-			}
-			storicoPrestiti.replace(utente, prestiti);
+//			ArrayList<LoanDAO> prestiti = storicoPrestiti.get(utente);
+//			for (Iterator<LoanDAO> iterator = prestiti.iterator(); iterator.hasNext();) {
+//				LoanDAO prestito = (LoanDAO) iterator.next();
+//				if(prestito.equals(p))
+//					prestiti.remove(prestito); //probabile exception FIXME
+//			}
+//			storicoPrestiti.replace(utente, prestiti);
 			
 			//RENDI PERSISTENTE L'OPERAZIONE TODO
 		}
+	}
+
+	/**
+	 * @return the loanDao
+	 */
+	public Dao<LoanDAO, String> getLoanDao() {
+		return loanDao;
+	}
+
+	/**
+	 * @param loanDao the loanDao to set
+	 */
+	public void setLoanDao(Dao<LoanDAO, String> loanDao) {
+		this.loanDao = loanDao;
 	}
 
 }

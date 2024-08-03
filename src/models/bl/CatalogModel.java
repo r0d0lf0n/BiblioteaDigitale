@@ -1,27 +1,23 @@
 package models.bl;
 
 import java.util.List;
-import com.j256.ormlite.dao.Dao;
-import database.Book;
-import database.DatabaseConfig;
+
+import controllers.bl.GestoreCatalogo;
+import models.db.BookDAO;
 
 public class CatalogModel {
-	DatabaseConfig config;
-	Dao<Book, String> bookDao = null;
 
 	public CatalogModel() {
-		config = DatabaseConfig.getInstance();
-		bookDao = config.getBookDao();
+		//empty
 	}
 	
-	public List<Book> getAllBooks() {
-		List<Book> book_catalog = null;
+	public List<BookDAO> getAllBooks() {
 		try {
-			book_catalog = bookDao.queryForAll();
+			return GestoreCatalogo.getInstance().getBookDao().queryForAll();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return book_catalog;
+		return null;
 	}
 }

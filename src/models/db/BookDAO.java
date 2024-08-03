@@ -1,10 +1,10 @@
-package database;
+package models.db;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "book")
-public class Book {
+public class BookDAO {
     
 	@DatabaseField(generatedId = true)
     private int id;
@@ -24,7 +24,7 @@ public class Book {
     @DatabaseField()
     private String isbn;
    
-    public Book() {
+    public BookDAO() {
         // ORMLite needs a no-arg constructor
     }
 

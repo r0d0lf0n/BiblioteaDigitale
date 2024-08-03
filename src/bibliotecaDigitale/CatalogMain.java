@@ -1,14 +1,15 @@
 package bibliotecaDigitale;
 
 import com.j256.ormlite.dao.Dao;
+
 import controllers.views.CatalogController;
-import database.Book;
 import models.bl.CatalogModel;
+import models.db.BookDAO;
 import views.Catalog.CatalogView;
 
 public class CatalogMain {
 	CatalogView catalogView;
-	Dao<Book, String> bookDao = null;
+	Dao<BookDAO, String> bookDao = null;
 	CatalogModel catalogModel;
 
 	public CatalogMain() {

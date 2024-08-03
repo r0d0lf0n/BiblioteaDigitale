@@ -1,59 +1,57 @@
 package views.Loan;
 
-import java.awt.EventQueue;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
+
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SpringLayout;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.JTextField;
 
-public class LoanView extends JFrame {
+import controllers.views.LandingPageController;
+import controllers.views.LoansController;
+import models.db.LoanDAO;
+import utils.CustomDialog;
+import utils.Observer;
+
+public class LoanView extends JFrame implements Observer{
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTable LoanTable;
-	private DefaultTableModel model;
+	private JTable loanTable;
+	//private DefaultTableModel model;
 	private JLabel lblNoLoans;
+	private JLabel noLoansBtn;
 	private JTextField textField;
+	private LoansController controller = null;
+	private CustomDialog dialog = null;
+	NewLoanView newLoanView = null;
 	
-	
-//	/**
-//	 * Launch the application.
-//	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					Test frame = new Test();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 
 	/**
 	 * Create the frame.
+	 * @param landingPageController 
 	 */
-	public LoanView() {
-		setTitle("Loans");
+	public LoanView(LandingPageController landingPageController) {
+		controller = new LoansController();
+		
+		setTitle("Gestione Prestiti");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 600, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
+		setLocationRelativeTo(null);
 		setContentPane(contentPane);
 		SpringLayout sl_contentPane = new SpringLayout();
 		contentPane.setLayout(sl_contentPane);
@@ -61,8 +59,7 @@ public class LoanView extends JFrame {
 		JButton btnClose = new JButton("Close");
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				  WindowEvent windowClosing = new WindowEvent(LoanView.this, WindowEvent.WINDOW_CLOSING);
-	              Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(windowClosing);
+				landingPageController.openLandingPanel();
 			}
 		});
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnClose, 0, SpringLayout.WEST, contentPane);
@@ -73,6 +70,7 @@ public class LoanView extends JFrame {
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnNewLoan, 0, SpringLayout.WEST, contentPane);
 		btnNewLoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//FIXME empty
 			}
 		});
 		contentPane.add(btnNewLoan);
@@ -82,6 +80,7 @@ public class LoanView extends JFrame {
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnEditLoan, 0, SpringLayout.WEST, btnClose);
 		btnEditLoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//FIXME empty
 			}
 		});
 		contentPane.add(btnEditLoan);
@@ -91,6 +90,7 @@ public class LoanView extends JFrame {
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnReturnLoan, 0, SpringLayout.WEST, btnClose);
 		btnReturnLoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//FIXME empty
 			}
 		});
 		contentPane.add(btnReturnLoan);
@@ -103,12 +103,12 @@ public class LoanView extends JFrame {
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, scrollPane, -20, SpringLayout.SOUTH, contentPane);
 		contentPane.add(scrollPane);
 
-		LoanTable = new JTable();
-		scrollPane.setViewportView(LoanTable);
-		sl_contentPane.putConstraint(SpringLayout.WEST, LoanTable, 0, SpringLayout.WEST, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, LoanTable, -211, SpringLayout.NORTH, btnClose);
-		sl_contentPane.putConstraint(SpringLayout.EAST, LoanTable, -420, SpringLayout.EAST, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.NORTH, LoanTable, 85, SpringLayout.SOUTH, btnEditLoan);
+		loanTable = new JTable();
+		scrollPane.setViewportView(loanTable);
+		sl_contentPane.putConstraint(SpringLayout.WEST, loanTable, 0, SpringLayout.WEST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, loanTable, -211, SpringLayout.NORTH, btnClose);
+		sl_contentPane.putConstraint(SpringLayout.EAST, loanTable, -420, SpringLayout.EAST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, loanTable, 85, SpringLayout.SOUTH, btnEditLoan);
 		
 	    lblNoLoans = new JLabel("There are no loans yet!");
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, lblNoLoans, -6, SpringLayout.NORTH, scrollPane);
@@ -133,18 +133,84 @@ public class LoanView extends JFrame {
 		this.addWindowListener(new WindowAdapter() {
 	         @Override
 	         public void windowClosing(WindowEvent e) {
-	             dispose();
+	        	 landingPageController.openLandingPanel();
 	         }
 	     });
+		
+		
+		
+		controller.addObserver(this);
+		landingPageController.addObserver(this);
+	}
+	
+	
+	private void buttonClicked() {
+		if (getLoans().size() > 0) { 
+			configView();
+		} else {
+			showNoLoansLabel(true);
+			JDialog d = new CustomDialog().showDialog(this, "Warning!", "There are no loand yet!", "New Loan", "Cancel");
+			JButton btnOne = dialog.getButtonOne();
+			JButton btnTwo = dialog.getButtonTwo();
+			
+			btnOne.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					System.out.println("New loan!");
+					newLoanView = new NewLoanView();
+					d.setVisible(false);
+					d.dispose();
+					newLoanView.setVisible(true);
+					//LoanModel loanModel = new LoanModel();
+					//NewLoanController newLoanController = new NewLoanController(newLoanView, loanModel);
+				}
+			});
+		    
+			btnTwo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					System.out.println("Closing dialog!");
+					d.setVisible(false);
+					d.dispose();
+				}
+			});
+
+			
+			d.setVisible(true);
+		}
+	}
+	
+
+	private void configView() {
+		showNoLoansLabel(false);
+		initializeTable();
+	}
+	
+	private void initializeTable() {
+		Object[] columns = { "id", "User", "Book" };
+		DefaultTableModel model = new DefaultTableModel();
+		model.setColumnIdentifiers(columns);
+		
+		for(int i = 1; i < getLoans().size(); i++) {
+//			System.out.println(loans.get(i)[0]);
+				model.addRow(new Object[] {i, getLoans().get(i).getUser_id(), getLoans().get(i).getBook_id()});
+		}
+
+		loanTable.setModel(model);
+	}
+	
+	
+	private List<LoanDAO> getLoans() {
+		return controller.getLoans();
+	}
+	
+	private void showNoLoansLabel(boolean flag) {
+		if (flag) {
+			noLoansBtn.setVisible(true);
+		} else {
+			noLoansBtn.setVisible(false);
+		}
 	}
 
-	public JTable getLoanTable() {
-		return LoanTable;
-	}
-
-	public void setLoanTable(JTable LoanTable) {
-		this.LoanTable = LoanTable;
-	}
+	
 	
 	public JLabel getNoLoanBtn() {
 		return lblNoLoans;
@@ -152,5 +218,17 @@ public class LoanView extends JFrame {
 
 	public void setNoLoanBtn(JLabel lblNoLoans) {
 		this.lblNoLoans = lblNoLoans;
+	}
+
+	@Override
+	public void update(String type, Object arg) {
+		// TODO Auto-generated method stub
+		if(type.equals("OPEN_LOANS")) {
+			this.setVisible(true);
+			System.out.println("OBSERVER - OPEN PANEL");
+		}
+		if(type.equals("CLOSE_LOANS")){
+			this.setVisible(false);
+		}
 	}
 }

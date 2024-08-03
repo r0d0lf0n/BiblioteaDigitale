@@ -5,13 +5,14 @@ import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import database.Book;
+
 import models.bl.CatalogModel;
+import models.db.BookDAO;
 import views.Catalog.CatalogView;
 
 public class CatalogController {
 
-	private List<Book> book_catalog;
+	private List<BookDAO> book_catalog;
 	private CatalogView catalogView;
 	private DefaultTableModel model;
 	private JTable catalogTable;

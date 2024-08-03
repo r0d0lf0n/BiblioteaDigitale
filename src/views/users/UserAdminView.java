@@ -1,4 +1,4 @@
-package views;
+package views.users;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -15,6 +15,7 @@ import javax.swing.SpringLayout;
 import bibliotecaDigitale.CatalogMain;
 import controllers.views.UserAdminController;
 import utils.Observer;
+import views.InsertBookView;
 
 
 

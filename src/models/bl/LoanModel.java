@@ -1,27 +1,23 @@
 package models.bl;
 
 import java.util.List;
-import com.j256.ormlite.dao.Dao;
-import database.DatabaseConfig;
-import database.Loan;
+
+import controllers.bl.GestorePrestiti;
+import models.db.LoanDAO;
 
 public class LoanModel {
-	DatabaseConfig config;
-	Dao<Loan, String> loanDao = null;
 
 	public LoanModel() {
-		config = DatabaseConfig.getInstance();
-		loanDao = config.getLoanDao();
+		//emtpy
 	}
 	
-	public List<Loan> getAllLoans() {
-		List<Loan> loans = null;
+	public List<LoanDAO> getAllLoans() {
 		try {
-			loans = loanDao.queryForAll();
+			return GestorePrestiti.getInstance().getLoanDao().queryForAll();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return loans;
+		return null;
 	}
 }

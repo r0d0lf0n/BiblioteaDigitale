@@ -3,6 +3,12 @@
  */
 package controllers.bl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.j256.ormlite.dao.Dao;
+
+import models.db.UserDAO;
 import models.users.Roles;
 import models.users.Utente;
 
@@ -16,8 +22,18 @@ public class GestoreUtenti {
 	 */
 	private static GestoreUtenti _instance = null;
 	private int idTessera = 0;
+	private List<Utente> registeredUsers = null;
+	private List<Utente> externalUsers = null;
+
+	Dao<UserDAO, String> userDao; //TODO serve ?
+
+
 
 	private GestoreUtenti() {
+		
+		registeredUsers = new ArrayList<Utente>();
+		externalUsers = new ArrayList<Utente>();
+		
 	}
 
 	public static GestoreUtenti getInstance() {
@@ -70,5 +86,19 @@ public class GestoreUtenti {
 		}
 	}
 	
+	
+	/**
+	 * @return the userDao
+	 */
+	public Dao<UserDAO, String> getUserDao() {
+		return userDao;
+	}
+
+	/**
+	 * @param userDao the userDao to set
+	 */
+	public void setUserDao(Dao<UserDAO, String> userDao) {
+		this.userDao = userDao;
+	}
 	
 }

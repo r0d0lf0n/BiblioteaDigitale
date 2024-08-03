@@ -2,7 +2,7 @@ package controllers.bl;
 
 import java.util.ArrayList;
 
-import models.bl.Libro;
+import models.db.BookDAO;
 
 public class GestoreRicerche {
 
@@ -21,14 +21,14 @@ public class GestoreRicerche {
 		return _instance;
 	}
 	
-	public ArrayList<Libro> search(String...params){
+	public ArrayList<BookDAO> search(String...params){
 		
 		synchronized (this) {
 			//REALIZZA RICERCA SU DB CON GESTIONE DELLA CONCORRENZA
 			// E THREAD PER OPERAZIONE ASINCRONA
 			// TODO 
 			
-			return new ArrayList<Libro>();
+			return new ArrayList<BookDAO>();
 		}
 	}
 	

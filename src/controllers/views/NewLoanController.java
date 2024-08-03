@@ -10,13 +10,13 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import bibliotecaDigitale.CatalogMain;
-import database.Loan;
 import models.bl.LoanModel;
+import models.db.LoanDAO;
 import utils.CustomDialog;
 import views.Loan.NewLoanView;
 
 public class NewLoanController {
-	private List<Loan> loans;
+	private List<LoanDAO> loans;
 	private NewLoanView newLoanView;
 	private DefaultTableModel model;
 	private JTable loanTable;
