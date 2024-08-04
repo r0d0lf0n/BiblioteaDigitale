@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
-import bibliotecaDigitale.CatalogMain;
+import controllers.views.LandingPageController;
 import controllers.views.UserAdminController;
 import utils.Observer;
 import views.InsertBookView;
@@ -27,7 +27,9 @@ public class UserAdminView extends JFrame implements Observer{
 	private static final long serialVersionUID = 1L;
 	private UserAdminController controller = null;
 
-	public UserAdminView(String firstName, String lastName, String codiceFiscale) {
+	public UserAdminView(LandingPageController landingPageController, String firstName, String lastName, String codiceFiscale) {
+        controller = new UserAdminController();
+
         // Imposta il titolo della finestra
         setTitle("Pannello di amministrazione");
 
@@ -75,25 +77,28 @@ public class UserAdminView extends JFrame implements Observer{
         sl_contentPane.putConstraint(SpringLayout.WEST, btnShowCatalog, 0, SpringLayout.WEST, btnInsertBook);
         btnShowCatalog.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	CatalogMain catalog = new CatalogMain();
+            	landingPageController.openCatalogPanel(); //TODO
             }
         });
         contentPane.add(btnShowCatalog);
 
         setSize(400, 300);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLocationRelativeTo(null); 
         
-        controller = new UserAdminController();
         controller.addObserver(this);
+        landingPageController.addObserver(this);
     }
 
 
 	@Override
 	public void update(String type, Object arg) {
-		// TODO Auto-generated method stub
-		System.out.println("Observer Notification");
-		
-	}
+		if(type.equals("OPEN_SEARCH")) {
+			this.setVisible(true);
+		}
+		if(type.equals("CLOSE_SEARCH")){
+			this.setVisible(false);
+		}
+    }
 
 }

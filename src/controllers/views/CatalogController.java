@@ -1,5 +1,6 @@
 package controllers.views;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JLabel;
@@ -7,38 +8,58 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import models.bl.CatalogModel;
+import models.bl.LoanModel;
 import models.db.BookDAO;
+import utils.Observable;
+import utils.Observer;
 import views.Catalog.CatalogView;
 
-public class CatalogController {
+public class CatalogController implements Observable{
 
-	private List<BookDAO> book_catalog;
-	private CatalogView catalogView;
-	private DefaultTableModel model;
-	private JTable catalogTable;
+	//private List<BookDAO> book_catalog;
+	//private CatalogView catalogView;
+	//private DefaultTableModel model;
+	//private JTable catalogTable;
 	private CatalogModel catalogModel;
-	private JLabel lblNoLoans;
+	//private JLabel lblNoLoans;
+	private List<Observer> observers = null;
+    private Object obj;
 
-	public CatalogController(CatalogView view, CatalogModel bookModel) {
-		catalogView = view;
-		this.catalogModel = bookModel;
-		view.setVisible(true);
-		InitialiazeTable();
-	}
-
-	private void InitialiazeTable() {
-		book_catalog = catalogModel.getAllBooks();
-		Object[] columns = { "id", "Author", "Year" };
-		model = new DefaultTableModel();
-		model.setColumnIdentifiers(columns);
 		
-		for(int i = 1; i < book_catalog.size(); i++) {
-//			System.out.println(book_catalog.get(i)[0]);
-				model.addRow(new Object[] {i, book_catalog.get(i).getAuthor(), book_catalog.get(i).getYear()});
-		}
+	
+	public CatalogController() {
+		this.catalogModel = new CatalogModel();
+		observers = new ArrayList<Observer>();
 
-		catalogTable = catalogView.getCatalogTable();
-		catalogTable.setModel(model);
-		catalogView.setCatalogTable(catalogTable);
+		//this.catalogModel = bookModel;
+		//view.setVisible(true);
 	}
+
+	public List<BookDAO> getBookCatalog(){
+		return catalogModel.getAllBooks();
+	}
+
+
+
+    public void setChanged(String type, Object obj) {
+        this.obj = obj;
+        notifyObservers(type, obj); // Notifica gli osservatori con il nuovo stato
+    }
+
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers(String type, Object arg) {
+        for (Observer observer : observers) {
+            observer.update(type, arg); // Aggiorna ciascun osservatore con il nuovo stato
+        }
+    }
 }

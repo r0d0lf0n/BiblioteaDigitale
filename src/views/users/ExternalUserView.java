@@ -17,6 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import controllers.views.ExternalUserController;
+import controllers.views.LandingPageController;
+import models.users.Utente;
 import utils.Observer;
 
 public class ExternalUserView extends JFrame implements Observer {
@@ -24,8 +26,10 @@ public class ExternalUserView extends JFrame implements Observer {
     private static final long serialVersionUID = 1L;
     private ExternalUserController controller = null;
     private DefaultComboBoxModel<String> comboGenereModel = null;
+    private Utente currentUser = null;
 
-    public ExternalUserView() {
+    public ExternalUserView(LandingPageController landingPageController, Utente user) {
+    	this.currentUser = user;
         comboGenereModel = new DefaultComboBoxModel<>();
         controller = new ExternalUserController();
 
@@ -90,6 +94,7 @@ public class ExternalUserView extends JFrame implements Observer {
         setLocationRelativeTo(null); // Centra la finestra nello schermo
         setResizable(false); // Impedisce il ridimensionamento della finestra
 
+        landingPageController.addObserver(this);
         controller.addObserver(this);
         populatePanels();
     }
@@ -100,7 +105,6 @@ public class ExternalUserView extends JFrame implements Observer {
 
     @Override
     public void update(String type, Object arg) {
-        System.out.println("Observer Notification");
 
         if (type.equals("COMBOBOX_GENERI")) {
             comboGenereModel.removeAllElements();
@@ -111,5 +115,12 @@ public class ExternalUserView extends JFrame implements Observer {
         if(type.equals("SEARCH_RESULTS")) {
         	System.out.println("SEARCH RESULTS"); //TODO
         }
+        
+		if(type.equals("OPEN_SEARCH")) {
+			this.setVisible(true);
+		}
+		if(type.equals("CLOSE_SEARCH")){
+			this.setVisible(false);
+		}
     }
 }

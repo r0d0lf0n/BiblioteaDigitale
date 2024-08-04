@@ -104,13 +104,11 @@ public class LandingPageView extends JFrame implements Observer{
 
 	@Override
 	public void update(String type, Object arg) {
-		// TODO Auto-generated method stub
 		if(type.equals("OPEN_LANDING")) {
 			this.setVisible(true);
 		}
 		if(type.equals("CLOSE_LANDING")){
 			this.setVisible(false);
-			System.out.println("OBSERVER - CLOSE PANEL");
 		}
 	}
 

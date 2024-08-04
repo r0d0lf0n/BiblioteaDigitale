@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import controllers.views.LandingPageController;
 import controllers.views.RegisteredUserController;
 import models.users.Utente;
 import utils.Observer;
@@ -23,7 +24,7 @@ public class RegisteredUserView extends JFrame implements Observer {
     private DefaultComboBoxModel<String> comboGenereModel = null;
 
     
-    public RegisteredUserView(Utente utente) {
+    public RegisteredUserView(LandingPageController landingPageController, Utente utente) {
     	//new
         controller = new RegisteredUserController();
         comboGenereModel = new DefaultComboBoxModel<String>();
@@ -90,8 +91,7 @@ public class RegisteredUserView extends JFrame implements Observer {
         // Pulsante di chiusura
         JButton closeButton = new JButton("Chiudi");
         closeButton.addActionListener(e -> {
-            // Chiudi il pannello o l'applicazione
-            dispose(); // Chiude la finestra
+            landingPageController.openLandingPanel();
         });
 
         // Pannello per i pulsanti
@@ -106,11 +106,11 @@ public class RegisteredUserView extends JFrame implements Observer {
 
         setLocationRelativeTo(null); // Centra la finestra nello schermo
         setResizable(false);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         // Aggiunge l'observer
         controller.addObserver(this);
-        
+        landingPageController.addObserver(this);
         populateData();
     }
 
@@ -121,8 +121,6 @@ public class RegisteredUserView extends JFrame implements Observer {
 
 	@Override
     public void update(String type, Object arg) {
-        // TODO Auto-generated method stub
-        System.out.println("Observer Notification");
         
         if(type.equals("COMBOBOX_GENERI")) {
         	comboGenereModel.removeAllElements();
@@ -130,6 +128,14 @@ public class RegisteredUserView extends JFrame implements Observer {
         		comboGenereModel.addElement(item); // Add updated items to the model
             }
         }
+        
+		if(type.equals("OPEN_SEARCH")) {
+			this.setVisible(true);
+		}
+		
+		if(type.equals("CLOSE_SEARCH")){
+			this.setVisible(false);
+		}
     }
 
 

@@ -184,7 +184,7 @@ public class LoanView extends JFrame implements Observer{
 //	}
 	
 	private void initializeTable() {
-		Object[] columns = { "id", "User", "Book" };
+		Object[] columns = { "id", "User", "Book", "Start Loan", "End Loan" };
 		DefaultTableModel model = new DefaultTableModel();
 		model.setColumnIdentifiers(columns);
 		
@@ -204,10 +204,8 @@ public class LoanView extends JFrame implements Observer{
 
 	@Override
 	public void update(String type, Object arg) {
-		// TODO Auto-generated method stub
 		if(type.equals("OPEN_LOANS")) {
 			this.setVisible(true);
-			System.out.println("OBSERVER - OPEN PANEL");
 		}
 		if(type.equals("CLOSE_LOANS")){
 			this.setVisible(false);

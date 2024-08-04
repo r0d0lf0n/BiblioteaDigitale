@@ -1,14 +1,13 @@
 package views.Catalog;
 
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -16,13 +15,18 @@ import javax.swing.SpringLayout;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-public class CatalogView extends JFrame {
+import controllers.views.CatalogController;
+import controllers.views.LandingPageController;
+import models.db.BookDAO;
+import utils.Observer;
+
+public class CatalogView extends JFrame implements Observer{
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTable catalogTable;
-	private DefaultTableModel model;
-	private JLabel lblNoLoans;
+	//private JLabel lblNoLoans;
+	private CatalogController controller = null;
 	
 //	/**
 //	 * Launch the application.
@@ -43,12 +47,15 @@ public class CatalogView extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public CatalogView() {
+	public CatalogView(LandingPageController landingPageController) {
+		controller = new CatalogController();
+		
+		
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 600, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
+		setLocationRelativeTo(null);
 		setContentPane(contentPane);
 		SpringLayout sl_contentPane = new SpringLayout();
 		contentPane.setLayout(sl_contentPane);
@@ -56,8 +63,7 @@ public class CatalogView extends JFrame {
 		JButton btnClose = new JButton("Close");
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				  WindowEvent windowClosing = new WindowEvent(CatalogView.this, WindowEvent.WINDOW_CLOSING);
-	              Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(windowClosing);
+				landingPageController.openLandingPanel();
 			}
 		});
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnClose, 0, SpringLayout.WEST, contentPane);
@@ -68,6 +74,7 @@ public class CatalogView extends JFrame {
 		sl_contentPane.putConstraint(SpringLayout.NORTH, btnLoadData, 20, SpringLayout.NORTH, contentPane);
 		btnLoadData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//TODO
 			}
 		});
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnLoadData, 0, SpringLayout.WEST, btnClose);
@@ -76,6 +83,7 @@ public class CatalogView extends JFrame {
 		JButton btnRefresh = new JButton("Refresh");
 		btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//TODO
 			}
 		});
 		sl_contentPane.putConstraint(SpringLayout.NORTH, btnRefresh, 17, SpringLayout.SOUTH, btnLoadData);
@@ -100,17 +108,43 @@ public class CatalogView extends JFrame {
 		this.addWindowListener(new WindowAdapter() {
 	         @Override
 	         public void windowClosing(WindowEvent e) {
-
-	             dispose();
+	        	 landingPageController.openLandingPanel();
 	         }
 	     });
+		
+		if(getBookCatalog().size() == 0)
+			initializeTable();
+		
+		controller.addObserver(this);
+		landingPageController.addObserver(this);
 	}
 
-	public JTable getCatalogTable() {
-		return catalogTable;
+	public List<BookDAO> getBookCatalog() {
+		return controller.getBookCatalog();
 	}
 
-	public void setCatalogTable(JTable catalogTable) {
-		this.catalogTable = catalogTable;
+
+	@Override
+	public void update(String type, Object arg) {
+		if(type.equals("OPEN_CATALOG")) {
+			this.setVisible(true);
+		}
+		if(type.equals("CLOSE_CATALOG")){
+			this.setVisible(false);
+		}
+		
+	}
+	
+	private void initializeTable() {
+		Object[] columns = { "id", "Title", "Author", "Year", "Description","ISBN" };
+		DefaultTableModel model = new DefaultTableModel();
+		model.setColumnIdentifiers(columns);
+		
+		for(int i = 1; i < getBookCatalog().size(); i++) {
+//			System.out.println(book_catalog.get(i)[0]);
+				model.addRow(new Object[] {i, getBookCatalog().get(i).getAuthor(), getBookCatalog().get(i).getYear()});
+		}
+
+		catalogTable.setModel(model);
 	}
 }
