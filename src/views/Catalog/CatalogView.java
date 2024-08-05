@@ -27,6 +27,7 @@ public class CatalogView extends JFrame implements Observer{
 	private JTable catalogTable;
 	//private JLabel lblNoLoans;
 	private CatalogController controller = null;
+	List<BookDAO> book_catalog = null;
 	
 //	/**
 //	 * Launch the application.
@@ -52,7 +53,7 @@ public class CatalogView extends JFrame implements Observer{
 		
 		
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(100, 100, 600, 600);
+		setBounds(100, 100, 800, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLocationRelativeTo(null);
@@ -112,15 +113,15 @@ public class CatalogView extends JFrame implements Observer{
 	         }
 	     });
 		
-		if(getBookCatalog().size() == 0)
-			initializeTable();
+//		if(getBookCatalog().size() == 0)
+		initializeTable();
 		
 		controller.addObserver(this);
 		landingPageController.addObserver(this);
 	}
 
-	public List<BookDAO> getBookCatalog() {
-		return controller.getBookCatalog();
+	public void getBookCatalog() {
+		book_catalog = controller.getBookCatalog();
 	}
 
 
@@ -139,10 +140,11 @@ public class CatalogView extends JFrame implements Observer{
 		Object[] columns = { "id", "Title", "Author", "Year", "Description","ISBN" };
 		DefaultTableModel model = new DefaultTableModel();
 		model.setColumnIdentifiers(columns);
+		getBookCatalog();
 		
-		for(int i = 1; i < getBookCatalog().size(); i++) {
-//			System.out.println(book_catalog.get(i)[0]);
-				model.addRow(new Object[] {i, getBookCatalog().get(i).getAuthor(), getBookCatalog().get(i).getYear()});
+		for(int i = 1; i < book_catalog.size(); i++) {
+//			System.out.println(book_catalog.get(i).getAuthor());
+			model.addRow(new Object[] {i, book_catalog.get(i).getAuthor(), book_catalog.get(i).getYear()});
 		}
 
 		catalogTable.setModel(model);
