@@ -12,8 +12,10 @@ public class CustomDialog {
     JButton btnOne;
     JButton btnTwo;
 	
-	public JDialog showDialog(JFrame view, String title, String msg, String btnOneText, String btnTwoText) {
+	public JDialog buildDialog(JFrame view, String title, String msg, String btnOneText, String btnTwoText, 
+			int xCoordinate, int yCoordinate, int width, int height) {
 		JDialog d = new JDialog(view, title);
+		d.setLocation(xCoordinate, yCoordinate);
 	    JLabel l = new JLabel(msg);
 
 	    btnOne = new JButton(btnOneText);
@@ -25,7 +27,7 @@ public class CustomDialog {
 	    p.add(l);
 
 	    d.add(p);
-	    d.setSize(280, 100);
+	    d.setSize(width, height);
 	    return d;
 	}
 	

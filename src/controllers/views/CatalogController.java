@@ -15,13 +15,7 @@ import utils.Observer;
 import views.Catalog.CatalogView;
 
 public class CatalogController implements Observable{
-
-	//private List<BookDAO> book_catalog;
-	//private CatalogView catalogView;
-	//private DefaultTableModel model;
-	//private JTable catalogTable;
 	private CatalogModel catalogModel;
-	//private JLabel lblNoLoans;
 	private List<Observer> observers = null;
     private Object obj;
 
@@ -30,9 +24,6 @@ public class CatalogController implements Observable{
 	public CatalogController() {
 		this.catalogModel = new CatalogModel();
 		observers = new ArrayList<Observer>();
-
-		//this.catalogModel = bookModel;
-		//view.setVisible(true);
 	}
 
 	public List<BookDAO> getBookCatalog(){

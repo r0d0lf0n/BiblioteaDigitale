@@ -1,5 +1,7 @@
 package views.Loan;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -7,6 +9,7 @@ import java.awt.event.WindowEvent;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -20,7 +23,9 @@ import javax.swing.table.DefaultTableModel;
 
 import controllers.views.LandingPageController;
 import controllers.views.LoansController;
+import models.db.BookDAO;
 import models.db.LoanDAO;
+import utils.CustomDialog;
 import utils.Observer;
 
 public class LoanView extends JFrame implements Observer{
@@ -33,6 +38,11 @@ public class LoanView extends JFrame implements Observer{
 	private JTextField textField;
 	private LoansController controller = null;
 	NewLoanView newLoanView = null;
+	List<LoanDAO> loans = null;
+	private CustomDialog dialog;
+	int centerX;
+	int centerY;
+
 	
 
 	/**
@@ -40,11 +50,18 @@ public class LoanView extends JFrame implements Observer{
 	 * @param landingPageController 
 	 */
 	public LoanView(LandingPageController landingPageController) {
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+	    // Calcola il punto centrale dello schermo
+	    centerX = screenWidth / 2;
+	    centerY = screenHeight / 2;
+	    
 		controller = new LoansController();
-		
+		dialog = new CustomDialog();
 		setTitle("Gestione Prestiti");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(100, 100, 600, 600);
+		setBounds(100, 100, 800, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLocationRelativeTo(null);
@@ -135,9 +152,8 @@ public class LoanView extends JFrame implements Observer{
 	         }
 	     });
 		
-		if (getLoans().size() == 0) { 
-			initializeTable();
-		}
+		getLoans();
+
 		controller.addObserver(this);
 		landingPageController.addObserver(this);
 		
@@ -188,9 +204,9 @@ public class LoanView extends JFrame implements Observer{
 		DefaultTableModel model = new DefaultTableModel();
 		model.setColumnIdentifiers(columns);
 		
-		for(int i = 1; i < getLoans().size(); i++) {
+		for(int i = 1; i < loans.size(); i++) {
 //			System.out.println(loans.get(i)[0]);
-				model.addRow(new Object[] {i, getLoans().get(i).getUser_id(), getLoans().get(i).getBook_id()});
+				model.addRow(new Object[] {i, loans.get(i).getUser_id(), loans.get(i).getBook_id()});
 		}
 
 		loanTable.setModel(model);
@@ -198,15 +214,50 @@ public class LoanView extends JFrame implements Observer{
 	
 	
 	private List<LoanDAO> getLoans() {
-		return controller.getLoans();
+		loans = controller.getLoans();
+		return loans;
 	}
 	
 
 	@Override
 	public void update(String type, Object arg) {
 		if(type.equals("OPEN_LOANS")) {
-			this.setVisible(true);
-		}
+			if (loans.size() == 0) { 
+				lblNoLoans.setVisible(true);
+				int width = 280;
+				int height = 100;		
+				JDialog d = dialog.buildDialog(this, "Warning!", "There are no loand yet!", "New Loan", "Cancel", centerX - width, centerY - height, width, height);
+				JButton btnOne = dialog.getButtonOne();
+				JButton btnTwo = dialog.getButtonTwo();
+				btnOne.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					System.out.println("New loan!");
+//					newLoanView = new NewLoanView(landingPageController);
+					d.setVisible(false);
+					d.dispose();
+//					newLoanView.setVisible(true);
+					//LoanModel loanModel = new LoanModel();
+					//NewLoanController newLoanController = new NewLoanController(newLoanView, loanModel);
+					}
+				});
+				
+				btnTwo.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						System.out.println("Closing dialog!");
+						d.setVisible(false);
+						d.dispose();
+					}
+				});
+				
+				d.setVisible(true);
+				lblNoLoans.setVisible(true);
+			} else {
+				this.setVisible(true);
+				lblNoLoans.setVisible(false);
+				initializeTable();
+			}
+		} 
+		
 		if(type.equals("CLOSE_LOANS")){
 			this.setVisible(false);
 		}
