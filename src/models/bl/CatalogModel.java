@@ -26,7 +26,6 @@ public class CatalogModel {
 		try {
 
 			list = GestoreCatalogo.getInstance().getBookDao().queryBuilder()
-			  .selectColumns("title")
 			  .where()
 			  .like("title", "%"+criteria+"%")
 			  .query();
