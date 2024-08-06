@@ -7,6 +7,8 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import controllers.views.LoansController;
 import utils.Observer;
@@ -75,11 +77,7 @@ public class NewLoanView extends JDialog implements Observer {
 		
 		SpringLayout sl_contentPane = new SpringLayout();
 		contentPane.setLayout(sl_contentPane);
-		
-
-		
-		
-		
+	
 		JButton btnNewButton = new JButton("Close");
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnNewButton, -10, SpringLayout.SOUTH, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.EAST, btnNewButton, -10, SpringLayout.EAST, contentPane);
@@ -97,6 +95,20 @@ public class NewLoanView extends JDialog implements Observer {
 		textFieldUser.setColumns(100);
 		contentPane.add(textFieldUser);
 		
+		textFieldUser.getDocument().addDocumentListener(new DocumentListener() {
+		    @Override
+		    public void insertUpdate(DocumentEvent e) {
+		    	System.out.println(textFieldUser.getText());
+		    	
+		    }
+
+		    @Override
+		    public void removeUpdate(DocumentEvent e) {}
+
+		    @Override
+		    public void changedUpdate(DocumentEvent e) {}
+		});
+		
 		JLabel lblBook = new JLabel("Book Name:");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, lblBook, 0, SpringLayout.NORTH, lblUser);
 		sl_contentPane.putConstraint(SpringLayout.WEST, lblBook, 314, SpringLayout.EAST, lblUser);
@@ -111,6 +123,20 @@ public class NewLoanView extends JDialog implements Observer {
 		sl_contentPane.putConstraint(SpringLayout.EAST, textFieldBook, -195, SpringLayout.EAST, contentPane);
 		textFieldBook.setColumns(100);
 		contentPane.add(textFieldBook);
+		
+		textFieldBook.getDocument().addDocumentListener(new DocumentListener() {
+		    @Override
+		    public void insertUpdate(DocumentEvent e) {
+		    	System.out.println(textFieldBook.getText());
+		    	
+		    }
+
+		    @Override
+		    public void removeUpdate(DocumentEvent e) {}
+
+		    @Override
+		    public void changedUpdate(DocumentEvent e) {}
+		});
 		
 		tableBooks = new JTable();
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, tableBooks, -234, SpringLayout.SOUTH, contentPane);
