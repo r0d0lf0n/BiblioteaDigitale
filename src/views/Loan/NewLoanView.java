@@ -1,6 +1,5 @@
 package views.Loan;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JDialog;
@@ -11,20 +10,17 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import controllers.views.LoansController;
+import models.bl.CatalogModel;
+import models.bl.UserModel;
+import models.db.BookDAO;
+import models.db.UserDAO;
 import utils.Observer;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.SpringLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import java.util.List;
 import javax.swing.JLabel;
-import java.awt.GridLayout;
-import java.awt.LayoutManager;
 import javax.swing.JTextField;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import javax.swing.JTable;
 
 public class NewLoanView extends JDialog implements Observer {
@@ -45,6 +41,10 @@ public class NewLoanView extends JDialog implements Observer {
 	private JLabel lblSelectedUserValue;
 	private JLabel lblBookSelected;
 	private JLabel lblSelectedBookValue;
+	private List<BookDAO> filteredBooks = null;
+	private List<UserDAO> filteredUsers = null;
+	private CatalogModel catalogModel;
+	private UserModel userModel;
 
 	/**
 	 * Launch the application.
@@ -98,8 +98,8 @@ public class NewLoanView extends JDialog implements Observer {
 		textFieldUser.getDocument().addDocumentListener(new DocumentListener() {
 		    @Override
 		    public void insertUpdate(DocumentEvent e) {
-		    	System.out.println(textFieldUser.getText());
-		    	
+		    	String txt = textFieldUser.getText();
+		    	filteredUsers(txt);
 		    }
 
 		    @Override
@@ -127,8 +127,8 @@ public class NewLoanView extends JDialog implements Observer {
 		textFieldBook.getDocument().addDocumentListener(new DocumentListener() {
 		    @Override
 		    public void insertUpdate(DocumentEvent e) {
-		    	System.out.println(textFieldBook.getText());
-		    	
+		    	String txt = textFieldBook.getText();
+		    	filteredBooks(txt);
 		    }
 
 		    @Override
@@ -187,11 +187,6 @@ public class NewLoanView extends JDialog implements Observer {
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, lblSelectedBookValue, 0, SpringLayout.SOUTH, lblBookSelected);
 		contentPane.add(lblSelectedBookValue);
 		
-
-		
-		
-		
-		
 		
 		
 		controller.addObserver(this);
@@ -206,5 +201,19 @@ public class NewLoanView extends JDialog implements Observer {
 		if(type.equals("CLOSE_NEW_LOAN")){
 			this.setVisible(false);
 		}
+	}
+	
+	private List<UserDAO> filteredUsers(String criteria) {
+//    	System.out.println(criteria);
+    	List<UserDAO> list = controller.getUsersByRegex(criteria);
+    	System.out.println(list);
+		return list;
+	}
+	
+	private List<BookDAO> filteredBooks(String criteria) {
+//		System.out.println(criteria);
+    	List<BookDAO> list = controller.getBooksByRegex(criteria);
+    	System.out.println(list);
+		return list;
 	}
 }

@@ -3,19 +3,27 @@ package controllers.views;
 import java.util.ArrayList;
 import java.util.List;
 
+import models.bl.CatalogModel;
 import models.bl.LoanModel;
+import models.bl.UserModel;
+import models.db.BookDAO;
 import models.db.LoanDAO;
+import models.db.UserDAO;
 import utils.Observable;
 import utils.Observer;
 
 public class LoansController implements Observable{
 
 	private LoanModel loanModel;
+	private UserModel userModel;
+	private CatalogModel catalogModel;
 	private List<Observer> observers = null;
     private Object obj;
 
 	public LoansController() {
 		this.loanModel = new LoanModel();
+		this.userModel = new UserModel();
+		this.catalogModel = new CatalogModel();
 		observers = new ArrayList<Observer>();
 
 	}
@@ -24,7 +32,13 @@ public class LoansController implements Observable{
 		return loanModel.getAllLoans();
 	}
 	
-
+	public List<UserDAO> getUsersByRegex(String criteria) {
+		return userModel.getUsersByRegex(criteria);
+	}
+	
+	public List<BookDAO> getBooksByRegex(String criteria) {
+		return catalogModel.getBooksByRegex(criteria);
+	}
 
     public void setChanged(String type, Object obj) {
         this.obj = obj;
