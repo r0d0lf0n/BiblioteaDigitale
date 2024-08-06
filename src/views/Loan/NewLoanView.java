@@ -156,12 +156,14 @@ public class NewLoanView extends JDialog implements Observer {
 		    public void insertUpdate(DocumentEvent e) {
 		    	String txt = textFieldBook.getText();
 		    	filteredBooks(txt);
+		    	cleanTextField();
 		    }
 
 		    @Override
 		    public void removeUpdate(DocumentEvent e) {
 //		    	String txt = textFieldBook.getText();
 //		    	filteredBooks(txt);
+		    	cleanTextField();
 		    }
 
 		    @Override
@@ -364,5 +366,12 @@ public class NewLoanView extends JDialog implements Observer {
 		}
 		
 		tableBooks.setModel(model);
+	}
+	
+	private void cleanTextField() {
+		lblSelectedBookValueID.setText("none");
+		lblSelectedBookValueTitle.setText("none");
+		lblSelectedBookValueAuthor.setText("none");
+		lblSelectedBookValueYear.setText("none");
 	}
 }
