@@ -84,7 +84,7 @@ public class LoanView extends JFrame implements Observer{
 		btnNewLoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(newLoanView == null)
-					newLoanView = new NewLoanView();
+					newLoanView = new NewLoanView(controller);
 				newLoanView.setVisible(true);
 			}
 		});
@@ -230,14 +230,14 @@ public class LoanView extends JFrame implements Observer{
 				JButton btnOne = dialog.getButtonOne();
 				JButton btnTwo = dialog.getButtonTwo();
 				btnOne.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					System.out.println("New loan!");
-//					newLoanView = new NewLoanView(landingPageController);
-					d.setVisible(false);
-					d.dispose();
-//					newLoanView.setVisible(true);
-					//LoanModel loanModel = new LoanModel();
-					//NewLoanController newLoanController = new NewLoanController(newLoanView, loanModel);
+					public void actionPerformed(ActionEvent e) {
+//				    	System.out.println("New loan!");
+						d.setVisible(false);
+						d.dispose();
+						newLoanView = new NewLoanView(controller);
+						controller.setChanged("OPEN_NEW_LOAN", null);
+						//LoanModel loanModel = new LoanModel();
+						//NewLoanController newLoanController = new NewLoanController(newLoanView, loanModel);
 					}
 				});
 				
