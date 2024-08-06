@@ -258,14 +258,14 @@ public class NewLoanView extends JDialog implements Observer {
 		contentPane.add(lblSelectedBookValueTitle);
 		
 		lblSelectedBookValueAuthor = new JLabel("none");
-		lblSelectedBookValueAuthor.setSize(100, 40);
 		sl_contentPane.putConstraint(SpringLayout.NORTH, lblSelectedBookValueAuthor, 0, SpringLayout.NORTH, lblBookSelected);
-		sl_contentPane.putConstraint(SpringLayout.WEST, lblSelectedBookValueAuthor, 132, SpringLayout.EAST, lblSelectedBookValueTitle);
+		sl_contentPane.putConstraint(SpringLayout.WEST, lblSelectedBookValueAuthor, 102, SpringLayout.EAST, lblSelectedBookValueTitle);
+		lblSelectedBookValueAuthor.setSize(100, 40);
 		contentPane.add(lblSelectedBookValueAuthor);
 		
 		lblSelectedBookValueYear = new JLabel("none");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, lblSelectedBookValueYear, 0, SpringLayout.NORTH, lblBookSelected);
-		sl_contentPane.putConstraint(SpringLayout.WEST, lblSelectedBookValueYear, 103, SpringLayout.EAST, lblSelectedBookValueAuthor);
+		sl_contentPane.putConstraint(SpringLayout.WEST, lblSelectedBookValueYear, 108, SpringLayout.EAST, lblSelectedBookValueAuthor);
 		lblSelectedBookValueYear.setSize(100, 40);
 		contentPane.add(lblSelectedBookValueYear);
 		
