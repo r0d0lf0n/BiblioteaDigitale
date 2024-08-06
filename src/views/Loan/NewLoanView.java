@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import controllers.views.LoansController;
@@ -43,7 +45,7 @@ public class NewLoanView extends JDialog implements Observer {
 	private JLabel lblUserSelected;
 	private JLabel lblSelectedUserValue;
 	private JLabel lblBookSelected;
-	private JLabel lblSelectedBookValue;
+	private JLabel lblSelectedBookValueID;
 	private List<BookDAO> filteredBooks = null;
 	private List<UserDAO> filteredUsers = null;
 	private CatalogModel catalogModel;
@@ -51,6 +53,10 @@ public class NewLoanView extends JDialog implements Observer {
 	private JScrollPane scrollPaneBooks;
 	private JTable table;
 	private JScrollPane scrollPaneUsers;
+	private JLabel lblSelectedBookValueTitle;
+	private JLabel lblSelectedBookValueAuthor;
+	private JLabel lblSelectedBookValueYear;
+	private BookDAO selectedBook;
 
 	/**
 	 * Launch the application.
@@ -192,10 +198,11 @@ public class NewLoanView extends JDialog implements Observer {
 		sl_contentPane.putConstraint(SpringLayout.WEST, lblBookSelected, 0, SpringLayout.WEST, lblUser);
 		contentPane.add(lblBookSelected);
 		
-		lblSelectedBookValue = new JLabel("none");
-		sl_contentPane.putConstraint(SpringLayout.WEST, lblSelectedBookValue, 0, SpringLayout.WEST, lblSelectedUserValue);
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, lblSelectedBookValue, 0, SpringLayout.SOUTH, lblBookSelected);
-		contentPane.add(lblSelectedBookValue);
+		lblSelectedBookValueID = new JLabel("none");
+		lblSelectedBookValueID.setSize(30, 40);
+		sl_contentPane.putConstraint(SpringLayout.WEST, lblSelectedBookValueID, 0, SpringLayout.WEST, lblSelectedUserValue);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, lblSelectedBookValueID, 0, SpringLayout.SOUTH, lblBookSelected);
+		contentPane.add(lblSelectedBookValueID);
 		
 		scrollPaneBooks = new JScrollPane();
 		sl_contentPane.putConstraint(SpringLayout.NORTH, scrollPaneBooks, 1, SpringLayout.NORTH, tableUsers);
@@ -204,6 +211,37 @@ public class NewLoanView extends JDialog implements Observer {
 		sl_contentPane.putConstraint(SpringLayout.EAST, scrollPaneBooks, 334, SpringLayout.EAST, lblTableLabel);
 		contentPane.add(scrollPaneBooks);
 		scrollPaneBooks.setViewportView(tableBooks);
+		tableBooks.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+	        public void valueChanged(ListSelectionEvent event) {
+	        	if (!event.getValueIsAdjusting()) {
+	        		String bookId = tableBooks.getValueAt(tableBooks.getSelectedRow(), 0).toString();
+	        		String title = tableBooks.getValueAt(tableBooks.getSelectedRow(), 1).toString();
+	        		String author = tableBooks.getValueAt(tableBooks.getSelectedRow(), 2).toString();
+	        		String year = tableBooks.getValueAt(tableBooks.getSelectedRow(), 3).toString();
+	        		System.out.println(bookId);
+	        		System.out.println(title);
+	        		System.out.println(author);
+	        		System.out.println(year);
+	        		
+	        	    selectedBook = new BookDAO();
+	        	    selectedBook.setId(Integer.valueOf(bookId));
+	        	    selectedBook.setTitle(title);
+	        	    selectedBook.setAuthor(author);
+	        	    selectedBook.setYear(year);
+	        		
+	        	    
+	        	    int titleMaxLenght = 20;
+	        	    if (!(selectedBook.getTitle().length() > 20)) {
+	        	    	titleMaxLenght = selectedBook.getTitle().length();
+	        	    }
+	        		lblSelectedBookValueID.setText(String.valueOf(bookId));
+	        		lblSelectedBookValueTitle.setText(selectedBook.getTitle().substring(0, titleMaxLenght));
+	        		lblSelectedBookValueAuthor.setText(selectedBook.getAuthor());
+	        		lblSelectedBookValueYear.setText(selectedBook.getYear());
+	        	}
+//	            System.out.println(tableBooks.getValueAt(tableBooks.getSelectedRow(), 0).toString());
+	        }
+	    });
 		
 		scrollPaneUsers = new JScrollPane();
 		sl_contentPane.putConstraint(SpringLayout.NORTH, scrollPaneUsers, 0, SpringLayout.NORTH, scrollPaneBooks);
@@ -212,6 +250,24 @@ public class NewLoanView extends JDialog implements Observer {
 		sl_contentPane.putConstraint(SpringLayout.EAST, scrollPaneUsers, -6, SpringLayout.WEST, scrollPaneBooks);
 		contentPane.add(scrollPaneUsers);
 		scrollPaneUsers.setViewportView(tableUsers);
+		
+		lblSelectedBookValueTitle = new JLabel("none");
+		lblSelectedBookValueTitle.setSize(100, 40);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, lblSelectedBookValueTitle, 0, SpringLayout.NORTH, lblBookSelected);
+		sl_contentPane.putConstraint(SpringLayout.WEST, lblSelectedBookValueTitle, 27, SpringLayout.EAST, lblSelectedBookValueID);
+		contentPane.add(lblSelectedBookValueTitle);
+		
+		lblSelectedBookValueAuthor = new JLabel("none");
+		lblSelectedBookValueAuthor.setSize(100, 40);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, lblSelectedBookValueAuthor, 0, SpringLayout.NORTH, lblBookSelected);
+		sl_contentPane.putConstraint(SpringLayout.WEST, lblSelectedBookValueAuthor, 132, SpringLayout.EAST, lblSelectedBookValueTitle);
+		contentPane.add(lblSelectedBookValueAuthor);
+		
+		lblSelectedBookValueYear = new JLabel("none");
+		sl_contentPane.putConstraint(SpringLayout.NORTH, lblSelectedBookValueYear, 0, SpringLayout.NORTH, lblBookSelected);
+		sl_contentPane.putConstraint(SpringLayout.WEST, lblSelectedBookValueYear, 103, SpringLayout.EAST, lblSelectedBookValueAuthor);
+		lblSelectedBookValueYear.setSize(100, 40);
+		contentPane.add(lblSelectedBookValueYear);
 		
 		
 		
