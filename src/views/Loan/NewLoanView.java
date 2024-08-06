@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableModel;
 
 import controllers.views.LoansController;
 import models.bl.CatalogModel;
@@ -22,6 +23,8 @@ import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JTable;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 
 public class NewLoanView extends JDialog implements Observer {
 
@@ -45,6 +48,9 @@ public class NewLoanView extends JDialog implements Observer {
 	private List<UserDAO> filteredUsers = null;
 	private CatalogModel catalogModel;
 	private UserModel userModel;
+	private JScrollPane scrollPaneBooks;
+	private JTable table;
+	private JScrollPane scrollPaneUsers;
 
 	/**
 	 * Launch the application.
@@ -139,9 +145,9 @@ public class NewLoanView extends JDialog implements Observer {
 		});
 		
 		tableBooks = new JTable();
+		sl_contentPane.putConstraint(SpringLayout.WEST, tableBooks, 396, SpringLayout.WEST, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, tableBooks, -234, SpringLayout.SOUTH, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.EAST, tableBooks, -10, SpringLayout.EAST, contentPane);
-		contentPane.add(tableBooks);
 		
 		lblTableLabel = new JLabel("Books");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, tableBooks, 11, SpringLayout.SOUTH, lblTableLabel);
@@ -149,11 +155,9 @@ public class NewLoanView extends JDialog implements Observer {
 		contentPane.add(lblTableLabel);
 		
 		tableUsers = new JTable();
-		sl_contentPane.putConstraint(SpringLayout.WEST, tableBooks, 30, SpringLayout.EAST, tableUsers);
+		sl_contentPane.putConstraint(SpringLayout.EAST, tableUsers, -6, SpringLayout.WEST, tableBooks);
 		sl_contentPane.putConstraint(SpringLayout.WEST, tableUsers, 10, SpringLayout.WEST, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, tableUsers, -234, SpringLayout.SOUTH, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.EAST, tableUsers, -424, SpringLayout.EAST, contentPane);
-		contentPane.add(tableUsers);
 		
 		lblTableLabelUsers = new JLabel("Users");
 		sl_contentPane.putConstraint(SpringLayout.WEST, lblTableLabelUsers, 10, SpringLayout.WEST, contentPane);
@@ -168,7 +172,7 @@ public class NewLoanView extends JDialog implements Observer {
 		contentPane.add(btnSave);
 		
 		lblUserSelected = new JLabel("Selected User:");
-		sl_contentPane.putConstraint(SpringLayout.NORTH, lblUserSelected, 55, SpringLayout.SOUTH, tableUsers);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, lblUserSelected, 50, SpringLayout.SOUTH, tableUsers);
 		sl_contentPane.putConstraint(SpringLayout.WEST, lblUserSelected, 0, SpringLayout.WEST, lblUser);
 		contentPane.add(lblUserSelected);
 		
@@ -187,6 +191,22 @@ public class NewLoanView extends JDialog implements Observer {
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, lblSelectedBookValue, 0, SpringLayout.SOUTH, lblBookSelected);
 		contentPane.add(lblSelectedBookValue);
 		
+		scrollPaneBooks = new JScrollPane();
+		sl_contentPane.putConstraint(SpringLayout.NORTH, scrollPaneBooks, 1, SpringLayout.NORTH, tableUsers);
+		sl_contentPane.putConstraint(SpringLayout.WEST, scrollPaneBooks, 0, SpringLayout.WEST, lblTableLabel);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, scrollPaneBooks, 198, SpringLayout.NORTH, tableUsers);
+		sl_contentPane.putConstraint(SpringLayout.EAST, scrollPaneBooks, 334, SpringLayout.EAST, lblTableLabel);
+		contentPane.add(scrollPaneBooks);
+		scrollPaneBooks.setViewportView(tableBooks);
+		
+		scrollPaneUsers = new JScrollPane();
+		sl_contentPane.putConstraint(SpringLayout.NORTH, scrollPaneUsers, 0, SpringLayout.NORTH, scrollPaneBooks);
+		sl_contentPane.putConstraint(SpringLayout.WEST, scrollPaneUsers, 10, SpringLayout.WEST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, scrollPaneUsers, 0, SpringLayout.SOUTH, scrollPaneBooks);
+		sl_contentPane.putConstraint(SpringLayout.EAST, scrollPaneUsers, -6, SpringLayout.WEST, scrollPaneBooks);
+		contentPane.add(scrollPaneUsers);
+		scrollPaneUsers.setViewportView(tableUsers);
+		
 		
 		
 		controller.addObserver(this);
@@ -203,17 +223,33 @@ public class NewLoanView extends JDialog implements Observer {
 		}
 	}
 	
-	private List<UserDAO> filteredUsers(String criteria) {
-//    	System.out.println(criteria);
+	private void filteredUsers(String criteria) {
+		Object[] columns = { "id", "Name"};
+		DefaultTableModel model = new DefaultTableModel();
+		model.setColumnIdentifiers(columns);
+		
     	List<UserDAO> list = controller.getUsersByRegex(criteria);
-    	System.out.println(list);
-		return list;
+		for (UserDAO u : list) {
+			System.out.println("*************************");
+			System.out.println(u.getName());
+			model.addRow(new Object[] {u.getId(), u.getName()});
+		}
+		
+		tableUsers.setModel(model);
 	}
 	
-	private List<BookDAO> filteredBooks(String criteria) {
-//		System.out.println(criteria);
+	private void filteredBooks(String criteria) {
+		Object[] columns = { "id", "Title", "Author", "Year"};
+		DefaultTableModel model = new DefaultTableModel();
+		model.setColumnIdentifiers(columns);
+		
     	List<BookDAO> list = controller.getBooksByRegex(criteria);
-    	System.out.println(list);
-		return list;
+		for (BookDAO b : list) {
+			System.out.println("*************************");
+			System.out.println(b.getTitle());
+			model.addRow(new Object[] {b.getId(), b.getTitle(), b.getAuthor(), b.getYear()});
+		}
+		
+		tableBooks.setModel(model);
 	}
 }

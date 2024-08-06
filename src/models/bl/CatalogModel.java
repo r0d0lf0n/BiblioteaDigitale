@@ -23,10 +23,23 @@ public class CatalogModel {
 	}
 	
 	public List<BookDAO> getBooksByRegex(String criteria) {
+		System.out.println(criteria);
 		List<BookDAO> list = null;
 		try {
 			bookDao = GestoreCatalogo.getInstance().getBookDao();
-			list = bookDao.queryBuilder().where().eq("title", criteria).query();
+//			list = bookDao.queryForEq(criteria, list)
+//			list = bookDao.queryForAll();
+			
+			
+			list = bookDao.queryBuilder()
+			  .where()
+			  .in("title", bookDao.queryBuilder()
+			    .selectColumns("title"))
+			  .query();
+			
+
+			
+//			 queryBuilder.where().eq("title", criteria).and().eq(Account.PASSWORD_FIELD_NAME, "_secret");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
