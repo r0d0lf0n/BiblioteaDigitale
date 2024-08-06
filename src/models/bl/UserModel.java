@@ -4,9 +4,7 @@ import java.util.List;
 
 import com.j256.ormlite.dao.Dao;
 
-import controllers.bl.GestoreCatalogo;
 import controllers.bl.GestoreUtenti;
-import models.db.BookDAO;
 import models.db.UserDAO;
 
 public class UserModel {
@@ -20,7 +18,6 @@ public class UserModel {
 		try {
 			return GestoreUtenti.getInstance().getUserDao().queryForAll();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -29,14 +26,12 @@ public class UserModel {
 	public List<UserDAO> getUsersByRegex(String criteria) {
 		List<UserDAO> list = null;
 		try {
-			userDao = GestoreUtenti.getInstance().getUserDao();
-			list = userDao.queryBuilder()
+			list = GestoreUtenti.getInstance().getUserDao().queryBuilder()
 					  .selectColumns("name")
 					  .where()
 					  .like("name", "%"+criteria+"%")
 					  .query();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return list;

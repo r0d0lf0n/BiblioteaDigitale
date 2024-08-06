@@ -12,7 +12,7 @@ import models.db.UserDAO;
 
 
 public final class DatabaseConfig {
-    private static DatabaseConfig INSTANCE;
+    private static DatabaseConfig _instance;
     
 	String dbfilepath  = "jdbc:sqlite:biblio.db";
 	ConnectionSource connectionSource;
@@ -42,11 +42,11 @@ public final class DatabaseConfig {
 	}
 	
 	 public static synchronized DatabaseConfig getInstance() {
-        if(INSTANCE == null) {
-            INSTANCE = new DatabaseConfig();
+        if(_instance == null) {
+            _instance = new DatabaseConfig();
         }
         
-        return INSTANCE;
+        return _instance;
     }
 	
 	public ConnectionSource getdbConnection() {

@@ -22,6 +22,8 @@ public class App {
 				
 		Orchestrator orchestrator = new Orchestrator();
 
+		orchestrator.startDB();
+		
 		//create users
 		for(int i=0; i< adminNumber; i++) {
 			orchestrator.startUser(Roles.ADMIN, generateUser());
@@ -36,7 +38,6 @@ public class App {
 			orchestrator.startUser(Roles.EXTERNAL_USER, generateUser());
 		}
 		
-		orchestrator.startDB();
 		orchestrator.startApp();
 		
 	}

@@ -24,6 +24,9 @@ public class UserDAO {
     @DatabaseField()
     private int role;
     
+    @DatabaseField
+    private String codiceFiscale;
+    
     public UserDAO() {
         // ORMLite needs a no-arg constructor
     }
@@ -75,5 +78,13 @@ public class UserDAO {
 
 	public void setRole(int role) {
 		this.role = role;
+	}
+
+	public void setCodiceFiscale(String codiceFiscale) {
+		this.codiceFiscale = codiceFiscale;
+	}
+	
+	public String getCodiceFiscale() {
+		return codiceFiscale;
 	}
 }
