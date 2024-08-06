@@ -1,6 +1,7 @@
 package models.db;
 
-import java.sql.Date;
+import java.awt.print.Book;
+import java.util.Date;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -27,16 +28,16 @@ public class LoanDAO {
 		return user;
 	}
 
-	public void setUser_id(UserDAO user_id) {
-		this.user = user_id;
+	public void setUser_id(UserDAO id) {
+		this.user = id;
 	}
 
 	public BookDAO getBook_id() {
 		return book;
 	}
 
-	public void setBook_id(BookDAO book_id) {
-		this.book = book_id;
+	public void setBook_id(BookDAO id) {
+		this.book = id;
 	}
 
 	public Date getStart_date() {

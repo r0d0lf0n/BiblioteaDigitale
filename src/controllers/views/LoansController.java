@@ -28,6 +28,10 @@ public class LoansController implements Observable{
 
 	}
 	
+	public void saveLoan(LoanDAO loan) {
+		loanModel.saveLoan(loan);
+	}
+	
 	public List<LoanDAO> getLoans() {
 		return loanModel.getAllLoans();
 	}

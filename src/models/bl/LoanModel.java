@@ -1,5 +1,6 @@
 package models.bl;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import controllers.bl.GestorePrestiti;
@@ -19,5 +20,14 @@ public class LoanModel {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public void saveLoan(LoanDAO loan) {
+		try {
+			GestorePrestiti.getInstance().getLoanDao().createIfNotExists(loan);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
