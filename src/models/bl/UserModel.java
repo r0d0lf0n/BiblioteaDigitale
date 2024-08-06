@@ -30,7 +30,11 @@ public class UserModel {
 		List<UserDAO> list = null;
 		try {
 			userDao = GestoreUtenti.getInstance().getUserDao();
-			list = userDao.queryBuilder().where().eq("name", criteria).query();
+			list = userDao.queryBuilder()
+					  .selectColumns("name")
+					  .where()
+					  .like("name", "%"+criteria+"%")
+					  .query();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

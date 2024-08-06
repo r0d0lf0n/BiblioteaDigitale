@@ -109,7 +109,10 @@ public class NewLoanView extends JDialog implements Observer {
 		    }
 
 		    @Override
-		    public void removeUpdate(DocumentEvent e) {}
+		    public void removeUpdate(DocumentEvent e) {
+		    	String txt = textFieldUser.getText();
+		    	filteredUsers(txt);
+		    }
 
 		    @Override
 		    public void changedUpdate(DocumentEvent e) {}
@@ -138,7 +141,10 @@ public class NewLoanView extends JDialog implements Observer {
 		    }
 
 		    @Override
-		    public void removeUpdate(DocumentEvent e) {}
+		    public void removeUpdate(DocumentEvent e) {
+		    	String txt = textFieldBook.getText();
+		    	filteredBooks(txt);
+		    }
 
 		    @Override
 		    public void changedUpdate(DocumentEvent e) {}
@@ -245,6 +251,7 @@ public class NewLoanView extends JDialog implements Observer {
 		
     	List<BookDAO> list = controller.getBooksByRegex(criteria);
 		for (BookDAO b : list) {
+			System.out.println(String.format("size: %d", list.size()));
 			System.out.println("*************************");
 			System.out.println(b.getTitle());
 			model.addRow(new Object[] {b.getId(), b.getTitle(), b.getAuthor(), b.getYear()});

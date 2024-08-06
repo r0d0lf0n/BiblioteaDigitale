@@ -26,20 +26,12 @@ public class CatalogModel {
 		System.out.println(criteria);
 		List<BookDAO> list = null;
 		try {
-			bookDao = GestoreCatalogo.getInstance().getBookDao();
-//			list = bookDao.queryForEq(criteria, list)
-//			list = bookDao.queryForAll();
-			
-			
+			bookDao = GestoreCatalogo.getInstance().getBookDao();	
 			list = bookDao.queryBuilder()
+			  .selectColumns("title")
 			  .where()
-			  .in("title", bookDao.queryBuilder()
-			    .selectColumns("title"))
+			  .like("title", "%"+criteria+"%")
 			  .query();
-			
-
-			
-//			 queryBuilder.where().eq("title", criteria).and().eq(Account.PASSWORD_FIELD_NAME, "_secret");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
