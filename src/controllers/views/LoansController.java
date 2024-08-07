@@ -43,6 +43,10 @@ public class LoansController implements Observable{
 	public List<BookDAO> getBooksByRegex(String criteria) {
 		return catalogModel.getBooksByRegex(criteria);
 	}
+	
+	public List<LoanDAO> getLoansByRegex(String criteria) {
+		return loanModel.getLoansByRegex(criteria);
+	}
 
     public void setChanged(String type, Object obj) {
         this.obj = obj;

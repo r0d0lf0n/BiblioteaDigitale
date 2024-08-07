@@ -137,14 +137,14 @@ public class CatalogView extends JFrame implements Observer{
 	}
 	
 	private void initializeTable() {
-		Object[] columns = { "id", "Title", "Author", "Year", "Description","ISBN" };
+		Object[] columns = { "Title", "Author", "Year", "Description","ISBN" };
 		DefaultTableModel model = new DefaultTableModel();
 		model.setColumnIdentifiers(columns);
 		getBookCatalog();
 		
 		for(int i = 1; i < book_catalog.size(); i++) {
 //			System.out.println(book_catalog.get(i).getAuthor());
-			model.addRow(new Object[] {i, book_catalog.get(i).getAuthor(), book_catalog.get(i).getYear()});
+			model.addRow(new Object[] {book_catalog.get(i).getAuthor(), book_catalog.get(i).getYear()});
 		}
 
 		catalogTable.setModel(model);

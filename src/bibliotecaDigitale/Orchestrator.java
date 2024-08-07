@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -22,8 +23,11 @@ import com.opencsv.CSVReader;
 
 import controllers.bl.DatabaseConfig;
 import controllers.bl.GestoreCatalogo;
+import controllers.bl.GestorePrestiti;
 import controllers.bl.GestoreUtenti;
 import models.db.BookDAO;
+import models.db.LoanDAO;
+import models.db.UserDAO;
 import models.users.Amministratore;
 import models.users.Roles;
 import models.users.Utente;
@@ -143,6 +147,8 @@ public class Orchestrator {
 
 	private void setDataBaseForFirstTime() {
 		Dao<BookDAO, String> bookDao = GestoreCatalogo.getInstance().getBookDao();
+		Dao<LoanDAO, String> loanDao = GestorePrestiti.getInstance().getLoanDao();
+		createFakeLoans(loanDao);
 		try {
 			books = bookDao.queryForAll();
 			if (books.size() == 0) {
@@ -193,6 +199,34 @@ public class Orchestrator {
 			try (CSVReader csvReader = new CSVReader(reader)) {
 				return csvReader.readAll();
 			}
+		}
+	}
+	
+	//TODO ELIMINARE
+	private void createFakeLoans(Dao<LoanDAO, String> loanDao) {
+		System.out.println("Inserting fake loans....");
+		List<String[]> loans_list = new ArrayList<String[]>();
+		try {
+			loans_list = readBookCatalog();
+			for (int i = 1; i < 10; i++) {
+				// create an instance of Account
+				LoanDAO loan = new LoanDAO();
+				UserDAO user = new UserDAO();
+				user.setId(i);
+				user.setName("Nome"+i);
+				loan.setUser_id(user);
+				BookDAO book = new BookDAO();
+				book.setId(i);
+				book.setTitle("Titolo"+i);
+				loan.setUser_id(user);
+				loan.setBook_id(book);
+				loanDao.create(loan);
+				System.out.println("Saving loan: ");
+				System.out.println(loans_list.get(i));
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

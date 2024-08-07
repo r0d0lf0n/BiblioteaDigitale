@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
@@ -19,12 +21,15 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 import controllers.views.LandingPageController;
 import controllers.views.LoansController;
 import models.db.BookDAO;
 import models.db.LoanDAO;
+import models.db.UserDAO;
 import utils.CustomDialog;
 import utils.Observer;
 
@@ -70,17 +75,17 @@ public class LoanView extends JFrame implements Observer{
 		contentPane.setLayout(sl_contentPane);
 
 		JButton btnClose = new JButton("Close");
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnClose, -60, SpringLayout.SOUTH, contentPane);
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				landingPageController.openLandingPanel();
 			}
 		});
-		sl_contentPane.putConstraint(SpringLayout.WEST, btnClose, 0, SpringLayout.WEST, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnClose, -10, SpringLayout.SOUTH, contentPane);
 		contentPane.add(btnClose);
 
-		JButton btnNewLoan = new JButton("New Loan");
-		sl_contentPane.putConstraint(SpringLayout.WEST, btnNewLoan, 0, SpringLayout.WEST, contentPane);
+		JButton btnNewLoan = new JButton("Inserisci nuovo prestito");
+		sl_contentPane.putConstraint(SpringLayout.WEST, btnNewLoan, 8, SpringLayout.WEST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnNewLoan, -148, SpringLayout.SOUTH, contentPane);
 		btnNewLoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(newLoanView == null)
@@ -90,32 +95,21 @@ public class LoanView extends JFrame implements Observer{
 		});
 		contentPane.add(btnNewLoan);
 
-		JButton btnEditLoan = new JButton("Edit Loan");
-		sl_contentPane.putConstraint(SpringLayout.NORTH, btnEditLoan, 19, SpringLayout.SOUTH, btnNewLoan);
-		sl_contentPane.putConstraint(SpringLayout.WEST, btnEditLoan, 0, SpringLayout.WEST, btnClose);
+		JButton btnEditLoan = new JButton("Modifica prestito selezionato");
+		sl_contentPane.putConstraint(SpringLayout.NORTH, btnEditLoan, 8, SpringLayout.SOUTH, btnNewLoan);
+		sl_contentPane.putConstraint(SpringLayout.WEST, btnEditLoan, 0, SpringLayout.WEST, btnNewLoan);
+		sl_contentPane.putConstraint(SpringLayout.EAST, btnEditLoan, -2, SpringLayout.EAST, btnNewLoan);
 		btnEditLoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//FIXME empty
 			}
 		});
 		contentPane.add(btnEditLoan);
-		
-		JButton btnReturnLoan = new JButton("Return Loan");
-		sl_contentPane.putConstraint(SpringLayout.NORTH, btnReturnLoan, 21, SpringLayout.SOUTH, btnEditLoan);
-		sl_contentPane.putConstraint(SpringLayout.WEST, btnReturnLoan, 0, SpringLayout.WEST, btnClose);
-		btnReturnLoan.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//FIXME empty
-			}
-		});
-		contentPane.add(btnReturnLoan);
 
 		JScrollPane scrollPane = new JScrollPane();
-		sl_contentPane.putConstraint(SpringLayout.EAST, btnNewLoan, -41, SpringLayout.WEST, scrollPane);
-		sl_contentPane.putConstraint(SpringLayout.EAST, btnEditLoan, -41, SpringLayout.WEST, scrollPane);
-		sl_contentPane.putConstraint(SpringLayout.EAST, scrollPane, -10, SpringLayout.EAST, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.NORTH, scrollPane, 36, SpringLayout.NORTH, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, scrollPane, -20, SpringLayout.SOUTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.EAST, btnClose, 0, SpringLayout.EAST, scrollPane);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, scrollPane, -27, SpringLayout.NORTH, btnNewLoan);
+		sl_contentPane.putConstraint(SpringLayout.EAST, scrollPane, -15, SpringLayout.EAST, contentPane);
 		contentPane.add(scrollPane);
 
 		loanTable = new JTable();
@@ -125,24 +119,43 @@ public class LoanView extends JFrame implements Observer{
 		sl_contentPane.putConstraint(SpringLayout.EAST, loanTable, -420, SpringLayout.EAST, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.NORTH, loanTable, 85, SpringLayout.SOUTH, btnEditLoan);
 		
-	    lblNoLoans = new JLabel("There are no loans yet!");
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, lblNoLoans, -6, SpringLayout.NORTH, scrollPane);
-		sl_contentPane.putConstraint(SpringLayout.EAST, lblNoLoans, -141, SpringLayout.EAST, contentPane);
+	    lblNoLoans = new JLabel("Non \u00E8 presente alcun prestito.");
+	    sl_contentPane.putConstraint(SpringLayout.NORTH, scrollPane, 9, SpringLayout.SOUTH, lblNoLoans);
+	    sl_contentPane.putConstraint(SpringLayout.EAST, btnNewLoan, 29, SpringLayout.EAST, lblNoLoans);
+	    sl_contentPane.putConstraint(SpringLayout.WEST, lblNoLoans, 10, SpringLayout.WEST, contentPane);
 		lblNoLoans.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblNoLoans);
 		
 		textField = new JTextField();
-		sl_contentPane.putConstraint(SpringLayout.NORTH, btnNewLoan, 25, SpringLayout.SOUTH, textField);
-		sl_contentPane.putConstraint(SpringLayout.WEST, scrollPane, 20, SpringLayout.EAST, textField);
-		sl_contentPane.putConstraint(SpringLayout.NORTH, textField, -8, SpringLayout.NORTH, scrollPane);
-		sl_contentPane.putConstraint(SpringLayout.WEST, textField, 0, SpringLayout.WEST, btnClose);
-		sl_contentPane.putConstraint(SpringLayout.EAST, textField, 135, SpringLayout.WEST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, lblNoLoans, 6, SpringLayout.SOUTH, textField);
+		sl_contentPane.putConstraint(SpringLayout.WEST, scrollPane, 0, SpringLayout.WEST, textField);
+		sl_contentPane.putConstraint(SpringLayout.WEST, textField, 10, SpringLayout.WEST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.EAST, textField, 145, SpringLayout.WEST, contentPane);
 		contentPane.add(textField);
 		textField.setColumns(10);
+		textField.getDocument().addDocumentListener(new DocumentListener() {
+		    @Override
+		    public void insertUpdate(DocumentEvent e) {
+		    	String txt = textField.getText();
+		    	if (isInteger(txt))
+		    		filteredLoansByUser(txt);
+		    }
+
+		    @Override
+		    public void removeUpdate(DocumentEvent e) {
+		    	String txt = textField.getText();
+		    	if (isInteger(txt))
+		    		filteredLoansByUser(txt);
+		    }
+
+		    @Override
+		    public void changedUpdate(DocumentEvent e) {}
+		});
 		
-		JLabel lblNewLabel = new JLabel(" Filter Loan");
-		sl_contentPane.putConstraint(SpringLayout.NORTH, lblNewLabel, 0, SpringLayout.NORTH, lblNoLoans);
-		sl_contentPane.putConstraint(SpringLayout.EAST, lblNewLabel, 0, SpringLayout.EAST, btnClose);
+		JLabel lblNewLabel = new JLabel(" Ricerca prestito:");
+		sl_contentPane.putConstraint(SpringLayout.NORTH, lblNewLabel, 7, SpringLayout.NORTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.WEST, lblNewLabel, 6, SpringLayout.WEST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, textField, 17, SpringLayout.SOUTH, lblNewLabel);
 		contentPane.add(lblNewLabel);
 		
 		this.addWindowListener(new WindowAdapter() {
@@ -159,6 +172,17 @@ public class LoanView extends JFrame implements Observer{
 		
 	}
 	
+	public static boolean isInteger(String s) {
+	    try { 
+	        Integer.parseInt(s); 
+	    } catch(NumberFormatException e) { 
+	        return false; 
+	    } catch(NullPointerException e) {
+	        return false;
+	    }
+	    // only got here if we didn't return false
+	    return true;
+	}
 	
 //	private void populatePanel(LandingPageController landingPageController) {
 //		if (getLoans().size() > 0) { 
@@ -189,7 +213,7 @@ public class LoanView extends JFrame implements Observer{
 //				}
 //			});
 //
-//			TEST COMMIT
+//			
 //			d.setVisible(true);
 //		}
 //	}
@@ -200,13 +224,13 @@ public class LoanView extends JFrame implements Observer{
 //	}
 	
 	private void initializeTable() {
-		Object[] columns = { "id", "User", "Book", "Start Loan", "End Loan" };
+		Object[] columns = { "User", "Book", "Start Loan", "End Loan" };
 		DefaultTableModel model = new DefaultTableModel();
 		model.setColumnIdentifiers(columns);
 		
 		for(int i = 1; i < loans.size(); i++) {
 //			System.out.println(loans.get(i)[0]);
-				model.addRow(new Object[] {i, loans.get(i).getUser_id(), loans.get(i).getBook_id()});
+				model.addRow(new Object[] {loans.get(i).getUser_id(), loans.get(i).getBook_id(), loans.get(i).getStart_date(), loans.get(i).getEnd_date()});
 		}
 
 		loanTable.setModel(model);
@@ -215,10 +239,26 @@ public class LoanView extends JFrame implements Observer{
 	
 	private List<LoanDAO> getLoans() {
 		loans = controller.getLoans();
+		
+				
 		return loans;
 	}
 	
-
+	private void filteredLoansByUser(String criteria) {
+		Object[] columns = { "User", "Book", "Start Loan", "End Loan" };
+		DefaultTableModel model = new DefaultTableModel();
+		model.setColumnIdentifiers(columns);
+		
+    	List<LoanDAO> list = controller.getLoansByRegex(criteria);
+		for (LoanDAO u : list) {
+			System.out.println("*************************");
+			System.out.println(u.getUser_id());
+			model.addRow(new Object[] {u.getUser_id(), u.getBook_id(), u.getStart_date(), u.getStart_date()});
+		}
+		
+		loanTable.setModel(model);
+	}
+	
 	@Override
 	public void update(String type, Object arg) {
 		if(type.equals("OPEN_LOANS")) {
