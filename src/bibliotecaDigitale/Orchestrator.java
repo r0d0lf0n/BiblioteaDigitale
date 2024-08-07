@@ -5,25 +5,17 @@ package bibliotecaDigitale;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.io.Reader;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.swing.JFrame;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
-import com.opencsv.CSVReader;
 
 import controllers.bl.DatabaseConfig;
 import controllers.bl.GestoreCatalogo;
-import controllers.bl.GestorePrestiti;
 import controllers.bl.GestoreUtenti;
 import models.db.BookDAO;
 import models.db.LoanDAO;
@@ -156,28 +148,28 @@ public class Orchestrator {
 	}
 
 	private void setDataBaseForFirstTime() {
-		Dao<BookDAO, String> bookDao = GestoreCatalogo.getInstance().getBookDao();
-		Dao<LoanDAO, String> loanDao = GestorePrestiti.getInstance().getLoanDao();
-		createFakeLoans(loanDao);
+		//Dao<BookDAO, String> bookDao = GestoreCatalogo.getInstance().getBookDao();
+		//Dao<LoanDAO, String> loanDao = GestorePrestiti.getInstance().getLoanDao();
+		//createFakeLoans(loanDao);
 		try {
-			books = bookDao.queryForAll();
+			books = GestoreCatalogo.getInstance().getBookDao().queryForAll();
 			if (books.size() == 0) {
-				createBasicBookCatalog(bookDao);
+				createBasicBookCatalog(GestoreCatalogo.getInstance().getBookDao());
 			} else {
 				System.out.println("Basic book catalog already loaded!");
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	private void createBasicBookCatalog(Dao<BookDAO, String> bookDao) {
-		System.out.println("Inserting book for the first time....");
+		System.out.println("Inserting 100 book for the first time....");
 		List<String[]> book_catalog = new ArrayList<String[]>();
 		try {
-			book_catalog = readBookCatalog();
-			for (int i = 1; i < 1000; i++) {
+
+			book_catalog = GestoreCatalogo.getInstance().readBookCatalog("/assets/Books-light.csv");
+			for (int i = 1; i <= 100; i++) {
 				// create an instance of Account
 				BookDAO book = new BookDAO();
 				book.setTitle(book_catalog.get(i)[1]);
@@ -186,38 +178,26 @@ public class Orchestrator {
 				book.setDescription(
 						book_catalog.get(i)[1] + " - " + book_catalog.get(i)[2] + " - " + book_catalog.get(i)[3]);
 				book.setIsbn(book_catalog.get(i)[0]);
+				book.setEditor(book_catalog.get(i)[4]);
 				bookDao.create(book);
-				System.out.println("Saving book: ");
-				System.out.println(book_catalog.get(i));
+				if(i==1)
+					System.out.println(book);
+			//	System.out.println("Saving book: ");
+			//	System.out.println(book_catalog.get(i));
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	private List<String[]> readBookCatalog() throws Exception {
-		String filepath = "/assets/Books.csv";
-		URI resourcePath = this.getClass().getResource(filepath).toURI();
-		Path path = Paths.get(resourcePath);
-		return readAllLines(path);
-	}
 
-	public List<String[]> readAllLines(Path filePath) throws Exception {
-		//	System.out.println(filePath);
-		try (Reader reader = Files.newBufferedReader(filePath)) {
-			try (CSVReader csvReader = new CSVReader(reader)) {
-				return csvReader.readAll();
-			}
-		}
-	}
 	
 	//TODO ELIMINARE
 	private void createFakeLoans(Dao<LoanDAO, String> loanDao) {
 		System.out.println("Inserting fake loans....");
 		List<String[]> loans_list = new ArrayList<String[]>();
 		try {
-			loans_list = readBookCatalog();
+			loans_list = GestoreCatalogo.getInstance().readBookCatalog("/assets/Books-light.csv");
 			for (int i = 1; i < 10; i++) {
 				// create an instance of Account
 				LoanDAO loan = new LoanDAO();

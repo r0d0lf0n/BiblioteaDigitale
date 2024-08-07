@@ -63,6 +63,7 @@ public class GestoreUtenti {
 				persistentUser.setSurname(utente.getCognome());
 				persistentUser.setId(utente.getIdTessera());
 				persistentUser.setCodiceFiscale(utente.getCodiceFiscale());
+				persistentUser.setNumTessera(utente.getIdTessera());
 				try {
 					synchronized (this) {
 						userDao.create(persistentUser);

@@ -23,6 +23,9 @@ public class BookDAO {
     
     @DatabaseField()
     private String isbn;
+    
+    @DatabaseField()
+    private String editor;
    
     public BookDAO() {
         // ORMLite needs a no-arg constructor
@@ -74,5 +77,23 @@ public class BookDAO {
 
 	public void setIsbn(String isbn) {
 		this.isbn = isbn;
+	}
+	
+	public String getEditor() {
+		return editor;
+	}
+
+	public void setEditor(String editor) {
+		this.editor = editor;
+	}
+	
+	public String toString() {
+		return this.id+" "+this.title+" "+this.author+" "+this.editor+" "+this.year+" "+this.description+" "+this.isbn;
+	}
+	
+	public boolean equals(BookDAO book) {
+		if(book.getIsbn() == this.isbn)
+			return true;
+		return false;
 	}
 }

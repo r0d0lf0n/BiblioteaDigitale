@@ -3,23 +3,17 @@ package controllers.views;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JLabel;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-
+import controllers.bl.GestoreCatalogo;
 import models.bl.CatalogModel;
-import models.bl.LoanModel;
 import models.db.BookDAO;
 import utils.Observable;
 import utils.Observer;
-import views.Catalog.CatalogView;
 
 public class CatalogController implements Observable{
 	private CatalogModel catalogModel;
 	private List<Observer> observers = null;
     private Object obj;
-
-		
+	
 	
 	public CatalogController() {
 		this.catalogModel = new CatalogModel();
@@ -53,4 +47,24 @@ public class CatalogController implements Observable{
             observer.update(type, arg); // Aggiorna ciascun osservatore con il nuovo stato
         }
     }
+
+	public void loadCSV(String selectedFile) {
+		new LoaderThread(selectedFile).start();
+
+	}
+	
+	private class LoaderThread extends Thread{
+		private String selectedFile;
+		
+		public LoaderThread(String selectedFile) {
+			this.selectedFile = selectedFile;
+		}
+		
+		@Override
+		public void run() {
+			boolean isCharged = GestoreCatalogo.getInstance().populateCatalog(selectedFile);
+			if(isCharged)
+				setChanged("LOAD_BOOKS", null);
+		}
+	}
 }

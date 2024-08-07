@@ -27,6 +27,9 @@ public class UserDAO {
     @DatabaseField
     private String codiceFiscale;
     
+    @DatabaseField
+    private int numTessera;
+    
     public UserDAO() {
         // ORMLite needs a no-arg constructor
     }
@@ -86,5 +89,17 @@ public class UserDAO {
 	
 	public String getCodiceFiscale() {
 		return codiceFiscale;
+	}
+	
+	public void setNumTessera(int numTessera) {
+		this.numTessera = numTessera;
+	}
+	
+	public int getNumTessera() {
+		return numTessera;
+	}
+	
+	public String toString() {
+		return this.id+" "+this.name+" "+this.surname+" "+this.role+" "+this.codiceFiscale+" "+this.numTessera;
 	}
 }

@@ -14,8 +14,10 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import controllers.bl.GestoreCatalogo;
 import controllers.views.LandingPageController;
 import utils.Observer;
+import views.Catalog.CatalogView;
 
 public class LandingPageView extends JFrame implements Observer{
 
@@ -68,8 +70,15 @@ public class LandingPageView extends JFrame implements Observer{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Azione per il pulsante Open Loans
+            	if(GestoreCatalogo.getInstance().isLoadingInProgress()) {
+            		JOptionPane.showMessageDialog(LandingPageView.this, 
+            				"Caricamento catalogo in corso, altre operazioni potrebbero portare inconsistenza sul sistema",
+                            "ATTENZIONE",
+                            JOptionPane.WARNING_MESSAGE);
+            		
+            	}
             	controller.openLoansPanel();
-                System.out.println("Open Loans clicked");
+               // System.out.println("Open Loans clicked");
             }
         });
         buttonPanel.add(btnOpenLoans);
@@ -80,7 +89,8 @@ public class LandingPageView extends JFrame implements Observer{
             public void actionPerformed(ActionEvent e) {
                 // Azione per il pulsante Open Catalog
             	controller.openCatalogPanel();
-                System.out.println("Open Catalog clicked");
+            	
+                //System.out.println("Open Catalog clicked");
             }
         });
         buttonPanel.add(btnOpenCatalog);
@@ -90,12 +100,18 @@ public class LandingPageView extends JFrame implements Observer{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Azione per il pulsante Advanced Search
+            	if(GestoreCatalogo.getInstance().isLoadingInProgress()) {
+            		JOptionPane.showMessageDialog(LandingPageView.this, 
+            				"Caricamento catalogo in corso, altre operazioni potrebbero portare inconsistenza sul sistema",
+                            "ATTENZIONE",
+                            JOptionPane.WARNING_MESSAGE);
+            		
+            	}
             	controller.openSearchPanel();
-                System.out.println("Advanced Search clicked");
+               // System.out.println("Advanced Search clicked");
             }
         });
         buttonPanel.add(btnOpenAdvancedSearch);
-
         contentPane.add(buttonPanel, BorderLayout.CENTER);
         
         controller.addObserver(this);
