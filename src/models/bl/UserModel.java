@@ -27,7 +27,7 @@ public class UserModel {
 		List<UserDAO> list = null;
 		try {
 			list = GestoreUtenti.getInstance().getUserDao().queryBuilder()
-					  .selectColumns("name")
+//					  .selectColumns("name")
 					  .where()
 					  .like("name", "%"+criteria+"%")
 					  .query();

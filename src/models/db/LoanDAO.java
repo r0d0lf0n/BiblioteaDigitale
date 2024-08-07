@@ -8,16 +8,16 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "loan")
 public class LoanDAO {
 	
-    @DatabaseField(generatedId = true)
-    private int id;
-    
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+//    @DatabaseField(generatedId = true)
+//    private int id;
+//    
+//    public int getId() {
+//        return id;
+//    }
+//
+//    public void setId(int id) {
+//        this.id = id;
+//    }
 	
 	@DatabaseField(canBeNull = false, foreign = true, columnName = "user_id")
     private UserDAO user;
