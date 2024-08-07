@@ -3,10 +3,13 @@ package models.bl;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.j256.ormlite.dao.Dao;
+
 import controllers.bl.GestorePrestiti;
 import models.db.LoanDAO;
 
 public class LoanModel {
+	Dao<LoanDAO, String> loanDao;
 
 	public LoanModel() {
 		//emtpy
@@ -29,5 +32,24 @@ public class LoanModel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public List<LoanDAO> getLoansByRegex(String criteria) {
+		List<LoanDAO> list = null;
+		try {
+			loanDao = GestorePrestiti.getInstance().getLoanDao();			
+			list = loanDao.queryBuilder()
+					  .selectColumns("book_id")
+					  .where()
+					  .eq("book_id", criteria)
+				      .or()
+				      .eq("user_id", criteria)
+					  .query();
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
 	}
 }
