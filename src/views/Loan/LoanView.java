@@ -189,7 +189,7 @@ public class LoanView extends JFrame implements Observer{
 //				}
 //			});
 //
-//			
+//			TEST COMMIT
 //			d.setVisible(true);
 //		}
 //	}
