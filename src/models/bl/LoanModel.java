@@ -33,6 +33,23 @@ public class LoanModel {
 			e.printStackTrace();
 		}
 	}
+	
+	public List<LoanDAO> getLoansByUserId(int id) {
+		List<LoanDAO> list = null;
+		try {
+			loanDao = GestorePrestiti.getInstance().getLoanDao();			
+			list = loanDao.queryBuilder()
+					  .selectColumns("user_id")
+					  .where()
+				      .eq("user_id", id)
+					  .query();
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+	}
 
 	public List<LoanDAO> getLoansByRegex(String criteria) {
 		List<LoanDAO> list = null;

@@ -224,7 +224,7 @@ public class LoanView extends JFrame implements Observer{
 //	}
 	
 	private void initializeTable() {
-		Object[] columns = { "User", "Book", "Start Loan", "End Loan" };
+		Object[] columns = { "User", "Book", "Start Date", "End Date" };
 		DefaultTableModel model = new DefaultTableModel();
 		model.setColumnIdentifiers(columns);
 		
@@ -245,7 +245,7 @@ public class LoanView extends JFrame implements Observer{
 	}
 	
 	private void filteredLoansByUser(String criteria) {
-		Object[] columns = { "User", "Book", "Start Loan", "End Loan" };
+		Object[] columns = { "User", "Book", "Start Date", "End Date" };
 		DefaultTableModel model = new DefaultTableModel();
 		model.setColumnIdentifiers(columns);
 		

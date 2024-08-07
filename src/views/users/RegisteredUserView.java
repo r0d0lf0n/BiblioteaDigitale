@@ -2,6 +2,8 @@ package views.users;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -13,20 +15,25 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import controllers.views.LandingPageController;
+import controllers.views.LoansController;
 import controllers.views.RegisteredUserController;
 import models.users.Utente;
 import utils.Observer;
+import views.Loan.LoansDetailView;
 
 public class RegisteredUserView extends JFrame implements Observer {
 
     private static final long serialVersionUID = 1L;
     private final RegisteredUserController controller;
+    private final LoansController loansController;
     private DefaultComboBoxModel<String> comboGenereModel = null;
+	public LoansDetailView loansDetailView = null;
 
     
     public RegisteredUserView(LandingPageController landingPageController, Utente utente) {
     	//new
         controller = new RegisteredUserController();
+        loansController = new LoansController();
         comboGenereModel = new DefaultComboBoxModel<String>();
 
         // Impostazioni del layout per il pannello
@@ -86,7 +93,14 @@ public class RegisteredUserView extends JFrame implements Observer {
 
         // Pulsante "Gestione Prestiti"
         JButton manageLoansButton = new JButton("Gestione Prestiti");
-        // Aggiungi qui l'azione per il pulsante "Gestione Prestiti"
+        manageLoansButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	if(loansDetailView == null)
+            		loansDetailView = new LoansDetailView(loansController, utente.getIdTessera());
+            	loansDetailView.setVisible(true);
+            }
+        });
 
         // Pulsante di chiusura
         JButton closeButton = new JButton("Chiudi");

@@ -230,7 +230,7 @@ public class Orchestrator {
 				book.setTitle("Titolo"+i);
 				loan.setUser_id(user);
 				loan.setBook_id(book);
-				loanDao.create(loan);
+				loanDao.createIfNotExists(loan);
 				System.out.println("Saving loan: ");
 				System.out.println(loans_list.get(i));
 			}
