@@ -24,6 +24,7 @@ import models.bl.UserModel;
 import models.db.BookDAO;
 import models.db.LoanDAO;
 import models.db.UserDAO;
+import utils.CustomDialog;
 import utils.Observer;
 
 import javax.swing.JButton;
@@ -73,6 +74,11 @@ public class NewLoanView extends JDialog implements Observer {
 	private JFormattedTextField formattedTextFieldEndDate;
 	private JLabel lblSelectedUserValueName;
 	private JLabel lblSelectedUserValueSurname;
+	private DefaultTableModel modelUsers;
+	private DefaultTableModel modelBooks;
+	int centerX;
+	int centerY;
+	private CustomDialog dialog;
 
 	/**
 	 * Launch the application.
@@ -94,6 +100,7 @@ public class NewLoanView extends JDialog implements Observer {
 	 * Create the frame.
 	 */
 	public NewLoanView(LoansController loanController) {
+//		cleanTextFields();
 		controller = loanController;
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -133,7 +140,7 @@ public class NewLoanView extends JDialog implements Observer {
 		    @Override
 		    public void removeUpdate(DocumentEvent e) {
 		    	String txt = textFieldUser.getText();
-		    	filteredUsers(txt);
+//		    	filteredUsers(txt);
 		    }
 
 		    @Override
@@ -160,14 +167,14 @@ public class NewLoanView extends JDialog implements Observer {
 		    public void insertUpdate(DocumentEvent e) {
 		    	String txt = textFieldBook.getText();
 		    	filteredBooks(txt);
-		    	cleanTextField();
+//		    	cleanTextFields();
 		    }
 
 		    @Override
 		    public void removeUpdate(DocumentEvent e) {
 //		    	String txt = textFieldBook.getText();
 //		    	filteredBooks(txt);
-		    	cleanTextField();
+//		    	cleanTextFields();
 		    }
 
 		    @Override
@@ -203,34 +210,57 @@ public class NewLoanView extends JDialog implements Observer {
 		
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("saving loans");
-				
-				loan = new LoanDAO();
-				loan.setBook_id(selectedBook);
-				loan.setUser_id(selectedUser);
-				Date startDate = new Date(); 
-				Date endDate = new Date(); 
-				loan.setStart_date(startDate);
-				
-				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-				String endDateTextField = formattedTextFieldEndDate.getText();
-				System.out.println(endDateTextField); 
-				try {
-					endDate = sdf.parse(endDateTextField);
-					loan.setEnd_date(endDate);
-				} catch (ParseException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} 
+				if (formattedTextFieldEndDate.getText().length() > 0) {		
+					loan = new LoanDAO();
+					loan.setBook_id(selectedBook);
+					loan.setUser_id(selectedUser);
+					Date startDate = new Date(); 
+					Date endDate = new Date(); 
+					loan.setStart_date(startDate);
+					
+					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+					String endDateTextField = formattedTextFieldEndDate.getText();
+//					System.out.println(endDateTextField); 
+					try {
+						endDate = sdf.parse(endDateTextField);
+						loan.setEnd_date(endDate);
+					} catch (ParseException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} 
 
-				System.out.println(startDate);  
-				System.out.println(endDate); 
-				if (endDate.after(startDate)) {
-					controller.saveLoan(loan);
+//					System.out.println(startDate);  
+//					System.out.println(endDate); 
+					
+					if (endDate.after(startDate)) {
+						System.out.println("saving loans");
+						controller.saveLoan(loan);
+						controller.setChanged("CLOSE_NEW_LOAN", null);
+						cleanTextFields();
+					} else {
+						System.out.println("End date equals to start date");
+					}
+					
 				} else {
-					System.out.println("End date equals to start date");
+					System.out.println("show dialog");
+					int width = 280;
+					int height = 100;
+					dialog = new CustomDialog();
+					JDialog d = dialog.buildDialog(null, "Warning!", "There are no loand yet!", "New Loan", "Cancel", centerX - width, centerY - height, width, height);
+					JButton btnOne = dialog.getButtonOne();
+					JButton btnTwo = dialog.getButtonTwo();
+					btnOne.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+
+						}
+					});
+					
+					btnTwo.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+
+						}
+					});
 				}
-				
 			}
 		});
 		
@@ -382,39 +412,55 @@ public class NewLoanView extends JDialog implements Observer {
 	
 	private void filteredUsers(String criteria) {
 		Object[] columns = { "id", "Name", "Surname"};
-		DefaultTableModel model = new DefaultTableModel();
-		model.setColumnIdentifiers(columns);
+		modelUsers = new DefaultTableModel();
+		modelUsers.setColumnIdentifiers(columns);
 		
     	List<UserDAO> list = controller.getUsersByRegex(criteria);
 		for (UserDAO u : list) {
 			System.out.println("*************************");
 			System.out.println(u.getName());
-			model.addRow(new Object[] {u.getId(), u.getName(), u.getSurname()});
+			modelUsers.addRow(new Object[] {u.getId(), u.getName(), u.getSurname()});
 		}
 		
-		tableUsers.setModel(model);
+		tableUsers.setModel(modelUsers);
 	}
 	
 	private void filteredBooks(String criteria) {
 		Object[] columns = { "id", "Title", "Author", "Year"};
-		DefaultTableModel model = new DefaultTableModel();
-		model.setColumnIdentifiers(columns);
+		modelBooks = new DefaultTableModel();
+		modelBooks.setColumnIdentifiers(columns);
 		
     	List<BookDAO> list = controller.getBooksByRegex(criteria);
 		for (BookDAO b : list) {
 //			System.out.println(String.format("size: %d", list.size()));
 //			System.out.println("*************************");
 //			System.out.println(b.getTitle());
-			model.addRow(new Object[] {b.getId(), b.getTitle(), b.getAuthor(), b.getYear()});
+			modelBooks.addRow(new Object[] {b.getId(), b.getTitle(), b.getAuthor(), b.getYear()});
 		}
 		
-		tableBooks.setModel(model);
+		tableBooks.setModel(modelBooks);
 	}
 	
-	private void cleanTextField() {
+	private void cleanTextFields() {
+		lblSelectedUserValueId.setText("none");
+		lblSelectedUserValueName.setText("none");
+		lblSelectedUserValueSurname.setText("none");
+		
 		lblSelectedBookValueID.setText("none");
 		lblSelectedBookValueTitle.setText("none");
 		lblSelectedBookValueAuthor.setText("none");
 		lblSelectedBookValueYear.setText("none");
+		
+		formattedTextFieldEndDate.setText("");
+		selectedUser = new UserDAO();
+		selectedBook = new BookDAO();
+		
+		modelBooks = new DefaultTableModel();
+		tableBooks.setModel(modelBooks);
+		modelUsers = new DefaultTableModel();
+		tableUsers.setModel(modelUsers);
+		
+		textFieldBook.setText("");
+		textFieldUser.setText("");
 	}
 }
