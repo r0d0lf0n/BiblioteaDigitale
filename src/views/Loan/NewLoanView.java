@@ -3,6 +3,7 @@ package views.Loan;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -69,6 +70,7 @@ public class NewLoanView extends JDialog implements Observer {
 	private UserDAO selectedUser;
 	private LoanDAO loan;
 	private JLabel lblEnd_date;
+	private JFormattedTextField formattedTextFieldEndDate;
 
 	/**
 	 * Launch the application.
@@ -204,15 +206,23 @@ public class NewLoanView extends JDialog implements Observer {
 				loan = new LoanDAO();
 				loan.setBook_id(selectedBook);
 				loan.setUser_id(selectedUser);
-				
-//				SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");  
 				Date startDate = new Date(); 
 				Date endDate = new Date(); 
-//				System.out.println(formatter.format(date));  
 				loan.setStart_date(startDate);
-				loan.setEnd_date(endDate);
+				
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+				String endDateTextField = formattedTextFieldEndDate.getText();
+				System.out.println(endDateTextField); 
+				try {
+					endDate = sdf.parse(endDateTextField);
+					loan.setEnd_date(endDate);
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} 
 
-
+				System.out.println(startDate);  
+				System.out.println(endDate); 
 				if (endDate.after(startDate)) {
 					controller.saveLoan(loan);
 				} else {
@@ -289,6 +299,37 @@ public class NewLoanView extends JDialog implements Observer {
 		sl_contentPane.putConstraint(SpringLayout.EAST, scrollPaneUsers, -6, SpringLayout.WEST, scrollPaneBooks);
 		contentPane.add(scrollPaneUsers);
 		scrollPaneUsers.setViewportView(tableUsers);
+		tableBooks.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+	        public void valueChanged(ListSelectionEvent event) {
+	        	if (!event.getValueIsAdjusting()) {
+//	        		String bookId = tableBooks.getValueAt(tableBooks.getSelectedRow(), 0).toString();
+//	        		String title = tableBooks.getValueAt(tableBooks.getSelectedRow(), 1).toString();
+//	        		String author = tableBooks.getValueAt(tableBooks.getSelectedRow(), 2).toString();
+//	        		String year = tableBooks.getValueAt(tableBooks.getSelectedRow(), 3).toString();
+//	        		System.out.println(bookId);
+//	        		System.out.println(title);
+//	        		System.out.println(author);
+//	        		System.out.println(year);
+//	        		
+//	        	    selectedBook = new BookDAO();
+//	        	    selectedBook.setId(Integer.valueOf(bookId));
+//	        	    selectedBook.setTitle(title);
+//	        	    selectedBook.setAuthor(author);
+//	        	    selectedBook.setYear(year);
+//	        		
+//	        	    
+//	        	    int titleMaxLenght = 20;
+//	        	    if (!(selectedBook.getTitle().length() > 20)) {
+//	        	    	titleMaxLenght = selectedBook.getTitle().length();
+//	        	    }
+//	        		lblSelectedBookValueID.setText(String.valueOf(bookId));
+//	        		lblSelectedBookValueTitle.setText(selectedBook.getTitle().substring(0, titleMaxLenght));
+//	        		lblSelectedBookValueAuthor.setText(selectedBook.getAuthor());
+//	        		lblSelectedBookValueYear.setText(selectedBook.getYear());
+	        	}
+////	            System.out.println(tableBooks.getValueAt(tableBooks.getSelectedRow(), 0).toString());
+	        }
+	    });
 		
 		lblSelectedBookValueTitle = new JLabel("none");
 		lblSelectedBookValueTitle.setSize(100, 40);
@@ -315,7 +356,7 @@ public class NewLoanView extends JDialog implements Observer {
 		sl_contentPane.putConstraint(SpringLayout.WEST, lblEnd_date, 0, SpringLayout.WEST, lblUser);
 		contentPane.add(lblEnd_date);
 		
-		JFormattedTextField formattedTextFieldEndDate = new JFormattedTextField();
+	    formattedTextFieldEndDate = new JFormattedTextField();
 		sl_contentPane.putConstraint(SpringLayout.NORTH, formattedTextFieldEndDate, -5, SpringLayout.NORTH, lblEnd_date);
 		sl_contentPane.putConstraint(SpringLayout.WEST, formattedTextFieldEndDate, 6, SpringLayout.EAST, lblEnd_date);
 		sl_contentPane.putConstraint(SpringLayout.EAST, formattedTextFieldEndDate, 238, SpringLayout.WEST, contentPane);
@@ -359,9 +400,9 @@ public class NewLoanView extends JDialog implements Observer {
 		
     	List<BookDAO> list = controller.getBooksByRegex(criteria);
 		for (BookDAO b : list) {
-			System.out.println(String.format("size: %d", list.size()));
-			System.out.println("*************************");
-			System.out.println(b.getTitle());
+//			System.out.println(String.format("size: %d", list.size()));
+//			System.out.println("*************************");
+//			System.out.println(b.getTitle());
 			model.addRow(new Object[] {b.getId(), b.getTitle(), b.getAuthor(), b.getYear()});
 		}
 		
