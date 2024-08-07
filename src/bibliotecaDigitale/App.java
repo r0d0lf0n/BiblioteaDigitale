@@ -10,10 +10,10 @@ public class App {
 	
 	
 	private static final int adminNumber = 1;
-	private static final int regUserNumber = 3;
-	private static final int extUserNumber = 2;
-	private static final String[] FIRST_NAMES = {"Mario", "Luigi", "Giovanni", "Anna", "Maria", "Luca"};
-    private static final String[] LAST_NAMES = {"Rossi", "Bianchi", "Verdi", "Neri", "Gialli", "Marroni"};
+	private static final int regUserNumber = 20;
+	private static final int extUserNumber = 5;
+	private static final String[] FIRST_NAMES = {"Mario", "Luigi", "Giovanni", "Anna", "Maria", "Luca", "Rodolfo", "Ilaria", "Alessandro", "Marta", "Giacomo", "Josè", "Martin", "David", "Luca"};
+    private static final String[] LAST_NAMES = {"Rossi", "Bianchi", "Granata", "Mayo", "Conforti", "Durante", "Verza", "De Santis", "Lupini", "Casole", "Gioia"};
 	
 	/**
 	 * Launch the application.

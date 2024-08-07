@@ -49,6 +49,10 @@ public class Orchestrator {
 	private LoanView loansPage = null;
 	private CatalogView catalogPage = null;
 	//private UserAdminView adminView = null;
+	private int maxNumberOfRegUsers = 3;
+	private int maxNumberOfExtUsers = 2;
+	private int currentNumberOfRegUsers = 0;
+	private int currentNumberOfExtUsers = 0;
 
 	private ConnectionSource connectionSource;
 	private List<BookDAO> books = null;
@@ -109,7 +113,7 @@ public class Orchestrator {
 		if (role.equals(Roles.ADMIN)) {
 			admin = GestoreUtenti.getInstance()
 					.creaUtente(new Amministratore(user.get(0), user.get(1), user.get(2)));
-			viewList.add(new UserAdminView(landingPage.getLandingController(), admin.getNome(), admin.getCognome(), admin.getCodiceFiscale()));
+				viewList.add(new UserAdminView(landingPage.getLandingController(), admin.getNome(), admin.getCognome(), admin.getCodiceFiscale()));
 
 			System.out.println("ADMIN " + admin.getNome() + " " + admin.getCognome() + ", " + admin.getCodiceFiscale()
 					+ ". TESSERA NUM: " + ((Amministratore) admin).getIdTessera());
@@ -117,7 +121,10 @@ public class Orchestrator {
 		} else if (role.equals(Roles.REGULAR_USER)) {
 			Utente regUser1 = GestoreUtenti.getInstance()
 					.creaUtente(new UtenteRegistrato(user.get(0), user.get(1), user.get(2)));
-			viewList.add( new RegisteredUserView(landingPage.getLandingController(), regUser1));	
+			if(currentNumberOfRegUsers < maxNumberOfRegUsers) {
+				viewList.add( new RegisteredUserView(landingPage.getLandingController(), regUser1));
+				currentNumberOfRegUsers++;
+			}
 			registeredUsers.add(regUser1);
 			
 			System.out.println("UTENTE REGISTRATO " + regUser1.getNome() + " " + regUser1.getCognome() + ", "
@@ -125,7 +132,10 @@ public class Orchestrator {
 			
 		} else if (role.equals(Roles.EXTERNAL_USER)) {
 			Utente user1 = GestoreUtenti.getInstance().creaUtente(new UtenteEsterno());
-			viewList.add(new ExternalUserView(landingPage.getLandingController(), user1));
+			if(currentNumberOfExtUsers < maxNumberOfExtUsers) {
+				viewList.add(new ExternalUserView(landingPage.getLandingController(), user1));
+				currentNumberOfExtUsers++;
+			}
 			unregisteredUsers.add(user1);
 
 			System.out.println("USER " + user1.getNome() + " " + user1.getCognome() + ", " + user1.getCodiceFiscale()

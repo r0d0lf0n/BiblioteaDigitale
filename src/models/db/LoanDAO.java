@@ -1,7 +1,7 @@
 package models.db;
 
-import java.awt.print.Book;
 import java.util.Date;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -11,14 +11,6 @@ public class LoanDAO {
     @DatabaseField(generatedId = true)
     private int id;
     
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-	
 	@DatabaseField(canBeNull = false, foreign = true, columnName = "user_id")
     private UserDAO user;
     
@@ -66,4 +58,14 @@ public class LoanDAO {
 	public void setEnd_date(Date end_date) {
 		this.end_date = end_date;
 	}
+	
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+	
+	
 }
