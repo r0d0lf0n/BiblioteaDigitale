@@ -27,7 +27,7 @@ import javax.swing.JButton;
 public class BookDetailView extends JFrame implements Observer {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private LoansController controller = null;
+	private CatalogController controller = null;
 	private CatalogModel catalogModel;
 	private BookDAO selectedBook;
 	private UserDAO selectedUser;
@@ -64,7 +64,7 @@ public class BookDetailView extends JFrame implements Observer {
 	public BookDetailView(CatalogController catalogController, BookDAO b) {
 		book = b;
 		System.out.println(book.getId());
-		CatalogController controller = catalogController;
+		controller = catalogController;
 		catalogModel = new CatalogModel();
 //		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 //        int screenWidth = screenSize.width;
@@ -200,6 +200,7 @@ public class BookDetailView extends JFrame implements Observer {
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				catalogController.closeBookDetailPanel();
+
 			}
 		});
 		

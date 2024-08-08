@@ -39,6 +39,7 @@ public class CatalogView extends JFrame implements Observer{
 	private BookDAO selectedBook;
 	private BookDetailView bookDetailView = null;
 	private JButton btnRefresh;
+	private DefaultTableModel model;
 
 	
 	/**
@@ -132,6 +133,7 @@ public class CatalogView extends JFrame implements Observer{
 		btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Refreshing book catalog");
+//				refreshTable();
 				initializeTable();
 			}
 		});
@@ -184,7 +186,7 @@ public class CatalogView extends JFrame implements Observer{
 
 
 	private void initializeTable() {
-		DefaultTableModel model = new DefaultTableModel();
+	    model = new DefaultTableModel();
 		model.setColumnIdentifiers(columns);
 		List<BookDAO> book_catalog = controller.getBookCatalog();
 		
@@ -196,18 +198,24 @@ public class CatalogView extends JFrame implements Observer{
 		catalogTable.setModel(model);
 	}
 	
-//	private void refreshTable() {
-//		DefaultTableModel model = new DefaultTableModel();
-//		model.setColumnIdentifiers(columns);
-//		List<BookDAO> book_catalog = controller.getBookCatalog();
+	private void refreshTable() {
+		System.out.println("Refreshing catalog");
+		List<BookDAO> book_catalog = controller.getBookCatalog();
+		
+		int c = 0;
+		for(int i = 0; i < book_catalog.size(); i++) {
+			if (c <= 10) {
+				System.out.println(book_catalog.get(i).getTitle());
+			}
+			c++;
+			model.addRow(new Object[] {book_catalog.get(i).getId(), book_catalog.get(i).getTitle(), book_catalog.get(i).getAuthor(), book_catalog.get(i).getEditor(), book_catalog.get(i).getYear(), book_catalog.get(i).getDescription(), book_catalog.get(i).getIsbn()});
+		}
 //		
-//		for(int i = 0; i < book_catalog.size(); i++) {
-////			System.out.println(book_catalog.get(i).getAuthor());
-//			model.addRow(new Object[] {book_catalog.get(i).getId(), book_catalog.get(i).getTitle(), book_catalog.get(i).getAuthor(), book_catalog.get(i).getEditor(), book_catalog.get(i).getYear(), book_catalog.get(i).getDescription(), book_catalog.get(i).getIsbn()});
-//		}
-//
-//		catalogTable.setModel(model);
-//	}
+////		model.fireTableDataChanged();
+		catalogTable.setModel(model);
+		model.fireTableDataChanged();
+	}
+	
 	
 	@Override
 	public void update(String type, Object arg) {
@@ -224,6 +232,10 @@ public class CatalogView extends JFrame implements Observer{
 			new LoadBooksThread().start();
 		}
 		
+		if(type.equals("CLOSE_BOOK_DETAIL")) {
+//			refreshTable();
+//			initializeTable();
+		}
 	}
 	
 	private class LoadBooksThread extends Thread {

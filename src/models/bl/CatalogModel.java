@@ -40,7 +40,7 @@ public class CatalogModel {
 	
 	public void saveBook(BookDAO book) {
 		try {
-			System.out.println(book);
+//			System.out.println(book);
 			GestoreCatalogo.getInstance().getBookDao().update(book);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
