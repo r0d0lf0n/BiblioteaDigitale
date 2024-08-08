@@ -7,7 +7,6 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -22,11 +21,11 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
-
 import controllers.views.CatalogController;
 import controllers.views.LandingPageController;
 import models.db.BookDAO;
 import utils.Observer;
+import views.Loan.NewLoanView;
 
 public class CatalogView extends JFrame implements Observer{
 
@@ -38,6 +37,7 @@ public class CatalogView extends JFrame implements Observer{
 	//private List<BookDAO> book_catalog = null;
 	private Object[] columns = {"Book Num.", "Title", "Author", "Editor", "Year", "Description", "ISBN" };
 	private BookDAO selectedBook;
+	private BookDetailView bookDetailView = null;
 
 	
 	/**
@@ -127,13 +127,12 @@ public class CatalogView extends JFrame implements Observer{
 	        public void valueChanged(ListSelectionEvent event) {
 	        	if (!event.getValueIsAdjusting()) {
 	        		String bookId = catalogTable.getValueAt(catalogTable.getSelectedRow(), 0).toString();
-	        		System.out.println(bookId);
-	        		
 	        	    selectedBook = new BookDAO();
 	        	    selectedBook.setId(Integer.valueOf(bookId));
-//	        	    selectedBook.setTitle(title);
-//	        	    selectedBook.setAuthor(author);
-//	        	    selectedBook.setYear(year);
+	        	    
+//					if(bookDetailView == null)
+					bookDetailView = new BookDetailView(controller, selectedBook);
+					bookDetailView.setVisible(true);
 	        	}
 	        }
 	    });

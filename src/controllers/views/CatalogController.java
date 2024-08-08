@@ -67,4 +67,12 @@ public class CatalogController implements Observable{
 				setChanged("LOAD_BOOKS", null);
 		}
 	}
+	
+	public void closeBookDetailPanel() {
+//		setChanged("CLOSE_SEARCH", null);
+//		setChanged("CLOSE_LOANS", null);
+//		setChanged("CLOSE_CATALOG", null);
+//		setChanged("OPEN_LANDING", null);
+		setChanged("CLOSE_BOOK_DETAIL", null);	
+	}
 }
