@@ -18,6 +18,8 @@ import javax.swing.JTable;
 import javax.swing.SpringLayout;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
@@ -35,6 +37,7 @@ public class CatalogView extends JFrame implements Observer{
 	private CatalogController controller = null;
 	//private List<BookDAO> book_catalog = null;
 	private Object[] columns = {"Book Num.", "Title", "Author", "Editor", "Year", "Description", "ISBN" };
+	private BookDAO selectedBook;
 
 	
 	/**
@@ -120,6 +123,20 @@ public class CatalogView extends JFrame implements Observer{
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, catalogTable, -211, SpringLayout.NORTH, btnClose);
 		sl_contentPane.putConstraint(SpringLayout.EAST, catalogTable, -420, SpringLayout.EAST, contentPane);
 		//sl_contentPane.putConstraint(SpringLayout.NORTH, catalogTable, 85, SpringLayout.SOUTH, btnRefresh);
+		catalogTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+	        public void valueChanged(ListSelectionEvent event) {
+	        	if (!event.getValueIsAdjusting()) {
+	        		String bookId = catalogTable.getValueAt(catalogTable.getSelectedRow(), 0).toString();
+	        		System.out.println(bookId);
+	        		
+	        	    selectedBook = new BookDAO();
+	        	    selectedBook.setId(Integer.valueOf(bookId));
+//	        	    selectedBook.setTitle(title);
+//	        	    selectedBook.setAuthor(author);
+//	        	    selectedBook.setYear(year);
+	        	}
+	        }
+	    });
 		
 		this.addWindowListener(new WindowAdapter() {
 	         @Override
