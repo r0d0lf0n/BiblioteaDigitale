@@ -33,7 +33,7 @@ public class LoanModel {
 	        loanDao = GestorePrestiti.getInstance().getLoanDao();	        
 	        UpdateBuilder<LoanDAO, String> updateBuilder = loanDao.updateBuilder();
 	        updateBuilder.updateColumnValue("start_date", newStartDate);
-	        updateBuilder.updateColumnValue("end_Date", newStartDate);
+	        updateBuilder.updateColumnValue("end_Date", newEndDate);
 	        updateBuilder.where().eq("id", id);
 	        rowsUpdated = updateBuilder.update();	        
 	    } catch (Exception e) {
