@@ -74,5 +74,6 @@ public class CatalogController implements Observable{
 //		setChanged("CLOSE_CATALOG", null);
 //		setChanged("OPEN_LANDING", null);
 		setChanged("CLOSE_BOOK_DETAIL", null);	
+		setChanged("REFRESH_BOOK_DETAIL", null);	
 	}
 }

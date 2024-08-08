@@ -232,9 +232,8 @@ public class CatalogView extends JFrame implements Observer{
 			new LoadBooksThread().start();
 		}
 		
-		if(type.equals("CLOSE_BOOK_DETAIL")) {
-//			refreshTable();
-//			initializeTable();
+		if(type.equals("REFRESH_BOOK_DETAIL")) {
+			initializeTable();
 		}
 	}
 	
