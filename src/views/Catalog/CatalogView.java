@@ -127,10 +127,22 @@ public class CatalogView extends JFrame implements Observer{
 	        public void valueChanged(ListSelectionEvent event) {
 	        	if (!event.getValueIsAdjusting()) {
 	        		String bookId = catalogTable.getValueAt(catalogTable.getSelectedRow(), 0).toString();
+	        		String title = catalogTable.getValueAt(catalogTable.getSelectedRow(), 1).toString();
+	        		String author = catalogTable.getValueAt(catalogTable.getSelectedRow(), 2).toString();
+	        		String editor = catalogTable.getValueAt(catalogTable.getSelectedRow(), 3).toString();
+	        		String year = catalogTable.getValueAt(catalogTable.getSelectedRow(), 4).toString();
+	        		String desc = catalogTable.getValueAt(catalogTable.getSelectedRow(), 5).toString();
+	        		String ISBN = catalogTable.getValueAt(catalogTable.getSelectedRow(), 6).toString();
+	        		
 	        	    selectedBook = new BookDAO();
 	        	    selectedBook.setId(Integer.valueOf(bookId));
+	        	    selectedBook.setTitle(title);
+	        	    selectedBook.setAuthor(author);
+	        	    selectedBook.setEditor(editor);
+	        	    selectedBook.setYear(year);
+	        	    selectedBook.setDescription(desc);
+	        	    selectedBook.setIsbn(ISBN);
 	        	    
-//					if(bookDetailView == null)
 					bookDetailView = new BookDetailView(controller, selectedBook);
 					bookDetailView.setVisible(true);
 	        	}
