@@ -91,4 +91,9 @@ public class LoansController implements Observable{
             observer.update(type, arg); // Aggiorna ciascun osservatore con il nuovo stato
         }
     }
+    
+    public void closeLoansDetailPanel() {
+		setChanged("CLOSE_LOANS_DETAIL", null);	
+		setChanged("REFRESH_LOANS_DETAIL", null);	
+	}
 }

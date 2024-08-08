@@ -114,6 +114,7 @@ public class UpdateLoanView extends JFrame implements Observer {
       		   } else {
    	   				JOptionPane.showMessageDialog(null, "Save failed!", "Warning", JOptionPane.PLAIN_MESSAGE);
       		   }
+               controller.closeLoansDetailPanel();
             }
         });
 		contentPane.add(btnSave);
@@ -179,10 +180,10 @@ public class UpdateLoanView extends JFrame implements Observer {
 	@Override
 	public void update(String type, Object arg) {
 		System.out.println("Loan details!");
-		if(type.equals("OPEN_LOAN_DETAIL")) {
+		if(type.equals("OPEN_LOANS_DETAIL")) {
 			this.setVisible(true);
 		}
-		if(type.equals("CLOSE_LOAN_DETAIL")){
+		if(type.equals("CLOSE_LOANS_DETAIL")){
 			this.setVisible(false);
 		}
 	}

@@ -163,6 +163,16 @@ public class LoanView extends JFrame implements Observer{
 		sl_contentPane.putConstraint(SpringLayout.NORTH, textField, 17, SpringLayout.SOUTH, lblNewLabel);
 		contentPane.add(lblNewLabel);
 		
+		JButton btnRefresh = new JButton("Aggiorna");
+		btnRefresh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				initializeTable();
+			}
+		});
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnRefresh, -6, SpringLayout.NORTH, scrollPane);
+		sl_contentPane.putConstraint(SpringLayout.EAST, btnRefresh, 0, SpringLayout.EAST, btnClose);
+		contentPane.add(btnRefresh);
+		
 		this.addWindowListener(new WindowAdapter() {
 	         @Override
 	         public void windowClosing(WindowEvent e) {
@@ -229,6 +239,7 @@ public class LoanView extends JFrame implements Observer{
 //	}
 	
 	private void initializeTable() {
+		getLoans();
 		Object[] columns = { "Id", "User", "Book", "Start Date", "End Date" };
 		DefaultTableModel model = new DefaultTableModel();
 		model.setColumnIdentifiers(columns);
@@ -308,6 +319,10 @@ public class LoanView extends JFrame implements Observer{
 		
 		if(type.equals("CLOSE_LOANS")){
 			this.setVisible(false);
+		}
+		
+		if(type.equals("REFRESH_LOANS_DETAIL")) {
+			initializeTable();
 		}
 	}
 }

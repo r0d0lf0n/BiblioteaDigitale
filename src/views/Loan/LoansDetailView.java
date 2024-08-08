@@ -33,6 +33,7 @@ public class LoansDetailView extends JDialog implements Observer {
 	NewLoanView newLoanView = null;
 	UpdateLoanView updateLoanView = null;
 	List<LoanDAO> loans = null;
+	private int idUtente = 0;
 	int centerX;
 	int centerY;
 
@@ -99,9 +100,9 @@ public class LoansDetailView extends JDialog implements Observer {
 		contentPane.add(btnEditLoan);
 
 		JScrollPane scrollPane = new JScrollPane();
-		sl_contentPane.putConstraint(SpringLayout.WEST, scrollPane, 0, SpringLayout.WEST, btnNewLoan);
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, scrollPane, -30, SpringLayout.NORTH, btnNewLoan);
-		sl_contentPane.putConstraint(SpringLayout.EAST, scrollPane, -13, SpringLayout.EAST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.WEST, scrollPane, 10, SpringLayout.WEST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, scrollPane, -6, SpringLayout.NORTH, btnNewLoan);
+		sl_contentPane.putConstraint(SpringLayout.EAST, scrollPane, -11, SpringLayout.EAST, contentPane);
 		contentPane.add(scrollPane);
 
 		loanTable = new JTable();
@@ -112,13 +113,24 @@ public class LoansDetailView extends JDialog implements Observer {
 		sl_contentPane.putConstraint(SpringLayout.NORTH, loanTable, 85, SpringLayout.SOUTH, btnEditLoan);
 		
 	    lblNoLoans = new JLabel("Non \u00E8 presente alcun prestito.");
-	    sl_contentPane.putConstraint(SpringLayout.NORTH, scrollPane, 6, SpringLayout.SOUTH, lblNoLoans);
+	    sl_contentPane.putConstraint(SpringLayout.NORTH, scrollPane, 30, SpringLayout.SOUTH, lblNoLoans);
 	    sl_contentPane.putConstraint(SpringLayout.EAST, btnNewLoan, 29, SpringLayout.EAST, lblNoLoans);
 	    sl_contentPane.putConstraint(SpringLayout.WEST, lblNoLoans, 10, SpringLayout.WEST, contentPane);
 		lblNoLoans.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblNoLoans);
 		
-		getLoans(idUtente);
+		JButton btnRefresh = new JButton("Aggiorna");
+		btnRefresh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.closeLoansDetailPanel();
+				initializeTable();
+			}
+		});
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnRefresh, -6, SpringLayout.NORTH, scrollPane);
+		sl_contentPane.putConstraint(SpringLayout.EAST, btnRefresh, -10, SpringLayout.EAST, contentPane);
+		contentPane.add(btnRefresh);
+		
+		this.idUtente = idUtente;
 		initializeTable();
 		if (loans.size() == 0) { 
 			lblNoLoans.setVisible(true);
@@ -136,6 +148,8 @@ public class LoansDetailView extends JDialog implements Observer {
 	
 	
 	private void initializeTable() {
+		getLoans(idUtente);
+		
 		Object[] columns = { "Id", "User", "Book", "Start Date", "End Date" };
 		DefaultTableModel model = new DefaultTableModel();
 		model.setColumnIdentifiers(columns);
@@ -160,6 +174,9 @@ public class LoansDetailView extends JDialog implements Observer {
 
 	@Override
 	public void update(String type, Object arg) {
+		if(type.equals("REFRESH_LOANS_DETAIL")) {
+			initializeTable();
+		}
 		if (loans.size() == 0) { 
 			lblNoLoans.setVisible(true);
 			initializeTable();
@@ -170,7 +187,5 @@ public class LoansDetailView extends JDialog implements Observer {
 		}
 		this.setVisible(true);	
 	}
-	
-	
 }
 
