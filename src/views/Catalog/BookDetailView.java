@@ -42,6 +42,7 @@ public class BookDetailView extends JFrame implements Observer {
 	private JTextField textFieldISBN;
 	private JTextField textFieldEditor;
 	private JTextField textFieldYear;
+	private Boolean editing = false;
 	
 	/**
 	 * Launch the application.
@@ -64,6 +65,7 @@ public class BookDetailView extends JFrame implements Observer {
 		book = b;
 		System.out.println(book.getId());
 		CatalogController controller = catalogController;
+		catalogModel = new CatalogModel();
 //		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 //        int screenWidth = screenSize.width;
 //        int screenHeight = screenSize.height;
@@ -176,9 +178,19 @@ public class BookDetailView extends JFrame implements Observer {
 		contentPane.add(textFieldYear);
 		textFieldYear.setColumns(10);
 		
-		JButton btnEdit = new JButton("Edit book");
+		JButton btnEdit = new JButton("Edit");
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (!editing) {
+					toggleTextFieldEditing(true);
+					btnEdit.setText("Save");
+					editing = true;
+				} else {
+					toggleTextFieldEditing(false);
+					btnEdit.setText("Edit");
+					editing = false;
+					saveBook();
+				}
 			}
 		});
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnEdit, 0, SpringLayout.WEST, lblBookId);
@@ -208,6 +220,27 @@ public class BookDetailView extends JFrame implements Observer {
 		setTextFieldValues();
 	}
 	
+	private void saveBook() {
+		String id = textFieldId.getText();
+		String title = textFieldTitle.getText();
+		String author = textFieldAuthor.getText();
+		String editor = textFieldEditor.getText();
+		String year = textFieldYear.getText();
+		String desc = textFieldDescription.getText();
+		String ISBN = textFieldISBN.getText();
+		
+		BookDAO newBook = new BookDAO();
+		newBook.setId(Integer.valueOf(id));
+		newBook.setTitle(title);
+		newBook.setAuthor(author);
+		newBook.setEditor(editor);
+		newBook.setYear(year);
+		newBook.setDescription(desc);
+		newBook.setIsbn(ISBN);
+			
+		catalogModel.saveBook(newBook);
+	}
+	
 	private void setTextFieldValues() {
 		textFieldId.setText(String.valueOf(book.getId()));
 		textFieldTitle.setText(book.getTitle());
@@ -216,6 +249,16 @@ public class BookDetailView extends JFrame implements Observer {
 		textFieldYear.setText(book.getYear());
 		textFieldDescription.setText(book.getDescription());
 		textFieldISBN.setText(book.getIsbn());
+	}
+	
+	private void toggleTextFieldEditing(Boolean flag) {
+//		textFieldId.setEditable(true);
+		textFieldTitle.setEditable(flag);
+		textFieldAuthor.setEditable(flag);
+		textFieldEditor.setEditable(flag);
+		textFieldYear.setEditable(flag);
+		textFieldDescription.setEditable(flag);
+		textFieldISBN.setEditable(flag);
 	}
 
 	@Override
