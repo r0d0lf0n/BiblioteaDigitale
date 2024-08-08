@@ -37,10 +37,10 @@ public class RegisteredUserController implements Observable{
         }
     }
 
-	public void getGenereList() {
-		String[] list = {"LISTA", "DA", "RIEMPIRE", "DA", "DB"}; //TODO itera sulle categorie, crea la lista e torna il risultato tramite observer
+
+	public void search(String isbn, String autore, String titolo, String casaEditrice, String anno) {
+		// TODO Auto-generated method stub
 		
-		setChanged("COMBOBOX_GENERI", list);
 	}
 	
 

@@ -1,30 +1,31 @@
 package views.Catalog;
 
-import java.awt.EventQueue;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import com.j256.ormlite.field.DatabaseField;
-
 import controllers.views.CatalogController;
-import controllers.views.LoansController;
 import models.bl.CatalogModel;
 import models.db.BookDAO;
 import models.db.LoanDAO;
 import models.db.UserDAO;
 import utils.Observer;
-import javax.swing.JLabel;
-import javax.swing.SpringLayout;
-import javax.swing.JTextField;
-import javax.swing.JButton;
 
-public class BookDetailView extends JFrame implements Observer {
+public class BookDetailView extends JDialog implements Observer {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private CatalogController controller = null;
@@ -35,6 +36,7 @@ public class BookDetailView extends JFrame implements Observer {
 	int centerX;
 	int centerY;
 	private BookDAO book;
+	private BookDAO newBook;
 	private JTextField textFieldId;
 	private JTextField textFieldTitle;
 	private JTextField textFieldAuthor;
@@ -45,25 +47,12 @@ public class BookDetailView extends JFrame implements Observer {
 	private Boolean editing = false;
 	
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
 	 */
 	public BookDetailView(CatalogController catalogController, BookDAO b) {
+		super((Frame)null, "Dettaglio Libro", true);
 		book = b;
-		System.out.println(book.getId());
+		//System.out.println(book.getId());
 		controller = catalogController;
 		catalogModel = new CatalogModel();
 //		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -72,7 +61,7 @@ public class BookDetailView extends JFrame implements Observer {
 //	    centerX = screenWidth / 2;
 //	    centerY = screenHeight / 2;
 		
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+/*		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -176,11 +165,110 @@ public class BookDetailView extends JFrame implements Observer {
 		textFieldYear.setEditable(false);
 		sl_contentPane.putConstraint(SpringLayout.NORTH, textFieldYear, 6, SpringLayout.SOUTH, lblYear);
 		contentPane.add(textFieldYear);
-		textFieldYear.setColumns(10);
+		textFieldYear.setColumns(10); */
 		
-		JButton btnEdit = new JButton("Edit");
+
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        setBounds(100, 100, 600, 400);
+        setLocationRelativeTo(null);
+
+        contentPane = new JPanel();
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        setContentPane(contentPane);
+        contentPane.setLayout(new GridBagLayout());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL; 
+
+        JLabel lblBookId = new JLabel("Book ID:");
+        JLabel lblTitle = new JLabel("Title:");
+        JLabel lblAuthor = new JLabel("Author:");
+        JLabel lblEditor = new JLabel("Editor:");
+        JLabel lblYear = new JLabel("Year:");
+        JLabel lblDescription = new JLabel("Description:");
+        JLabel lblISBN = new JLabel("ISBN:");
+
+        textFieldId = new JTextField(40);
+        textFieldTitle = new JTextField(40);
+        textFieldAuthor = new JTextField(40);
+        textFieldEditor = new JTextField(40);
+        textFieldYear = new JTextField(40);
+        textFieldISBN = new JTextField(40);
+        textFieldDescription = new JTextField(40); 
+
+        JTextField[] textFields = {textFieldId, textFieldTitle, textFieldAuthor, textFieldEditor, textFieldYear, textFieldISBN, textFieldDescription};
+        for (JTextField textField : textFields) {
+            textField.setEditable(false);
+            textField.setMinimumSize(new Dimension(240, 30)); 
+        }
+
+        JButton btnClose = new JButton("Close");
+        JButton btnEdit = new JButton("Edit");
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        contentPane.add(lblBookId, gbc);
+
+        gbc.gridx = 1;
+        contentPane.add(textFieldId, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        contentPane.add(lblTitle, gbc);
+
+        gbc.gridx = 1;
+        contentPane.add(textFieldTitle, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        contentPane.add(lblAuthor, gbc);
+
+        gbc.gridx = 1;
+        contentPane.add(textFieldAuthor, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        contentPane.add(lblEditor, gbc);
+
+        gbc.gridx = 1;
+        contentPane.add(textFieldEditor, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        contentPane.add(lblYear, gbc);
+
+        gbc.gridx = 1;
+        contentPane.add(textFieldYear, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        contentPane.add(lblISBN, gbc);
+
+        gbc.gridx = 1;
+        contentPane.add(textFieldISBN, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        gbc.gridwidth = 2; 
+        contentPane.add(lblDescription, gbc);
+
+        gbc.gridy = 7;
+        contentPane.add(textFieldDescription, gbc);
+
+        gbc.gridwidth = 1; 
+        gbc.gridy = 8;
+        gbc.gridx = 0;
+        contentPane.add(btnEdit, gbc);
+
+        gbc.gridx = 1;
+        contentPane.add(btnClose, gbc);
+
+		
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				if (!editing) {
 					toggleTextFieldEditing(true);
 					btnEdit.setText("Save");
@@ -189,18 +277,20 @@ public class BookDetailView extends JFrame implements Observer {
 					toggleTextFieldEditing(false);
 					btnEdit.setText("Edit");
 					editing = false;
-					saveBook();
-					catalogController.closeBookDetailPanel();
+					//catalogController.closeBookDetailPanel(editing);
+					//editing = false;
 				}
 			}
 		});
-		sl_contentPane.putConstraint(SpringLayout.WEST, btnEdit, 0, SpringLayout.WEST, lblBookId);
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnEdit, -22, SpringLayout.SOUTH, contentPane);
-		contentPane.add(btnEdit);
+	//	sl_contentPane.putConstraint(SpringLayout.WEST, btnEdit, 0, SpringLayout.WEST, lblBookId);
+	//	sl_contentPane.putConstraint(SpringLayout.SOUTH, btnEdit, -22, SpringLayout.SOUTH, contentPane);
+	//	contentPane.add(btnEdit);
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				catalogController.closeBookDetailPanel();
-
+				boolean isEdited = isBookEdited();
+				if(isEdited)
+					saveBook();
+				catalogController.closeBookDetailPanel(isEdited);
 			}
 		});
 		
@@ -209,24 +299,27 @@ public class BookDetailView extends JFrame implements Observer {
 		this.addWindowListener(new WindowAdapter() {
 	        @Override
 	        public void windowClosing(WindowEvent e) {
-	        	System.out.println("Cleaning.....");
-//	        	textFieldId.setText("");
+				boolean isEdited = isBookEdited();
+				if(isEdited)
+					saveBook();
+	        	catalogController.closeBookDetailPanel(isEdited);
 	        }
+
 	    });
 		
 		setTextFieldValues();
 	}
 	
-	private void saveBook() {
-		String id = textFieldId.getText();
-		String title = textFieldTitle.getText();
-		String author = textFieldAuthor.getText();
-		String editor = textFieldEditor.getText();
-		String year = textFieldYear.getText();
-		String desc = textFieldDescription.getText();
-		String ISBN = textFieldISBN.getText();
+	private boolean isBookEdited() {
+		String id = textFieldId.getText().trim();
+		String title = textFieldTitle.getText().trim();
+		String author = textFieldAuthor.getText().trim();
+		String editor = textFieldEditor.getText().trim();
+		String year = textFieldYear.getText().trim();
+		String desc = textFieldDescription.getText().trim();
+		String ISBN = textFieldISBN.getText().trim();
 		
-		BookDAO newBook = new BookDAO();
+		newBook = new BookDAO();
 		newBook.setId(Integer.valueOf(id));
 		newBook.setTitle(title);
 		newBook.setAuthor(author);
@@ -234,7 +327,14 @@ public class BookDetailView extends JFrame implements Observer {
 		newBook.setYear(year);
 		newBook.setDescription(desc);
 		newBook.setIsbn(ISBN);
-			
+		
+		if(newBook.equals(book))
+			return false;
+		
+		return true;
+	}
+	
+	private void saveBook() {
 		catalogModel.saveBook(newBook);
 	}
 	
@@ -260,9 +360,10 @@ public class BookDetailView extends JFrame implements Observer {
 
 	@Override
 	public void update(String type, Object arg) {
-		System.out.println("Book details!");
+		//System.out.println("Book details!");
 		if(type.equals("OPEN_BOOK_DETAIL")) {
 			this.setVisible(true);
+			editing = false;
 		}
 		if(type.equals("CLOSE_BOOK_DETAIL")){
 			this.setVisible(false);

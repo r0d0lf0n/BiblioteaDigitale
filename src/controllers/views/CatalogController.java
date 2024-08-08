@@ -68,12 +68,9 @@ public class CatalogController implements Observable{
 		}
 	}
 	
-	public void closeBookDetailPanel() {
-//		setChanged("CLOSE_SEARCH", null);
-//		setChanged("CLOSE_LOANS", null);
-//		setChanged("CLOSE_CATALOG", null);
-//		setChanged("OPEN_LANDING", null);
+	public void closeBookDetailPanel(boolean editing) {
 		setChanged("CLOSE_BOOK_DETAIL", null);	
-		setChanged("REFRESH_BOOK_DETAIL", null);	
+		if(editing)
+			setChanged("REFRESH_BOOK_DETAIL", null);	
 	}
 }

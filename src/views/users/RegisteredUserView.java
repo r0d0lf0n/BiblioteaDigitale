@@ -1,14 +1,14 @@
 package views.users;
 
 import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -28,120 +28,155 @@ public class RegisteredUserView extends JFrame implements Observer {
     private final LoansController loansController;
     private DefaultComboBoxModel<String> comboGenereModel = null;
 	public LoansDetailView loansDetailView = null;
+	private Utente user = null;
 
     
-    public RegisteredUserView(LandingPageController landingPageController, Utente utente) {
-    	//new
-        controller = new RegisteredUserController();
-        loansController = new LoansController();
-        comboGenereModel = new DefaultComboBoxModel<String>();
+    public RegisteredUserView(LandingPageController landingPageController, Utente user) {
+    	 this.controller = new RegisteredUserController();
+         this.loansController = new LoansController();
+         this.comboGenereModel = new DefaultComboBoxModel<>();
+         this.user = user;
 
-        // Impostazioni del layout per il pannello
-        setLayout(new BorderLayout());
-        setTitle("Utente Registrato"); // Titolo del bordo del pannello
-        setSize(400, 300);
+         setTitle("Gestione Biblioteca - Utente Registrato");
+         setSize(500, 500); 
+         setLayout(new BorderLayout());
 
-        // Pannello per i campi dati utente (non modificabili)
-        JPanel userDataPanel = new JPanel(new GridLayout(4, 2, 10, 5));
-        userDataPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Aggiunge margine
+         
+         JPanel userDataPanel = new JPanel(new GridLayout(4, 2, 10, 5));
+         userDataPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Campi dati utente
-        JLabel lblNome = new JLabel("Nome:");
-        JTextField txtNome = new JTextField(utente.getNome());
-        txtNome.setEditable(false); // Non modificabile
-        userDataPanel.add(lblNome);
-        userDataPanel.add(txtNome);
+         JLabel lblNome = new JLabel("Nome:");
+         JTextField txtNome = new JTextField(user.getNome());
+         txtNome.setEditable(false);
+         userDataPanel.add(lblNome);
+         userDataPanel.add(txtNome);
 
-        JLabel lblCognome = new JLabel("Cognome:");
-        JTextField txtCognome = new JTextField(utente.getCognome());
-        txtCognome.setEditable(false); // Non modificabile
-        userDataPanel.add(lblCognome);
-        userDataPanel.add(txtCognome);
+         JLabel lblCognome = new JLabel("Cognome:");
+         JTextField txtCognome = new JTextField(user.getCognome());
+         txtCognome.setEditable(false);
+         userDataPanel.add(lblCognome);
+         userDataPanel.add(txtCognome);
 
-        JLabel lblCodiceFiscale = new JLabel("Codice Fiscale:");
-        JTextField txtCodiceFiscale = new JTextField(utente.getCodiceFiscale());
-        txtCodiceFiscale.setEditable(false); // Non modificabile
-        userDataPanel.add(lblCodiceFiscale);
-        userDataPanel.add(txtCodiceFiscale);
+         JLabel lblCodiceFiscale = new JLabel("Codice Fiscale:");
+         JTextField txtCodiceFiscale = new JTextField(user.getCodiceFiscale());
+         txtCodiceFiscale.setEditable(false);
+         userDataPanel.add(lblCodiceFiscale);
+         userDataPanel.add(txtCodiceFiscale);
 
-        JLabel lblNumeroTessera = new JLabel("Numero Tessera:");
-        JTextField txtNumeroTessera = new JTextField(String.valueOf(utente.getIdTessera()));
-        txtNumeroTessera.setEditable(false); // Non modificabile
-        userDataPanel.add(lblNumeroTessera);
-        userDataPanel.add(txtNumeroTessera);
+         JLabel lblNumeroTessera = new JLabel("Numero Tessera:");
+         JTextField txtNumeroTessera = new JTextField(String.valueOf(user.getIdTessera()));
+         txtNumeroTessera.setEditable(false);
+         userDataPanel.add(lblNumeroTessera);
+         userDataPanel.add(txtNumeroTessera);
 
-        // Pannello per i campi di ricerca
-        JPanel searchPanel = new JPanel(new GridLayout(4,1,10,5));
-        searchPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Aggiunge margine
+         // Pannello per i campi di ricerca
+         JPanel searchPanel = new JPanel(new GridBagLayout());
+         searchPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        searchPanel.add(new JLabel("Genere letterario:"));
-        searchPanel.add(new JComboBox<String>(comboGenereModel)); 
-        
-        searchPanel.add(new JLabel("Autore:"));
-        searchPanel.add(new JTextField(15)); // Esempio di JTextField per l'autore
-        
-        searchPanel.add(new JLabel("Titolo:"));
-        searchPanel.add(new JTextField(15)); // Esempio di JTextField per il titolo
+         GridBagConstraints gbc = new GridBagConstraints();
+         gbc.insets = new Insets(5, 5, 5, 5);
+         gbc.fill = GridBagConstraints.HORIZONTAL;
+         gbc.weightx = 1;
+         gbc.gridx = 0; 
 
-        // Pulsante "CERCA"
-        JButton searchButton = new JButton("CERCA");
-        searchButton.addActionListener(e -> {
-            // Qui va la logica per eseguire la ricerca
-            System.out.println("Esegui ricerca..."); // Esempio di messaggio di log
-        });
-        searchPanel.add(searchButton); // Aggiunge il pulsante al pannello di ricerca
+         // ISBN
+         JLabel isbnLabel = new JLabel("ISBN:");
+         gbc.gridy = 0;
+         searchPanel.add(isbnLabel, gbc);
 
-        // Pulsante "Gestione Prestiti"
-        JButton manageLoansButton = new JButton("Gestione Prestiti");
-        manageLoansButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	if(loansDetailView == null)
-            		loansDetailView = new LoansDetailView(loansController, utente.getIdTessera());
-            	loansDetailView.setVisible(true);
-            }
-        });
+         JTextField isbnField = new JTextField(15);
+         gbc.gridx = 1;
+         searchPanel.add(isbnField, gbc);
 
-        // Pulsante di chiusura
-        JButton closeButton = new JButton("Chiudi");
-        closeButton.addActionListener(e -> {
-            landingPageController.openLandingPanel();
-        });
+         // Autore
+         JLabel authorLabel = new JLabel("Autore:");
+         gbc.gridx = 0;
+         gbc.gridy = 1;
+         searchPanel.add(authorLabel, gbc);
 
-        // Pannello per i pulsanti
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(manageLoansButton);
-        buttonPanel.add(closeButton);
+         JTextField authorField = new JTextField(15);
+         gbc.gridx = 1;
+         searchPanel.add(authorField, gbc);
 
-        // Aggiungi i componenti al pannello principale con il layout BorderLayout
-        add(userDataPanel, BorderLayout.NORTH);
-        add(searchPanel, BorderLayout.CENTER);
-        add(buttonPanel, BorderLayout.SOUTH);
+         // Titolo
+         JLabel titleLabel = new JLabel("Titolo:");
+         gbc.gridx = 0;
+         gbc.gridy = 2;
+         searchPanel.add(titleLabel, gbc);
 
-        setLocationRelativeTo(null); // Centra la finestra nello schermo
-        setResizable(false);
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+         JTextField titleField = new JTextField(15);
+         gbc.gridx = 1;
+         searchPanel.add(titleField, gbc);
 
-        // Aggiunge l'observer
-        controller.addObserver(this);
-        landingPageController.addObserver(this);
-        populateData();
+         // Casa Editrice
+         JLabel publisherLabel = new JLabel("Casa Editrice:");
+         gbc.gridx = 0;
+         gbc.gridy = 3;
+         searchPanel.add(publisherLabel, gbc);
+
+         JTextField publisherField = new JTextField(15);
+         gbc.gridx = 1;
+         searchPanel.add(publisherField, gbc);
+
+         // Anno
+         JLabel yearLabel = new JLabel("Anno:");
+         gbc.gridx = 0;
+         gbc.gridy = 4;
+         searchPanel.add(yearLabel, gbc);
+
+         JTextField yearField = new JTextField(15);
+         gbc.gridx = 1;
+         searchPanel.add(yearField, gbc);
+
+         // Pulsante "CERCA"
+         JButton searchButton = new JButton("CERCA");
+         searchButton.addActionListener(e -> {
+             controller.search(
+                 isbnField.getText(),
+                 authorField.getText(),
+                 titleField.getText(),
+                 publisherField.getText(),
+                 yearField.getText()
+             );
+         });
+         gbc.gridx = 0;
+         gbc.gridy = 5;
+         gbc.gridwidth = 2;
+         gbc.fill = GridBagConstraints.NONE; 
+         gbc.anchor = GridBagConstraints.CENTER; 
+         searchPanel.add(searchButton, gbc);
+
+         JButton manageLoansButton = new JButton("Gestione Prestiti");
+         manageLoansButton.addActionListener(e -> {
+             if (loansDetailView == null)
+                 loansDetailView = new LoansDetailView(loansController, user.getIdTessera());
+             loansDetailView.setVisible(true);
+         });
+
+         JButton closeButton = new JButton("Chiudi");
+         closeButton.addActionListener(e -> {
+             landingPageController.openLandingPanel();
+         });
+
+         JPanel buttonPanel = new JPanel();
+         buttonPanel.add(manageLoansButton);
+         buttonPanel.add(closeButton);
+
+         add(userDataPanel, BorderLayout.NORTH);
+         add(searchPanel, BorderLayout.CENTER);
+         add(buttonPanel, BorderLayout.SOUTH);
+
+         setLocationRelativeTo(null); // Centra la finestra nello schermo
+         setResizable(false);
+         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+         controller.addObserver(this);
+         landingPageController.addObserver(this);
     }
 
-    private void populateData() {
-		// TODO Auto-generated method stub
-		controller.getGenereList();
-	}
 
 	@Override
     public void update(String type, Object arg) {
-        
-        if(type.equals("COMBOBOX_GENERI")) {
-        	comboGenereModel.removeAllElements();
-        	for (String item : (String[])arg) {
-        		comboGenereModel.addElement(item); // Add updated items to the model
-            }
-        }
         
 		if(type.equals("OPEN_SEARCH")) {
 			this.setVisible(true);

@@ -2,11 +2,14 @@ package views.Catalog;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
+
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -21,11 +24,11 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+
 import controllers.views.CatalogController;
 import controllers.views.LandingPageController;
 import models.db.BookDAO;
 import utils.Observer;
-import views.Loan.NewLoanView;
 
 public class CatalogView extends JFrame implements Observer{
 
@@ -38,7 +41,7 @@ public class CatalogView extends JFrame implements Observer{
 	private Object[] columns = {"Book Num.", "Title", "Author", "Editor", "Year", "Description", "ISBN" };
 	private BookDAO selectedBook;
 	private BookDetailView bookDetailView = null;
-	private JButton btnRefresh;
+	//private JButton btnRefresh;
 	private DefaultTableModel model;
 
 	
@@ -125,20 +128,6 @@ public class CatalogView extends JFrame implements Observer{
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, catalogTable, -211, SpringLayout.NORTH, btnClose);
 		sl_contentPane.putConstraint(SpringLayout.EAST, catalogTable, -420, SpringLayout.EAST, contentPane);
 		
-		btnRefresh = new JButton("Refresh");
-		sl_contentPane.putConstraint(SpringLayout.NORTH, btnRefresh, 36, SpringLayout.SOUTH, btnLoadData);
-		sl_contentPane.putConstraint(SpringLayout.WEST, btnRefresh, 0, SpringLayout.WEST, btnClose);
-		sl_contentPane.putConstraint(SpringLayout.EAST, btnRefresh, 105, SpringLayout.WEST, btnClose);
-		contentPane.add(btnRefresh);
-		btnRefresh.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Refreshing book catalog");
-//				refreshTable();
-				initializeTable();
-			}
-		});
-		
-		
 		//sl_contentPane.putConstraint(SpringLayout.NORTH, catalogTable, 85, SpringLayout.SOUTH, btnRefresh);
 		catalogTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
 	        public void valueChanged(ListSelectionEvent event) {
@@ -165,6 +154,7 @@ public class CatalogView extends JFrame implements Observer{
 	        	}
 	        }
 	    });
+	
 		
 		this.addWindowListener(new WindowAdapter() {
 	         @Override
@@ -198,7 +188,7 @@ public class CatalogView extends JFrame implements Observer{
 		catalogTable.setModel(model);
 	}
 	
-	private void refreshTable() {
+/*	private void refreshTable() {
 		System.out.println("Refreshing catalog");
 		List<BookDAO> book_catalog = controller.getBookCatalog();
 		
@@ -214,7 +204,7 @@ public class CatalogView extends JFrame implements Observer{
 ////		model.fireTableDataChanged();
 		catalogTable.setModel(model);
 		model.fireTableDataChanged();
-	}
+	} */
 	
 	
 	@Override
@@ -255,7 +245,7 @@ public class CatalogView extends JFrame implements Observer{
 	                    });
 	                }
 	    			JOptionPane.showMessageDialog(CatalogView.this, 
-	                        "Caricamento catalogo completato, presenti: "+ controller.getBookCatalog().size()+" testi in archivio");
+	                        "Aggiornamento completato, presenti: "+ controller.getBookCatalog().size()+" testi in archivio");
 	    			catalogTable.setModel(currentModel);
 	    			catalogTable.setEnabled(true);
 	    			btnLoadData.setEnabled(true); 

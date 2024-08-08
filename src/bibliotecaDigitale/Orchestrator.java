@@ -18,8 +18,6 @@ import controllers.bl.DatabaseConfig;
 import controllers.bl.GestoreCatalogo;
 import controllers.bl.GestoreUtenti;
 import models.db.BookDAO;
-import models.db.LoanDAO;
-import models.db.UserDAO;
 import models.users.Amministratore;
 import models.users.Roles;
 import models.users.Utente;
@@ -80,8 +78,8 @@ public class Orchestrator {
         int centerX = screenWidth / 2;
         int centerY = screenHeight / 2;
 
-        int panelWidth = 400;
-        int panelHeight = 300;
+        int panelWidth = 500;
+        int panelHeight = 400;
         // Calcola le posizioni di ciascun pannello
         int[][] positions = {
             {centerX - panelWidth, centerY - panelHeight}, // Top-left
@@ -177,8 +175,8 @@ public class Orchestrator {
 				book.setIsbn(book_catalog.get(i)[0]);
 				book.setEditor(book_catalog.get(i)[4]);
 				bookDao.create(book);
-				if(i==1)
-					System.out.println(book);
+			//	if(i==1)
+			//		System.out.println(book);
 			//	System.out.println("Saving book: ");
 			//	System.out.println(book_catalog.get(i));
 			}

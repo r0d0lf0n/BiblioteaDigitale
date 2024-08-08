@@ -92,7 +92,12 @@ public class BookDAO {
 	}
 	
 	public boolean equals(BookDAO book) {
-		if(book.getIsbn() == this.isbn)
+		if(book.getIsbn().equals(this.isbn) &&
+				book.getId() == this.id &&
+				book.getAuthor().equals(this.author) &&
+				book.getDescription().equals(this.description) &&
+				book.getTitle().equals(this.title) &&
+				book.getYear().equals(this.year))
 			return true;
 		return false;
 	}

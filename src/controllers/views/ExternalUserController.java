@@ -43,19 +43,14 @@ public class ExternalUserController implements Observable{
         }
     }
 	
-	
-	public void getGenereList() {
-		String[] list = {"LISTA", "DA", "RIEMPIRE", "DA", "DB"}; //TODO itera sulle categorie, crea la lista e torna il risultato tramite observer
-		
-		setChanged("COMBOBOX_GENERI", list);
-		
-	}
 
-	public void search(String text, String text2, String string) {
+
+	public void search(String isbn, String autore, String titolo, String casaEditrice, String anno) {
 		// TODO Auto-generated method stub
 		String[] results = {};
 		
 		setChanged("SEARCH_RESULTS", results);
 	}
+
 
 }

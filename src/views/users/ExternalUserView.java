@@ -8,9 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -25,17 +23,15 @@ public class ExternalUserView extends JFrame implements Observer {
 
     private static final long serialVersionUID = 1L;
     private ExternalUserController controller = null;
-    private DefaultComboBoxModel<String> comboGenereModel = null;
-    private Utente currentUser = null;
+    private Utente user = null;
 
     public ExternalUserView(LandingPageController landingPageController, Utente user) {
-    	this.currentUser = user;
-        comboGenereModel = new DefaultComboBoxModel<>();
+    	this.user = user;
         controller = new ExternalUserController();
 
-        setTitle("Ricerca Libri");
+        setTitle("Ricerca Libri - Utente esterno");
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setSize(400, 300);
+        setSize(500, 300); 
         setLayout(new BorderLayout());
 
         JPanel searchPanel = new JPanel();
@@ -46,17 +42,18 @@ public class ExternalUserView extends JFrame implements Observer {
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1;
+        gbc.gridx = 0; 
 
-        JLabel genreLabel = new JLabel("Genere:");
-        gbc.gridx = 0;
+        // ISBN
+        JLabel isbnLabel = new JLabel("ISBN:");
         gbc.gridy = 0;
-        searchPanel.add(genreLabel, gbc);
+        searchPanel.add(isbnLabel, gbc);
 
-        JComboBox<String> genreComboBox = new JComboBox<>(comboGenereModel);
+        JTextField isbnField = new JTextField(15);
         gbc.gridx = 1;
-        gbc.gridy = 0;
-        searchPanel.add(genreComboBox, gbc);
+        searchPanel.add(isbnField, gbc);
 
+        // Autore
         JLabel authorLabel = new JLabel("Autore:");
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -64,9 +61,9 @@ public class ExternalUserView extends JFrame implements Observer {
 
         JTextField authorField = new JTextField(15);
         gbc.gridx = 1;
-        gbc.gridy = 1;
         searchPanel.add(authorField, gbc);
 
+        // Titolo
         JLabel titleLabel = new JLabel("Titolo:");
         gbc.gridx = 0;
         gbc.gridy = 2;
@@ -74,44 +71,64 @@ public class ExternalUserView extends JFrame implements Observer {
 
         JTextField titleField = new JTextField(15);
         gbc.gridx = 1;
-        gbc.gridy = 2;
         searchPanel.add(titleField, gbc);
 
+        // Casa Editrice
+        JLabel publisherLabel = new JLabel("Casa Editrice:");
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        searchPanel.add(publisherLabel, gbc);
+
+        JTextField publisherField = new JTextField(15);
+        gbc.gridx = 1;
+        searchPanel.add(publisherField, gbc);
+
+        // Anno
+        JLabel yearLabel = new JLabel("Anno:");
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        searchPanel.add(yearLabel, gbc);
+
+        JTextField yearField = new JTextField(15);
+        gbc.gridx = 1;
+        searchPanel.add(yearField, gbc);
+
+        // Bottone di ricerca
         JButton searchButton = new JButton("Cerca");
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.search(titleField.getText(), authorField.getText(), genreComboBox.getSelectedItem().toString());
+                controller.search(
+                    isbnField.getText(),
+                    authorField.getText(),
+                    titleField.getText(),
+                    publisherField.getText(),
+                    yearField.getText()
+                );
             }
         });
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 5;
         gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.NONE; 
+        gbc.anchor = GridBagConstraints.CENTER; 
         searchPanel.add(searchButton, gbc);
 
         add(searchPanel, BorderLayout.CENTER);
 
-        setLocationRelativeTo(null); // Centra la finestra nello schermo
-        setResizable(false); // Impedisce il ridimensionamento della finestra
+        setLocationRelativeTo(null); 
+        setResizable(false); 
 
         landingPageController.addObserver(this);
         controller.addObserver(this);
-        populatePanels();
-    }
+        
+      }
 
-    private void populatePanels() {
-        controller.getGenereList();
-    }
 
+ 
     @Override
     public void update(String type, Object arg) {
 
-        if (type.equals("COMBOBOX_GENERI")) {
-            comboGenereModel.removeAllElements();
-            for (String item : (String[]) arg) {
-                comboGenereModel.addElement(item); // Aggiungi gli elementi aggiornati al modello
-            }
-        }
         if(type.equals("SEARCH_RESULTS")) {
         	System.out.println("SEARCH RESULTS"); //TODO
         }

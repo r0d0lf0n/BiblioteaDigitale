@@ -11,5 +11,6 @@ module Biblio {
 	requires ormlite.jdbc;
 	requires java.xml;
 	requires jdk.javadoc;
+	requires jdk.jpackage;
 	opens models.db to ormlite.jdbc;
 }
