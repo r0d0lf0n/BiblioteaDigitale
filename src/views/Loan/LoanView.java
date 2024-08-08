@@ -8,6 +8,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -43,6 +44,7 @@ public class LoanView extends JFrame implements Observer{
 	private JTextField textField;
 	private LoansController controller = null;
 	NewLoanView newLoanView = null;
+	UpdateLoanView updateLoanView = null;
 	List<LoanDAO> loans = null;
 	private CustomDialog dialog;
 	int centerX;
@@ -101,7 +103,10 @@ public class LoanView extends JFrame implements Observer{
 		sl_contentPane.putConstraint(SpringLayout.EAST, btnEditLoan, -2, SpringLayout.EAST, btnNewLoan);
 		btnEditLoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//FIXME empty
+				String loanId = loanTable.getValueAt(loanTable.getSelectedRow(), 0) != null ? loanTable.getValueAt(loanTable.getSelectedRow(), 0).toString() : "-1";
+        		LoanDAO selectedLoan = controller.getLoanById(Integer.valueOf(loanId));
+        	    updateLoanView = new UpdateLoanView(controller, selectedLoan);
+        	    updateLoanView.setVisible(true);
 			}
 		});
 		contentPane.add(btnEditLoan);
@@ -224,13 +229,15 @@ public class LoanView extends JFrame implements Observer{
 //	}
 	
 	private void initializeTable() {
-		Object[] columns = { "User", "Book", "Start Date", "End Date" };
+		Object[] columns = { "Id", "User", "Book", "Start Date", "End Date" };
 		DefaultTableModel model = new DefaultTableModel();
 		model.setColumnIdentifiers(columns);
 		
 		for(int i = 1; i < loans.size(); i++) {
-//			System.out.println(loans.get(i)[0]);
-				model.addRow(new Object[] {loans.get(i).getUser_id(), loans.get(i).getBook_id(), loans.get(i).getStart_date(), loans.get(i).getEnd_date()});
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			String start = loans.get(i).getStart_date() != null ? sdf.format(loans.get(i).getStart_date()) : "";
+			String end = loans.get(i).getEnd_date() != null ? sdf.format(loans.get(i).getEnd_date()) : "";
+			model.addRow(new Object[] {loans.get(i).getId(), loans.get(i).getUser_id(), loans.get(i).getBook_id(), start, end});
 		}
 
 		loanTable.setModel(model);
@@ -245,15 +252,16 @@ public class LoanView extends JFrame implements Observer{
 	}
 	
 	private void filteredLoansByUser(String criteria) {
-		Object[] columns = { "User", "Book", "Start Date", "End Date" };
+		Object[] columns = { "Id", "User", "Book", "Start Date", "End Date" };
 		DefaultTableModel model = new DefaultTableModel();
 		model.setColumnIdentifiers(columns);
 		
     	List<LoanDAO> list = controller.getLoansByRegex(criteria);
 		for (LoanDAO u : list) {
-			System.out.println("*************************");
-			System.out.println(u.getUser_id());
-			model.addRow(new Object[] {u.getUser_id(), u.getBook_id(), u.getStart_date(), u.getStart_date()});
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			String start = u.getStart_date() != null ? sdf.format(u.getStart_date()) : "";
+			String end = u.getEnd_date() != null ? sdf.format(u.getEnd_date()) : "";
+			model.addRow(new Object[] {u.getId(), u.getUser_id(), u.getBook_id(),start, end});
 		}
 		
 		loanTable.setModel(model);

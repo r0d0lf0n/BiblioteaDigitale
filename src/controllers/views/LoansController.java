@@ -1,6 +1,7 @@
 package controllers.views;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import models.bl.CatalogModel;
@@ -26,6 +27,23 @@ public class LoansController implements Observable{
 		this.catalogModel = new CatalogModel();
 		observers = new ArrayList<Observer>();
 
+	}
+	
+	public UserDAO getUserById(int id) {
+		return userModel.getUserById(id);
+	}
+	
+
+	public BookDAO getBookById(int id) {
+		return catalogModel.getBookById(id);
+	}
+	
+	public int updateLoan(int id, Date startDate, Date endDate) {
+		return loanModel.updateLoanById(id,startDate,endDate);
+	}
+	
+	public LoanDAO getLoanById(int id) {
+		return loanModel.getLoanById(id);
 	}
 	
 	public void saveLoan(LoanDAO loan) {

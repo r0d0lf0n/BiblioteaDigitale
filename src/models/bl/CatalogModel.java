@@ -38,6 +38,21 @@ public class CatalogModel {
 		return list;
 	}
 	
+	public BookDAO getBookById(int id) {
+		BookDAO book = null;
+		try {
+			List<BookDAO> list = GestoreCatalogo.getInstance().getBookDao().queryBuilder()
+					  .where()
+					  .eq("id", id)
+					  .query();
+			if (list.size()>0)
+				return list.get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return book;
+	}
+	
 	public void saveBook(BookDAO book) {
 		try {
 //			System.out.println(book);

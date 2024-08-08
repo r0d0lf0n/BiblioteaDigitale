@@ -1,9 +1,11 @@
 package models.bl;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.UpdateBuilder;
 
 import controllers.bl.GestorePrestiti;
 import models.db.LoanDAO;
@@ -25,6 +27,39 @@ public class LoanModel {
 		return null;
 	}
 	
+	public int updateLoanById(int id, Date newStartDate, Date newEndDate) {
+	    int rowsUpdated = 0;
+	    try {
+	        loanDao = GestorePrestiti.getInstance().getLoanDao();	        
+	        UpdateBuilder<LoanDAO, String> updateBuilder = loanDao.updateBuilder();
+	        updateBuilder.updateColumnValue("start_date", newStartDate);
+	        updateBuilder.updateColumnValue("end_Date", newStartDate);
+	        updateBuilder.where().eq("id", id);
+	        rowsUpdated = updateBuilder.update();	        
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return rowsUpdated;
+	}
+	
+	public LoanDAO getLoanById(int idPrestito) {
+		LoanDAO loan = null;
+		try {
+			loanDao = GestorePrestiti.getInstance().getLoanDao();			
+			List<LoanDAO> list = loanDao.queryBuilder()
+					  .where()
+					  .eq("id", idPrestito)
+					  .query();
+			if (list.size()>0)
+				loan = list.get(0);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return loan;
+	}
+	
 	public void saveLoan(LoanDAO loan) {
 		try {
 			GestorePrestiti.getInstance().getLoanDao().createIfNotExists(loan);
@@ -39,7 +74,6 @@ public class LoanModel {
 		try {
 			loanDao = GestorePrestiti.getInstance().getLoanDao();			
 			list = loanDao.queryBuilder()
-					  .selectColumns("user_id")
 					  .where()
 				      .eq("user_id", id)
 					  .query();
@@ -56,7 +90,6 @@ public class LoanModel {
 		try {
 			loanDao = GestorePrestiti.getInstance().getLoanDao();			
 			list = loanDao.queryBuilder()
-					  .selectColumns("book_id")
 					  .where()
 					  .eq("book_id", criteria)
 				      .or()

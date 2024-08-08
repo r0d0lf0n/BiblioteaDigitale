@@ -148,9 +148,6 @@ public class Orchestrator {
 	}
 
 	private void setDataBaseForFirstTime() {
-		//Dao<BookDAO, String> bookDao = GestoreCatalogo.getInstance().getBookDao();
-		//Dao<LoanDAO, String> loanDao = GestorePrestiti.getInstance().getLoanDao();
-		//createFakeLoans(loanDao);
 		try {
 			books = GestoreCatalogo.getInstance().getBookDao().queryForAll();
 			if (books.size() == 0) {
@@ -190,34 +187,6 @@ public class Orchestrator {
 		}
 	}
 
-
 	
-	//TODO ELIMINARE
-	private void createFakeLoans(Dao<LoanDAO, String> loanDao) {
-		System.out.println("Inserting fake loans....");
-		List<String[]> loans_list = new ArrayList<String[]>();
-		try {
-			loans_list = GestoreCatalogo.getInstance().readBookCatalog("/assets/Books-light.csv");
-			for (int i = 1; i < 10; i++) {
-				// create an instance of Account
-				LoanDAO loan = new LoanDAO();
-				UserDAO user = new UserDAO();
-				user.setId(i);
-				user.setName("Nome"+i);
-				loan.setUser_id(user);
-				BookDAO book = new BookDAO();
-				book.setId(i);
-				book.setTitle("Titolo"+i);
-				loan.setUser_id(user);
-				loan.setBook_id(book);
-				loanDao.createIfNotExists(loan);
-				System.out.println("Saving loan: ");
-				System.out.println(loans_list.get(i));
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
 }

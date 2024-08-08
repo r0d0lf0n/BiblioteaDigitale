@@ -5,6 +5,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -30,6 +31,7 @@ public class LoansDetailView extends JDialog implements Observer {
 	private JLabel lblNoLoans;
 	private LoansController controller = null;
 	NewLoanView newLoanView = null;
+	UpdateLoanView updateLoanView = null;
 	List<LoanDAO> loans = null;
 	int centerX;
 	int centerY;
@@ -48,7 +50,7 @@ public class LoansDetailView extends JDialog implements Observer {
 	    centerX = screenWidth / 2;
 	    centerY = screenHeight / 2;
 	    
-		controller = new LoansController();
+		controller = loansController;
 		setTitle("Gestione Prestiti - Id Utente:" + idUtente);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
@@ -88,7 +90,10 @@ public class LoansDetailView extends JDialog implements Observer {
 		sl_contentPane.putConstraint(SpringLayout.EAST, btnEditLoan, -2, SpringLayout.EAST, btnNewLoan);
 		btnEditLoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//FIXME empty
+				String loanId = loanTable.getValueAt(loanTable.getSelectedRow(), 0) != null ? loanTable.getValueAt(loanTable.getSelectedRow(), 0).toString() : "-1";
+        		LoanDAO selectedLoan = controller.getLoanById(Integer.valueOf(loanId));
+        	    updateLoanView = new UpdateLoanView(controller, selectedLoan);
+        	    updateLoanView.setVisible(true);
 			}
 		});
 		contentPane.add(btnEditLoan);
@@ -131,14 +136,17 @@ public class LoansDetailView extends JDialog implements Observer {
 	
 	
 	private void initializeTable() {
-		Object[] columns = { "User", "Book", "Start Date", "End Date" };
+		Object[] columns = { "Id", "User", "Book", "Start Date", "End Date" };
 		DefaultTableModel model = new DefaultTableModel();
 		model.setColumnIdentifiers(columns);
 		
 		for(int i = 1; i < loans.size(); i++) {
-				model.addRow(new Object[] {loans.get(i).getUser_id(), loans.get(i).getBook_id(), loans.get(i).getStart_date(), loans.get(i).getEnd_date()});
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			String start = loans.get(i).getStart_date() != null ? sdf.format(loans.get(i).getStart_date()) : "";
+			String end = loans.get(i).getEnd_date() != null ? sdf.format(loans.get(i).getEnd_date()) : "";
+			model.addRow(new Object[] {loans.get(i).getId(), loans.get(i).getUser_id(), loans.get(i).getBook_id(), start, end});
 		}
-		
+
 		loanTable.setModel(model);
 	}
 	
