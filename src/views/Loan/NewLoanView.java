@@ -1,6 +1,8 @@
 package views.Loan;
 
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
@@ -26,6 +28,7 @@ import models.db.LoanDAO;
 import models.db.UserDAO;
 import utils.CustomDialog;
 import utils.Observer;
+import views.Catalog.CatalogView;
 
 import javax.swing.JButton;
 import javax.swing.SpringLayout;
@@ -33,6 +36,7 @@ import javax.swing.SpringLayout;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JTable;
 import javax.swing.JScrollBar;
@@ -102,6 +106,11 @@ public class NewLoanView extends JDialog implements Observer {
 	public NewLoanView(LoansController loanController) {
 //		cleanTextFields();
 		controller = loanController;
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenWidth = screenSize.width;
+        int screenHeight = screenSize.height;
+	    centerX = screenWidth / 2;
+	    centerY = screenHeight / 2;
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
@@ -243,23 +252,8 @@ public class NewLoanView extends JDialog implements Observer {
 					
 				} else {
 					System.out.println("show dialog");
-					int width = 280;
-					int height = 100;
-					dialog = new CustomDialog();
-					JDialog d = dialog.buildDialog(null, "Warning!", "There are no loand yet!", "New Loan", "Cancel", centerX - width, centerY - height, width, height);
-					JButton btnOne = dialog.getButtonOne();
-					JButton btnTwo = dialog.getButtonTwo();
-					btnOne.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-
-						}
-					});
-					
-					btnTwo.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-
-						}
-					});
+        			JOptionPane.showMessageDialog(NewLoanView.this, 
+                            "The filed 'End Date' is required, please enter a date in the format DD/MM/YYYY");
 				}
 			}
 		});
