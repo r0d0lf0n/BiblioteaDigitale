@@ -38,6 +38,7 @@ public class CatalogView extends JFrame implements Observer{
 	private Object[] columns = {"Book Num.", "Title", "Author", "Editor", "Year", "Description", "ISBN" };
 	private BookDAO selectedBook;
 	private BookDetailView bookDetailView = null;
+	private JButton btnRefresh;
 
 	
 	/**
@@ -122,6 +123,20 @@ public class CatalogView extends JFrame implements Observer{
 		sl_contentPane.putConstraint(SpringLayout.WEST, catalogTable, 0, SpringLayout.WEST, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, catalogTable, -211, SpringLayout.NORTH, btnClose);
 		sl_contentPane.putConstraint(SpringLayout.EAST, catalogTable, -420, SpringLayout.EAST, contentPane);
+		
+		btnRefresh = new JButton("Refresh");
+		sl_contentPane.putConstraint(SpringLayout.NORTH, btnRefresh, 36, SpringLayout.SOUTH, btnLoadData);
+		sl_contentPane.putConstraint(SpringLayout.WEST, btnRefresh, 0, SpringLayout.WEST, btnClose);
+		sl_contentPane.putConstraint(SpringLayout.EAST, btnRefresh, 105, SpringLayout.WEST, btnClose);
+		contentPane.add(btnRefresh);
+		btnRefresh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Refreshing book catalog");
+				initializeTable();
+			}
+		});
+		
+		
 		//sl_contentPane.putConstraint(SpringLayout.NORTH, catalogTable, 85, SpringLayout.SOUTH, btnRefresh);
 		catalogTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
 	        public void valueChanged(ListSelectionEvent event) {
@@ -180,6 +195,19 @@ public class CatalogView extends JFrame implements Observer{
 
 		catalogTable.setModel(model);
 	}
+	
+//	private void refreshTable() {
+//		DefaultTableModel model = new DefaultTableModel();
+//		model.setColumnIdentifiers(columns);
+//		List<BookDAO> book_catalog = controller.getBookCatalog();
+//		
+//		for(int i = 0; i < book_catalog.size(); i++) {
+////			System.out.println(book_catalog.get(i).getAuthor());
+//			model.addRow(new Object[] {book_catalog.get(i).getId(), book_catalog.get(i).getTitle(), book_catalog.get(i).getAuthor(), book_catalog.get(i).getEditor(), book_catalog.get(i).getYear(), book_catalog.get(i).getDescription(), book_catalog.get(i).getIsbn()});
+//		}
+//
+//		catalogTable.setModel(model);
+//	}
 	
 	@Override
 	public void update(String type, Object arg) {

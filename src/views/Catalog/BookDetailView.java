@@ -190,6 +190,7 @@ public class BookDetailView extends JFrame implements Observer {
 					btnEdit.setText("Edit");
 					editing = false;
 					saveBook();
+					catalogController.closeBookDetailPanel();
 				}
 			}
 		});
@@ -201,11 +202,6 @@ public class BookDetailView extends JFrame implements Observer {
 				catalogController.closeBookDetailPanel();
 			}
 		});
-		
-		
-		
-		
-		
 		
 		controller.addObserver(this);
 		
