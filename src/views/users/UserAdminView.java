@@ -15,7 +15,7 @@ import javax.swing.SpringLayout;
 import controllers.views.LandingPageController;
 import controllers.views.UserAdminController;
 import utils.Observer;
-import views.InsertBookView;
+import views.Catalog.InsertBookView;
 
 
 

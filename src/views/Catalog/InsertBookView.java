@@ -1,4 +1,4 @@
-package views;
+package views.Catalog;
 
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -162,7 +162,6 @@ public class InsertBookView extends JFrame implements ActionListener {
 		 this.addWindowListener(new WindowAdapter() {
 	         @Override
 	         public void windowClosing(WindowEvent e) {
-
 	             dispose();
 	         }
 	     });

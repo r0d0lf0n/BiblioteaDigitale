@@ -40,7 +40,7 @@ public class GestoreUtenti {
 		return idTessera;
 	}
 
-	public Utente creaUtente(Utente utente) {
+	public Utente creaUtente(Utente utente, boolean persistent) {
 
 		synchronized (this) {
 			if (utente.getRuolo().equals(Roles.ADMIN))
@@ -54,7 +54,7 @@ public class GestoreUtenti {
 			}
 			
 			//RENDI PERSISTENTE L'OPERAZIONE
-			if(utente.getRuolo() != Roles.EXTERNAL_USER) {
+			if(persistent && utente.getRuolo() != Roles.EXTERNAL_USER) {
 				UserDAO persistentUser = new UserDAO();
 				persistentUser.setAddress("");
 				persistentUser.setName(utente.getNome());

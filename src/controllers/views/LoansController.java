@@ -48,10 +48,16 @@ public class LoansController implements Observable{
 	
 	public void saveLoan(LoanDAO loan) {
 		loanModel.saveLoan(loan);
+		setChanged("CLOSE_NEW_LOAN", null);
+
 	}
 	
 	public List<LoanDAO> getLoans() {
 		return loanModel.getAllLoans();
+	}
+	
+	public List<UserDAO> getUsers() {
+		return userModel.getAllUsers();
 	}
 	
 	public List<LoanDAO> getLoansByUserId(int id) {
@@ -70,7 +76,7 @@ public class LoansController implements Observable{
 		return loanModel.getLoansByRegex(criteria);
 	}
 
-    public void setChanged(String type, Object obj) {
+    private void setChanged(String type, Object obj) {
         this.obj = obj;
         notifyObservers(type, obj); // Notifica gli osservatori con il nuovo stato
     }
@@ -96,4 +102,8 @@ public class LoansController implements Observable{
 		setChanged("CLOSE_LOANS_DETAIL", null);	
 		setChanged("REFRESH_LOANS_DETAIL", null);	
 	}
+    
+    public void openNewLoan() {
+    	setChanged("OPEN_NEW_LOAN", null);
+    }
 }

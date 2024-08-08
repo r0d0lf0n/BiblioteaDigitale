@@ -4,8 +4,6 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
@@ -28,9 +26,7 @@ import javax.swing.table.DefaultTableModel;
 
 import controllers.views.LandingPageController;
 import controllers.views.LoansController;
-import models.db.BookDAO;
 import models.db.LoanDAO;
-import models.db.UserDAO;
 import utils.CustomDialog;
 import utils.Observer;
 
@@ -45,10 +41,11 @@ public class LoanView extends JFrame implements Observer{
 	private LoansController controller = null;
 	NewLoanView newLoanView = null;
 	UpdateLoanView updateLoanView = null;
-	List<LoanDAO> loans = null;
+	//List<LoanDAO> loans = null;
 	private CustomDialog dialog;
 	int centerX;
 	int centerY;
+	private LandingPageController landingPageController = null;
 
 	
 
@@ -57,6 +54,7 @@ public class LoanView extends JFrame implements Observer{
 	 * @param landingPageController 
 	 */
 	public LoanView(LandingPageController landingPageController) {
+		this.landingPageController = landingPageController;
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int screenWidth = screenSize.width;
         int screenHeight = screenSize.height;
@@ -179,8 +177,6 @@ public class LoanView extends JFrame implements Observer{
 	        	 landingPageController.openLandingPanel();
 	         }
 	     });
-		
-		getLoans();
 
 		controller.addObserver(this);
 		landingPageController.addObserver(this);
@@ -239,10 +235,10 @@ public class LoanView extends JFrame implements Observer{
 //	}
 	
 	private void initializeTable() {
-		getLoans();
 		Object[] columns = { "Id", "User", "Book", "Start Date", "End Date" };
 		DefaultTableModel model = new DefaultTableModel();
 		model.setColumnIdentifiers(columns);
+		List<LoanDAO> loans = controller.getLoans();
 		
 		for(int i = 1; i < loans.size(); i++) {
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -255,12 +251,6 @@ public class LoanView extends JFrame implements Observer{
 	}
 	
 	
-	private List<LoanDAO> getLoans() {
-		loans = controller.getLoans();
-		
-				
-		return loans;
-	}
 	
 	private void filteredLoansByUser(String criteria) {
 		Object[] columns = { "Id", "User", "Book", "Start Date", "End Date" };
@@ -281,7 +271,7 @@ public class LoanView extends JFrame implements Observer{
 	@Override
 	public void update(String type, Object arg) {
 		if(type.equals("OPEN_LOANS")) {
-			if (loans.size() == 0) { 
+			if (controller.getLoans().size() == 0) { 
 				lblNoLoans.setVisible(true);
 				int width = 280;
 				int height = 100;		
@@ -294,7 +284,8 @@ public class LoanView extends JFrame implements Observer{
 						d.setVisible(false);
 						d.dispose();
 						newLoanView = new NewLoanView(controller);
-						controller.setChanged("OPEN_NEW_LOAN", null);
+						controller.openNewLoan();
+						//controller.setChanged("OPEN_NEW_LOAN", null);
 						//LoanModel loanModel = new LoanModel();
 						//NewLoanController newLoanController = new NewLoanController(newLoanView, loanModel);
 					}
@@ -302,9 +293,19 @@ public class LoanView extends JFrame implements Observer{
 				
 				btnTwo.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						System.out.println("Closing dialog!");
+						//System.out.println("Closing dialog!");
 						d.setVisible(false);
 						d.dispose();
+						landingPageController.openLandingPanel();
+					}
+				});
+				
+				d.addWindowListener(new WindowAdapter() {
+					
+					@Override
+					public void windowClosing(WindowEvent e) {
+						dispose();
+						landingPageController.openLandingPanel();
 					}
 				});
 				

@@ -5,16 +5,14 @@ import java.util.List;
 import java.util.Random;
 
 import models.users.Roles;
+import models.users.Utente;
 
 public class App {
-	
-	
-	private static final int adminNumber = 1;
+		
 	private static final int regUserNumber = 20;
-	private static final int extUserNumber = 5;
+	private static final int extUserNumber = 3;
 	private static final String[] FIRST_NAMES = {"Mario", "Luigi", "Giovanni", "Anna", "Maria", "Luca", "Rodolfo", "Ilaria", "Alessandro", "Marta", "Giacomo", "Josè", "Martin", "David", "Luca"};
     private static final String[] LAST_NAMES = {"Rossi", "Bianchi", "Granata", "Mayo", "Conforti", "Durante", "Verza", "De Santis", "Lupini", "Casole", "Gioia"};
-	
 	/**
 	 * Launch the application.
 	 */
@@ -25,17 +23,18 @@ public class App {
 		orchestrator.startDB();
 		
 		//create users
-		for(int i=0; i< adminNumber; i++) {
-			orchestrator.startUser(Roles.ADMIN, generateUser());
+		if(!orchestrator.usersExist()) {
+			orchestrator.createUsers(Roles.ADMIN, generateUser());
+	
+			for(int i=0; i< regUserNumber; i++) {
+				orchestrator.createUsers(Roles.REGULAR_USER, generateUser());
+			}	
 		}
-		
-		for(int i=0; i< regUserNumber; i++) {
-			orchestrator.startUser(Roles.REGULAR_USER, generateUser());
+		else {
+			orchestrator.loadUsers();
 		}
-		
-		
 		for(int i=0; i< extUserNumber; i++) {
-			orchestrator.startUser(Roles.EXTERNAL_USER, generateUser());
+			orchestrator.createUsers(Roles.EXTERNAL_USER, generateUser());
 		}
 		
 		orchestrator.startApp();

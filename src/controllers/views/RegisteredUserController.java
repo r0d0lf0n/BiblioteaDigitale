@@ -15,7 +15,7 @@ public class RegisteredUserController implements Observable{
 		observers = new ArrayList<Observer>();
 	}
 
-    public void setChanged(String type, Object obj) {
+    private void setChanged(String type, Object obj) {
         this.obj = obj;
         notifyObservers(type, obj); // Notifica gli osservatori con il nuovo stato
     }
@@ -40,7 +40,7 @@ public class RegisteredUserController implements Observable{
 
 	public void search(String isbn, String autore, String titolo, String casaEditrice, String anno) {
 		// TODO Auto-generated method stub
-		
+		setChanged("NEW_SEARCH_RESULTS", null);
 	}
 	
 

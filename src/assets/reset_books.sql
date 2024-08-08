@@ -7,3 +7,7 @@ DELETE FROM sqlite_sequence WHERE name='book';
 
 DELETE FROM biblio.user;
 DELETE FROM sqlite_sequence WHERE name='user';
+
+
+DELETE FROM biblio.loan;
+DELETE FROM sqlite_sequence WHERE name='loan';

@@ -18,6 +18,7 @@ import controllers.bl.DatabaseConfig;
 import controllers.bl.GestoreCatalogo;
 import controllers.bl.GestoreUtenti;
 import models.db.BookDAO;
+import models.db.UserDAO;
 import models.users.Amministratore;
 import models.users.Roles;
 import models.users.Utente;
@@ -28,7 +29,6 @@ import views.Landing.LandingPageView;
 import views.Loan.LoanView;
 import views.users.ExternalUserView;
 import views.users.RegisteredUserView;
-import views.users.UserAdminView;
 
 /**
  * 
@@ -40,7 +40,7 @@ public class Orchestrator {
 	private CatalogView catalogPage = null;
 	//private UserAdminView adminView = null;
 	private int maxNumberOfRegUsers = 3;
-	private int maxNumberOfExtUsers = 2;
+	private int maxNumberOfExtUsers = 3;
 	private int currentNumberOfRegUsers = 0;
 	private int currentNumberOfExtUsers = 0;
 
@@ -50,6 +50,7 @@ public class Orchestrator {
 	private List<Utente> registeredUsers = null;
 	private List<Utente> unregisteredUsers = null;
 	private List<JFrame> viewList = null;
+	private List<UserDAO> users = null;
 
 
 	public Orchestrator() {
@@ -64,6 +65,7 @@ public class Orchestrator {
 		landingPage.setVisible(true);
 		loansPage = new LoanView(landingPage.getLandingController());
 		catalogPage = new CatalogView(landingPage.getLandingController());
+		catalogPage.addUser(admin);
 		
 		disposeUserUIPositions();
 
@@ -98,19 +100,19 @@ public class Orchestrator {
         }
 	}
 
-	public void startUser(Roles role, List<String> user) {
+	public void createUsers(Roles role, List<String> user) {
 
 		if (role.equals(Roles.ADMIN)) {
 			admin = GestoreUtenti.getInstance()
-					.creaUtente(new Amministratore(user.get(0), user.get(1), user.get(2)));
-				viewList.add(new UserAdminView(landingPage.getLandingController(), admin.getNome(), admin.getCognome(), admin.getCodiceFiscale()));
+					.creaUtente(new Amministratore(user.get(0), user.get(1), user.get(2)), true);
+				//viewList.add(new UserAdminView(landingPage.getLandingController(), admin.getNome(), admin.getCognome(), admin.getCodiceFiscale()));
 
 			System.out.println("ADMIN " + admin.getNome() + " " + admin.getCognome() + ", " + admin.getCodiceFiscale()
 					+ ". TESSERA NUM: " + ((Amministratore) admin).getIdTessera());
 			
 		} else if (role.equals(Roles.REGULAR_USER)) {
 			Utente regUser1 = GestoreUtenti.getInstance()
-					.creaUtente(new UtenteRegistrato(user.get(0), user.get(1), user.get(2)));
+					.creaUtente(new UtenteRegistrato(user.get(0), user.get(1), user.get(2)), true);
 			if(currentNumberOfRegUsers < maxNumberOfRegUsers) {
 				viewList.add( new RegisteredUserView(landingPage.getLandingController(), regUser1));
 				currentNumberOfRegUsers++;
@@ -121,7 +123,7 @@ public class Orchestrator {
 					+ regUser1.getCodiceFiscale() + ". TESSERA NUM: " + regUser1.getIdTessera());
 			
 		} else if (role.equals(Roles.EXTERNAL_USER)) {
-			Utente user1 = GestoreUtenti.getInstance().creaUtente(new UtenteEsterno());
+			Utente user1 = GestoreUtenti.getInstance().creaUtente(new UtenteEsterno(), false);
 			if(currentNumberOfExtUsers < maxNumberOfExtUsers) {
 				viewList.add(new ExternalUserView(landingPage.getLandingController(), user1));
 				currentNumberOfExtUsers++;
@@ -131,11 +133,38 @@ public class Orchestrator {
 			System.out.println("USER " + user1.getNome() + " " + user1.getCognome() + ", " + user1.getCodiceFiscale()
 					+ ". TESSERA NUM: " + user1.getIdTessera());
 		}
+	}	
+
+	
+	public void loadUsers() {
+		for (int i = 0; i < users.size(); i++) {
+			int currentRole = users.get(i).getRole();
+			if(currentRole == Roles.EXTERNAL_USER.ordinal()) {
+				Utente user1 = GestoreUtenti.getInstance().creaUtente(new UtenteEsterno(), false);
+				if(currentNumberOfExtUsers < maxNumberOfExtUsers) {
+					viewList.add(new ExternalUserView(landingPage.getLandingController(), user1));
+					currentNumberOfExtUsers++;
+				}
+				unregisteredUsers.add(user1);
+			}
+			else if(currentRole == Roles.REGULAR_USER.ordinal()) {
+				Utente regUser1 = GestoreUtenti.getInstance()
+						.creaUtente(new UtenteRegistrato(users.get(i).getName(), users.get(i).getSurname(), users.get(i).getCodiceFiscale()), false);
+				if(currentNumberOfRegUsers < maxNumberOfRegUsers) {
+					viewList.add( new RegisteredUserView(landingPage.getLandingController(), regUser1));
+					currentNumberOfRegUsers++;
+				}
+				registeredUsers.add(regUser1);
+			}
+			else if(currentRole == Roles.ADMIN.ordinal()) {
+				admin = GestoreUtenti.getInstance()
+						.creaUtente(new Amministratore(users.get(i).getName(), users.get(i).getSurname(), users.get(i).getCodiceFiscale()), false);
+			}
+		}
 
 	}
 
 	public void startDB() {
-		
 		configDatabase();
 		setDataBaseForFirstTime();
 	}
@@ -183,6 +212,18 @@ public class Orchestrator {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public boolean usersExist() {
+		try {
+			users = GestoreUtenti.getInstance().getUserDao().queryForAll();
+			if(users == null)
+				return false;
+			return users.size() > 0; 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	

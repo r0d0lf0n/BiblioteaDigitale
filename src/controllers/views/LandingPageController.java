@@ -15,7 +15,7 @@ public class LandingPageController implements Observable{
 		observers = new ArrayList<Observer>();
 	}
 
-    public void setChanged(String type, Object obj) {
+    private void setChanged(String type, Object obj) {
         this.obj = obj;
         notifyObservers(type, obj); // Notifica gli osservatori con il nuovo stato
     }

@@ -65,7 +65,7 @@ public class LandingPageView extends JFrame implements Observer{
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(3, 1, 5, 5)); 
 
-        btnOpenLoans = new JButton("Gestore Prestiti");
+        btnOpenLoans = new JButton("ADMIN - Gestore Prestiti");
         btnOpenLoans.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -83,7 +83,7 @@ public class LandingPageView extends JFrame implements Observer{
         });
         buttonPanel.add(btnOpenLoans);
 
-        btnOpenCatalog = new JButton("Gestore Catalogo");
+        btnOpenCatalog = new JButton("ADMIN - Gestore Libreria");
         btnOpenCatalog.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -95,7 +95,7 @@ public class LandingPageView extends JFrame implements Observer{
         });
         buttonPanel.add(btnOpenCatalog);
 
-        btnOpenAdvancedSearch = new JButton("Ricerca Libri");
+        btnOpenAdvancedSearch = new JButton("USERS - Ricerca Libri & Prestiti");
         btnOpenAdvancedSearch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

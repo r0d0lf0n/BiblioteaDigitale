@@ -7,12 +7,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SpringLayout;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -28,20 +36,6 @@ import models.db.LoanDAO;
 import models.db.UserDAO;
 import utils.CustomDialog;
 import utils.Observer;
-import views.Catalog.CatalogView;
-
-import javax.swing.JButton;
-import javax.swing.SpringLayout;
-
-import java.util.Date;
-import java.util.List;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.JTable;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.JFormattedTextField;
 
 public class NewLoanView extends JDialog implements Observer {
 
@@ -244,7 +238,6 @@ public class NewLoanView extends JDialog implements Observer {
 					if (endDate.after(startDate)) {
 						System.out.println("saving loans");
 						controller.saveLoan(loan);
-						controller.setChanged("CLOSE_NEW_LOAN", null);
 						cleanTextFields();
 					} else {
 						System.out.println("End date equals to start date");
