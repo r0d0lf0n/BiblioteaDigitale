@@ -218,13 +218,13 @@ public class NewLoanView extends JDialog implements Observer {
 				String author = lblSelectedBookValueAuthor.getText();
 				String year = lblSelectedBookValueYear.getText();
 				
-				String userId = lblSelectedUserTessera.getText();
+				String numTessera = lblSelectedUserTessera.getText();
 				String name = lblSelectedUserValueName.getText();
 				String surname = lblSelectedUserValueSurname.getText();
 					
 				if (bookId.length() == 0 || title.length() == 0 || 
 						author.length() == 0 || year.length() == 0 ||
-						userId.length() == 0 || name.length() == 0 ||
+								numTessera.length() == 0 || name.length() == 0 ||
 						surname.length() == 0 || formattedTextFieldEndDate.getText().length() == 0) {
 	       			JOptionPane.showMessageDialog(NewLoanView.this, 
                             "All field are required!");
@@ -355,7 +355,7 @@ public class NewLoanView extends JDialog implements Observer {
 	}
 	
 	private void filteredUsers(String criteria) {
-		Object[] columns = { "Tessera", "Nome", "Congnome"};
+		Object[] columns = { "Id", "Nome", "Congnome", "Tessera"};
 		modelUsers = new DefaultTableModel();
 		modelUsers.setColumnIdentifiers(columns);
 		
@@ -363,7 +363,7 @@ public class NewLoanView extends JDialog implements Observer {
 		for (UserDAO u : list) {
 			System.out.println("*************************");
 			System.out.println(u.getName());
-			modelUsers.addRow(new Object[] {u.getNumTessera(), u.getName(), u.getSurname()});
+			modelUsers.addRow(new Object[] {u.getId(), u.getName(), u.getSurname(), u.getNumTessera()});
 		}
 		
 		tableUsers.setModel(modelUsers);
@@ -505,14 +505,16 @@ public class NewLoanView extends JDialog implements Observer {
 	
 	
 	private void getDataFromUsersTable() {
-		String tessera = tableUsers.getValueAt(tableUsers.getSelectedRow(), 0).toString();
+		String userId = tableUsers.getValueAt(tableUsers.getSelectedRow(), 0).toString();
 		String name = tableUsers.getValueAt(tableUsers.getSelectedRow(), 1).toString();
 		String surname = tableUsers.getValueAt(tableUsers.getSelectedRow(), 2).toString();
+		String tessera = tableUsers.getValueAt(tableUsers.getSelectedRow(), 3).toString();
 
 		selectedUser = new UserDAO();
-		selectedUser.setNumTessera(Integer.valueOf(tessera));
+		selectedUser.setId(Integer.valueOf(userId));
 		selectedUser.setName(name);
 		selectedUser.setSurname(surname);
+		selectedUser.setNumTessera(Integer.valueOf(tessera));
 		
 		lblSelectedUserTessera.setText(String.valueOf(tessera));
 		lblSelectedUserValueName.setText(selectedUser.getName());
