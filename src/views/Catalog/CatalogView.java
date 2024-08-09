@@ -2,6 +2,8 @@ package views.Catalog;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -31,6 +33,7 @@ import models.db.LoanDAO;
 import models.users.Utente;
 import utils.Observer;
 import views.Loan.UpdateLoanView;
+import views.Loan.NewLoanView.BooksRowSelectionListener;
 
 public class CatalogView extends JFrame implements Observer{
 
@@ -49,7 +52,7 @@ public class CatalogView extends JFrame implements Observer{
 	private JTextField txtCodiceFiscale;
 	private JTextField txtCognome;
 	private JTextField txtNome;
-
+	private CatalogRowSelectionListener catalogRowSelectionListener = new CatalogRowSelectionListener();
 	
 	/**
 	 * Create the frame.
@@ -119,6 +122,7 @@ public class CatalogView extends JFrame implements Observer{
 		JButton btnClose = new JButton("Close");
 		btnClose.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
+		    	catalogTable.removeMouseListener(catalogRowSelectionListener);
 		        landingPageController.openLandingPanel();
 		    }
 		});
@@ -190,31 +194,7 @@ public class CatalogView extends JFrame implements Observer{
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, catalogTable, -211, SpringLayout.NORTH, btnClose);
 		sl_contentPane.putConstraint(SpringLayout.EAST, catalogTable, -320, SpringLayout.EAST, contentPane);
 
-		catalogTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-		    public void valueChanged(ListSelectionEvent event) {
-		        if (!event.getValueIsAdjusting()) {
-		            String bookId = catalogTable.getValueAt(catalogTable.getSelectedRow(), 0).toString();
-		            String title = catalogTable.getValueAt(catalogTable.getSelectedRow(), 1).toString();
-		            String author = catalogTable.getValueAt(catalogTable.getSelectedRow(), 2).toString();
-		            String editor = catalogTable.getValueAt(catalogTable.getSelectedRow(), 3).toString();
-		            String year = catalogTable.getValueAt(catalogTable.getSelectedRow(), 4).toString();
-		            String desc = catalogTable.getValueAt(catalogTable.getSelectedRow(), 5).toString();
-		            String ISBN = catalogTable.getValueAt(catalogTable.getSelectedRow(), 6).toString();
-		            
-		            selectedBook = new BookDAO();
-		            selectedBook.setId(Integer.valueOf(bookId));
-		            selectedBook.setTitle(title);
-		            selectedBook.setAuthor(author);
-		            selectedBook.setEditor(editor);
-		            selectedBook.setYear(year);
-		            selectedBook.setDescription(desc);
-		            selectedBook.setIsbn(ISBN);
-		            
-		            bookDetailView = new BookDetailView(controller, selectedBook);
-		            bookDetailView.setVisible(true);
-		        }
-		    }
-		});
+		catalogTable.addMouseListener(catalogRowSelectionListener);
 	
 		
 		this.addWindowListener(new WindowAdapter() {
@@ -321,6 +301,59 @@ public class CatalogView extends JFrame implements Observer{
 		txtCodiceFiscale.setText(admin.getCodiceFiscale());
 		txtNome.setText(admin.getNome());
 		txtCognome.setText(admin.getCognome());
+	}
+	
+	public class CatalogRowSelectionListener implements MouseListener {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			getDataFromDatble();
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			getDataFromDatble();
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+	}
+	
+	private void getDataFromDatble() {
+        String bookId = catalogTable.getValueAt(catalogTable.getSelectedRow(), 0).toString();
+        String title = catalogTable.getValueAt(catalogTable.getSelectedRow(), 1).toString();
+        String author = catalogTable.getValueAt(catalogTable.getSelectedRow(), 2).toString();
+        String editor = catalogTable.getValueAt(catalogTable.getSelectedRow(), 3).toString();
+        String year = catalogTable.getValueAt(catalogTable.getSelectedRow(), 4).toString();
+        String desc = catalogTable.getValueAt(catalogTable.getSelectedRow(), 5).toString();
+        String ISBN = catalogTable.getValueAt(catalogTable.getSelectedRow(), 6).toString();
+        
+        selectedBook = new BookDAO();
+        selectedBook.setId(Integer.valueOf(bookId));
+        selectedBook.setTitle(title);
+        selectedBook.setAuthor(author);
+        selectedBook.setEditor(editor);
+        selectedBook.setYear(year);
+        selectedBook.setDescription(desc);
+        selectedBook.setIsbn(ISBN);
+        
+        bookDetailView = new BookDetailView(controller, selectedBook);
+        bookDetailView.setVisible(true);
 	}
 }
 
