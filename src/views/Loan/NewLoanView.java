@@ -215,8 +215,23 @@ public class NewLoanView extends JDialog implements Observer {
 		contentPane.add(btnSave);
 		
 		btnSave.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (formattedTextFieldEndDate.getText().length() > 0) {		
+			public void actionPerformed(ActionEvent e) {				
+				String bookId = lblSelectedBookValueID.getText();
+				String title = lblSelectedBookValueTitle.getText();
+				String author = lblSelectedBookValueAuthor.getText();
+				String year = lblSelectedBookValueYear.getText();
+				
+				String userId = lblSelectedUserValueId.getText();
+				String name = lblSelectedUserValueName.getText();
+				String surname = lblSelectedUserValueSurname.getText();
+					
+				if (bookId.length() == 0 || title.length() == 0 || 
+						author.length() == 0 || year.length() == 0 ||
+						userId.length() == 0 || name.length() == 0 ||
+						surname.length() == 0 || formattedTextFieldEndDate.getText().length() == 0) {
+	       			JOptionPane.showMessageDialog(NewLoanView.this, 
+                            "All field are required!");
+				} else {
 					loan = new LoanDAO();
 					loan.setBook_id(selectedBook);
 					loan.setUser_id(selectedUser);
@@ -245,11 +260,6 @@ public class NewLoanView extends JDialog implements Observer {
 					} else {
 						System.out.println("End date equals to start date");
 					}
-					
-				} else {
-					System.out.println("show dialog");
-        			JOptionPane.showMessageDialog(NewLoanView.this, 
-                            "The filed 'End Date' is required, please enter a date in the format DD/MM/YYYY");
 				}
 			}
 		});
