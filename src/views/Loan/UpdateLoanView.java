@@ -155,9 +155,9 @@ public class UpdateLoanView extends JFrame implements Observer {
 	
 	private void initFields() {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		textFieldUser.setText(loan.getUser_id().toString());
+		textFieldUser.setText(String.valueOf(loan.getUser_id().getId()));
 		textFieldUser.setEditable(false);
-		textFieldBook.setText(loan.getBook_id().toString());
+		textFieldBook.setText(String.valueOf(loan.getBook_id().getId()));
 		textFieldBook.setEditable(false);
 		textStartDate.setText(loan.getStart_date() != null ? sdf.format(loan.getStart_date()) : "null");
 		textEndDate.setText(loan.getEnd_date() != null ? sdf.format(loan.getEnd_date()) : "null");
