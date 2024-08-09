@@ -1,21 +1,18 @@
 package views.Loan;
 
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -29,10 +26,15 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
+
 import controllers.views.LoansController;
 import models.db.BookDAO;
 import models.db.LoanDAO;
 import models.db.UserDAO;
+import utils.DateLabelFormatter;
 import utils.Observer;
 
 public class NewLoanView extends JDialog implements Observer {
@@ -60,7 +62,8 @@ public class NewLoanView extends JDialog implements Observer {
 	private UserDAO selectedUser;
 	private LoanDAO loan;
 	private JLabel lblEnd_date;
-	private JFormattedTextField formattedTextFieldEndDate;
+	private JDatePickerImpl datePickerEnd;
+	private UtilDateModel modelEnd;
 	private JLabel lblSelectedUserValueName;
 	private JLabel lblSelectedUserValueSurname;
 	private DefaultTableModel modelUsers;
@@ -107,6 +110,15 @@ public class NewLoanView extends JDialog implements Observer {
 		
 		SpringLayout sl_contentPane = new SpringLayout();
 		contentPane.setLayout(sl_contentPane);
+		
+		modelEnd = new UtilDateModel();
+		Properties p=new Properties();
+		p.put("text.today","Today");
+		p.put("text.month","Month");
+		p.put("text.year","Year");
+		JDatePanelImpl datePanel2 = new JDatePanelImpl(modelEnd, p);
+		datePickerEnd = new JDatePickerImpl(datePanel2, new DateLabelFormatter());
+		contentPane.add(datePickerEnd);
 	
 		JButton btnClose = new JButton("Close");
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnClose, -10, SpringLayout.SOUTH, contentPane);
@@ -221,11 +233,13 @@ public class NewLoanView extends JDialog implements Observer {
 				String numTessera = lblSelectedUserTessera.getText();
 				String name = lblSelectedUserValueName.getText();
 				String surname = lblSelectedUserValueSurname.getText();
-					
+				
+				String endDateString = datePickerEnd.getModel().getValue() != null ? datePickerEnd.getModel().getValue().toString() : "";
+									
 				if (bookId.length() == 0 || title.length() == 0 || 
 						author.length() == 0 || year.length() == 0 ||
 								numTessera.length() == 0 || name.length() == 0 ||
-						surname.length() == 0 || formattedTextFieldEndDate.getText().length() == 0) {
+						surname.length() == 0 || endDateString.length() == 0) {
 	       			JOptionPane.showMessageDialog(NewLoanView.this, 
                             "All field are required!");
 				} else {
@@ -233,22 +247,9 @@ public class NewLoanView extends JDialog implements Observer {
 					loan.setBook_id(selectedBook);
 					loan.setUser_id(selectedUser);
 					Date startDate = new Date(); 
-					Date endDate = new Date(); 
 					loan.setStart_date(startDate);
-					
-					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-					String endDateTextField = formattedTextFieldEndDate.getText();
-//					System.out.println(endDateTextField); 
-					try {
-						endDate = sdf.parse(endDateTextField);
-						loan.setEnd_date(endDate);
-					} catch (ParseException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} 
-
-//					System.out.println(startDate);  
-//					System.out.println(endDate); 
+					Date endDate = (Date) datePickerEnd.getModel().getValue();
+					loan.setEnd_date(endDate);
 					
 					if (endDate.after(startDate)) {
 						//System.out.println("saving loans");
@@ -267,6 +268,7 @@ public class NewLoanView extends JDialog implements Observer {
 		contentPane.add(lblUserSelected);
 		
 		lblSelectedUserTessera = new JLabel("none");
+		sl_contentPane.putConstraint(SpringLayout.WEST, datePickerEnd, 0, SpringLayout.WEST, lblSelectedUserTessera);
 		sl_contentPane.putConstraint(SpringLayout.WEST, lblSelectedUserTessera, 17, SpringLayout.EAST, lblUserSelected);
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, lblSelectedUserTessera, 0, SpringLayout.SOUTH, lblUserSelected);
 		contentPane.add(lblSelectedUserTessera);
@@ -319,15 +321,10 @@ public class NewLoanView extends JDialog implements Observer {
 		contentPane.add(lblSelectedBookValueYear);
 		
 		lblEnd_date = new JLabel("Fine Prestito:");
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, datePickerEnd, 0, SpringLayout.SOUTH, lblEnd_date);
 		sl_contentPane.putConstraint(SpringLayout.NORTH, lblEnd_date, 21, SpringLayout.SOUTH, lblBookSelected);
 		sl_contentPane.putConstraint(SpringLayout.WEST, lblEnd_date, 0, SpringLayout.WEST, lblUser);
 		contentPane.add(lblEnd_date);
-		
-	    formattedTextFieldEndDate = new JFormattedTextField();
-		sl_contentPane.putConstraint(SpringLayout.NORTH, formattedTextFieldEndDate, -5, SpringLayout.NORTH, lblEnd_date);
-		sl_contentPane.putConstraint(SpringLayout.WEST, formattedTextFieldEndDate, 6, SpringLayout.EAST, lblEnd_date);
-		sl_contentPane.putConstraint(SpringLayout.EAST, formattedTextFieldEndDate, 238, SpringLayout.WEST, contentPane);
-		contentPane.add(formattedTextFieldEndDate);
 		
 		lblSelectedUserValueName = new JLabel("none");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, lblSelectedUserValueName, 0, SpringLayout.NORTH, lblUserSelected);
@@ -396,7 +393,14 @@ public class NewLoanView extends JDialog implements Observer {
 		lblSelectedBookValueAuthor.setText("none");
 		lblSelectedBookValueYear.setText("none");
 		
-		formattedTextFieldEndDate.setText("");
+		modelEnd = new UtilDateModel();
+		Properties p=new Properties();
+		p.put("text.today","Today");
+		p.put("text.month","Month");
+		p.put("text.year","Year");
+		JDatePanelImpl datePanel2 = new JDatePanelImpl(modelEnd, p);
+		datePickerEnd = new JDatePickerImpl(datePanel2, new DateLabelFormatter());
+		
 		selectedUser = new UserDAO();
 		selectedBook = new BookDAO();
 		

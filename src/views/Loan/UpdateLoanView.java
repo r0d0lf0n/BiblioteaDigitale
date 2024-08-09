@@ -5,9 +5,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -19,10 +20,15 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
+
 import controllers.views.LoansController;
 import models.db.BookDAO;
 import models.db.LoanDAO;
 import models.db.UserDAO;
+import utils.DateLabelFormatter;
 import utils.Observer;
 
 
@@ -33,7 +39,10 @@ public class UpdateLoanView extends JFrame implements Observer {
 	private JTextField textFieldUser;
 	private JTextField textFieldBook;
 	private JLabel lblBook;
-	private JTextField textStartDate;
+	private JDatePickerImpl datePickerStart;
+	private JDatePickerImpl datePickerEnd;
+	private UtilDateModel modelStart;
+	private UtilDateModel modelEnd;
 	private JLabel lblStartDate;
 	private JLabel lblEndDate;
 	private JButton btnSave;
@@ -41,7 +50,6 @@ public class UpdateLoanView extends JFrame implements Observer {
 	private LoansController controller = null;
 	private LoanDAO loan = null;
 	private int rowsUpdated = -1;
-	private JTextField textEndDate;
 	
 	/**
 	 * Create the frame.
@@ -60,8 +68,24 @@ public class UpdateLoanView extends JFrame implements Observer {
 		setContentPane(contentPane);
 		SpringLayout sl_contentPane = new SpringLayout();
 		contentPane.setLayout(sl_contentPane);
+		
+		
+		modelStart = new UtilDateModel();
+		modelEnd = new UtilDateModel();
+		Properties p=new Properties();
+		p.put("text.today","Today");
+		p.put("text.month","Month");
+		p.put("text.year","Year");
+		JDatePanelImpl datePanel = new JDatePanelImpl(modelStart, p);
+		datePickerStart = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+		JDatePanelImpl datePanel2 = new JDatePanelImpl(modelEnd, p);
+		datePickerEnd = new JDatePickerImpl(datePanel2, new DateLabelFormatter());
+		
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, datePickerEnd, -28, SpringLayout.SOUTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.EAST, datePickerEnd, 0, SpringLayout.EAST, datePickerStart);
 
 		JLabel lblUser = new JLabel("Utente:");
+		sl_contentPane.putConstraint(SpringLayout.WEST, datePickerStart, 0, SpringLayout.WEST, lblUser);
 		sl_contentPane.putConstraint(SpringLayout.NORTH, lblUser, 20, SpringLayout.NORTH, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.WEST, lblUser, 10, SpringLayout.WEST, contentPane);
 		lblUser.setHorizontalAlignment(SwingConstants.CENTER);
@@ -86,23 +110,20 @@ public class UpdateLoanView extends JFrame implements Observer {
 		sl_contentPane.putConstraint(SpringLayout.WEST, lblBook, 0, SpringLayout.WEST, lblUser);
 		lblBook.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblBook);
-
-		textStartDate = new JTextField();
-		sl_contentPane.putConstraint(SpringLayout.WEST, textStartDate, 10, SpringLayout.WEST, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.EAST, textStartDate, 0, SpringLayout.EAST, textFieldUser);
-		textStartDate.setColumns(10);
-		contentPane.add(textStartDate);
-
+		
+		contentPane.add(datePickerStart);
+		contentPane.add(datePickerEnd);
+		
 		lblStartDate = new JLabel("Data inizio (dd/MM/yyyy):");
+		sl_contentPane.putConstraint(SpringLayout.NORTH, datePickerStart, 5, SpringLayout.SOUTH, lblStartDate);
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, lblStartDate, -107, SpringLayout.SOUTH, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.NORTH, textStartDate, 6, SpringLayout.SOUTH, lblStartDate);
 		sl_contentPane.putConstraint(SpringLayout.WEST, lblStartDate, 10, SpringLayout.WEST, contentPane);
 		lblStartDate.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblStartDate);
 
 		lblEndDate = new JLabel("Data fine (dd/MM/yyyy):");
-		sl_contentPane.putConstraint(SpringLayout.NORTH, lblEndDate, 10, SpringLayout.SOUTH, textStartDate);
 		sl_contentPane.putConstraint(SpringLayout.WEST, lblEndDate, 0, SpringLayout.WEST, lblUser);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, lblEndDate, -6, SpringLayout.NORTH, datePickerEnd);
 		lblEndDate.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblEndDate);
 
@@ -132,15 +153,7 @@ public class UpdateLoanView extends JFrame implements Observer {
             }
         });
 		contentPane.add(btnClose);
-		
-		textEndDate = new JTextField();
-		sl_contentPane.putConstraint(SpringLayout.NORTH, textEndDate, 205, SpringLayout.NORTH, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.WEST, textEndDate, 0, SpringLayout.WEST, lblUser);
-		sl_contentPane.putConstraint(SpringLayout.EAST, textEndDate, 0, SpringLayout.EAST, textFieldUser);
-		textEndDate.setText("");
-		textEndDate.setColumns(10);
-		contentPane.add(textEndDate);
-		
+				
 		 this.addWindowListener(new WindowAdapter() {
 	         @Override
 	         public void windowClosing(WindowEvent e) {
@@ -159,27 +172,28 @@ public class UpdateLoanView extends JFrame implements Observer {
 		UserDAO u  = controller.getUserById(loan.getUser_id().getId());
 		BookDAO b  = controller.getBookById(loan.getBook_id().getId());
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		textFieldUser.setText(String.valueOf(u.getName() + " " + u.getSurname()));
 		textFieldUser.setEditable(false);
 		textFieldBook.setText(b.getTitle());
 		textFieldBook.setEditable(false);
-		textStartDate.setText(loan.getStart_date() != null ? sdf.format(loan.getStart_date()) : "null");
-		textEndDate.setText(loan.getEnd_date() != null ? sdf.format(loan.getEnd_date()) : "null");
+		
+		Calendar calendar = new GregorianCalendar();
+		if (loan.getStart_date()!=null) {
+			calendar.setTime(loan.getStart_date());
+			modelStart.setDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+			modelStart.setSelected(true);
+		}
+		if (loan.getEnd_date()!=null) {
+			calendar.setTime(loan.getEnd_date());
+			modelEnd.setDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+			modelEnd.setSelected(true);			
+		}
 	}
 	
 	private void saveLoan() {		
-		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			String startDate = textStartDate.getText();
-			String endDate = textEndDate.getText();
-			Date start = sdf.parse(startDate);
-			Date end = sdf.parse(endDate); 
-			rowsUpdated = controller.updateLoan(loan.getId(), start, end);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
+		Date start = (Date) datePickerStart.getModel().getValue();
+		Date end = (Date) datePickerEnd.getModel().getValue();
+		rowsUpdated = controller.updateLoan(loan.getId(), start, end); 
 	}
 	
 	@Override
@@ -192,4 +206,6 @@ public class UpdateLoanView extends JFrame implements Observer {
 			this.setVisible(false);
 		}
 	}
+	
 }
+
