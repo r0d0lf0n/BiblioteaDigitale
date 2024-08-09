@@ -19,7 +19,7 @@ import controllers.views.LoansController;
 import controllers.views.RegisteredUserController;
 import models.users.Utente;
 import utils.Observer;
-import views.Loan.LoansDetailView;
+import views.Loan.LoanView;
 
 public class RegisteredUserView extends JFrame implements Observer {
 
@@ -27,7 +27,7 @@ public class RegisteredUserView extends JFrame implements Observer {
     private final RegisteredUserController controller;
     private final LoansController loansController;
     private DefaultComboBoxModel<String> comboGenereModel = null;
-	public LoansDetailView loansDetailView = null;
+	//public LoansDetailView loansDetailView = null;
 	private Utente user = null;
 
     
@@ -148,9 +148,9 @@ public class RegisteredUserView extends JFrame implements Observer {
 
          JButton manageLoansButton = new JButton("Gestione Prestiti");
          manageLoansButton.addActionListener(e -> {
-             if (loansDetailView == null)
-                 loansDetailView = new LoansDetailView(loansController, user.getIdTessera());
-             loansDetailView.setVisible(true);
+             //if (loansDetailView == null)
+             LoanView loansView = new LoanView(landingPageController, user.getIdTessera());
+             loansView.setVisible(true);
          });
 
          JButton closeButton = new JButton("Chiudi");

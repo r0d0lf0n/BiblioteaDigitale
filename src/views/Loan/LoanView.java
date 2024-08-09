@@ -53,7 +53,7 @@ public class LoanView extends JFrame implements Observer{
 	 * Create the frame.
 	 * @param landingPageController 
 	 */
-	public LoanView(LandingPageController landingPageController) {
+	public LoanView(LandingPageController landingPageController, int idTessera) {
 		this.landingPageController = landingPageController;
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int screenWidth = screenSize.width;

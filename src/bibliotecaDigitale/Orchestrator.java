@@ -63,7 +63,7 @@ public class Orchestrator {
 	public void startApp() {
 
 		landingPage.setVisible(true);
-		loansPage = new LoanView(landingPage.getLandingController());
+		loansPage = new LoanView(landingPage.getLandingController(), -1);
 		catalogPage = new CatalogView(landingPage.getLandingController());
 		catalogPage.addUser(admin);
 		
