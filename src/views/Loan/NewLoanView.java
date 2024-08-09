@@ -53,7 +53,7 @@ public class NewLoanView extends JDialog implements Observer {
 	private JLabel lblTableLabelUsers;
 	private JButton btnSave;
 	private JLabel lblUserSelected;
-	private JLabel lblSelectedUserValueId;
+	private JLabel lblSelectedUserTessera;
 	private JLabel lblBookSelected;
 	private JLabel lblSelectedBookValueID;
 	private JScrollPane scrollPaneBooks;
@@ -221,7 +221,7 @@ public class NewLoanView extends JDialog implements Observer {
 				String author = lblSelectedBookValueAuthor.getText();
 				String year = lblSelectedBookValueYear.getText();
 				
-				String userId = lblSelectedUserValueId.getText();
+				String userId = lblSelectedUserTessera.getText();
 				String name = lblSelectedUserValueName.getText();
 				String surname = lblSelectedUserValueSurname.getText();
 					
@@ -269,10 +269,10 @@ public class NewLoanView extends JDialog implements Observer {
 		sl_contentPane.putConstraint(SpringLayout.WEST, lblUserSelected, 0, SpringLayout.WEST, lblUser);
 		contentPane.add(lblUserSelected);
 		
-		lblSelectedUserValueId = new JLabel("none");
-		sl_contentPane.putConstraint(SpringLayout.WEST, lblSelectedUserValueId, 17, SpringLayout.EAST, lblUserSelected);
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, lblSelectedUserValueId, 0, SpringLayout.SOUTH, lblUserSelected);
-		contentPane.add(lblSelectedUserValueId);
+		lblSelectedUserTessera = new JLabel("none");
+		sl_contentPane.putConstraint(SpringLayout.WEST, lblSelectedUserTessera, 17, SpringLayout.EAST, lblUserSelected);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, lblSelectedUserTessera, 0, SpringLayout.SOUTH, lblUserSelected);
+		contentPane.add(lblSelectedUserTessera);
 		
 		lblBookSelected = new JLabel("Selected Book:");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, lblBookSelected, 25, SpringLayout.SOUTH, lblUserSelected);
@@ -281,7 +281,7 @@ public class NewLoanView extends JDialog implements Observer {
 		
 		lblSelectedBookValueID = new JLabel("none");
 		lblSelectedBookValueID.setSize(30, 40);
-		sl_contentPane.putConstraint(SpringLayout.WEST, lblSelectedBookValueID, 0, SpringLayout.WEST, lblSelectedUserValueId);
+		sl_contentPane.putConstraint(SpringLayout.WEST, lblSelectedBookValueID, 0, SpringLayout.WEST, lblSelectedUserTessera);
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, lblSelectedBookValueID, 0, SpringLayout.SOUTH, lblBookSelected);
 		contentPane.add(lblSelectedBookValueID);
 		
@@ -358,7 +358,7 @@ public class NewLoanView extends JDialog implements Observer {
 	}
 	
 	private void filteredUsers(String criteria) {
-		Object[] columns = { "id", "Name", "Surname"};
+		Object[] columns = { "Tessera", "Nome", "Congnome"};
 		modelUsers = new DefaultTableModel();
 		modelUsers.setColumnIdentifiers(columns);
 		
@@ -366,7 +366,7 @@ public class NewLoanView extends JDialog implements Observer {
 		for (UserDAO u : list) {
 			System.out.println("*************************");
 			System.out.println(u.getName());
-			modelUsers.addRow(new Object[] {u.getId(), u.getName(), u.getSurname()});
+			modelUsers.addRow(new Object[] {u.getNumTessera(), u.getName(), u.getSurname()});
 		}
 		
 		tableUsers.setModel(modelUsers);
@@ -390,7 +390,7 @@ public class NewLoanView extends JDialog implements Observer {
 	}
 	
 	private void cleanTextFields() {
-		lblSelectedUserValueId.setText("none");
+		lblSelectedUserTessera.setText("none");
 		lblSelectedUserValueName.setText("none");
 		lblSelectedUserValueSurname.setText("none");
 		
@@ -508,16 +508,16 @@ public class NewLoanView extends JDialog implements Observer {
 	
 	
 	private void getDataFromUsersTable() {
-		String userId = tableUsers.getValueAt(tableUsers.getSelectedRow(), 0).toString();
+		String tessera = tableUsers.getValueAt(tableUsers.getSelectedRow(), 0).toString();
 		String name = tableUsers.getValueAt(tableUsers.getSelectedRow(), 1).toString();
 		String surname = tableUsers.getValueAt(tableUsers.getSelectedRow(), 2).toString();
 
 		selectedUser = new UserDAO();
-		selectedUser.setId(Integer.valueOf(userId));
+		selectedUser.setNumTessera(Integer.valueOf(tessera));
 		selectedUser.setName(name);
 		selectedUser.setSurname(surname);
 		
-		lblSelectedUserValueId.setText(String.valueOf(userId));
+		lblSelectedUserTessera.setText(String.valueOf(tessera));
 		lblSelectedUserValueName.setText(selectedUser.getName());
 		lblSelectedUserValueSurname.setText(selectedUser.getSurname());
 	}
