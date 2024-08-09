@@ -6,6 +6,8 @@ package controllers.views;
 import java.util.ArrayList;
 import java.util.List;
 
+import controllers.bl.GestoreRicerche;
+import models.db.BookDAO;
 import utils.Observable;
 import utils.Observer;
 
@@ -47,9 +49,13 @@ public class ExternalUserController implements Observable{
 
 	public void search(String isbn, String autore, String titolo, String casaEditrice, String anno) {
 		// TODO Auto-generated method stub
-		String[] results = {};
-		
-		setChanged("SEARCH_RESULTS", results);
+		List<BookDAO> books = null;
+		try {
+			books = GestoreRicerche.getInstance().search(isbn, autore, titolo, casaEditrice, anno, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		setChanged("NEW_SEARCH_RESULTS", books);		
 	}
 
 

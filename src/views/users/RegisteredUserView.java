@@ -134,7 +134,8 @@ public class RegisteredUserView extends JFrame implements Observer {
                  authorField.getText(),
                  titleField.getText(),
                  publisherField.getText(),
-                 yearField.getText()
+                 yearField.getText(),
+                 user
              );
          });
          gbc.gridx = 0;
