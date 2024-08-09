@@ -122,7 +122,7 @@ public class NewLoanView extends JDialog implements Observer {
 			}
 		});
 		
-		JLabel lblUser = new JLabel("User Name:");
+		JLabel lblUser = new JLabel("Nome Utente:");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, lblUser, 26, SpringLayout.NORTH, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.WEST, lblUser, 10, SpringLayout.WEST, contentPane);
 		contentPane.add(lblUser);
@@ -150,7 +150,7 @@ public class NewLoanView extends JDialog implements Observer {
 		    public void changedUpdate(DocumentEvent e) {}
 		});
 		
-		JLabel lblBook = new JLabel("Book Name:");
+		JLabel lblBook = new JLabel("Nome Libro:");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, lblBook, 0, SpringLayout.NORTH, lblUser);
 		sl_contentPane.putConstraint(SpringLayout.WEST, lblBook, 314, SpringLayout.EAST, lblUser);
 		contentPane.add(lblBook);
@@ -189,7 +189,7 @@ public class NewLoanView extends JDialog implements Observer {
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, tableBooks, -234, SpringLayout.SOUTH, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.EAST, tableBooks, -10, SpringLayout.EAST, contentPane);
 		
-		lblTableLabel = new JLabel("Books");
+		lblTableLabel = new JLabel("Libri");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, tableBooks, 11, SpringLayout.SOUTH, lblTableLabel);
 		sl_contentPane.putConstraint(SpringLayout.EAST, lblTableLabel, -349, SpringLayout.EAST, contentPane);
 		contentPane.add(lblTableLabel);
@@ -199,7 +199,7 @@ public class NewLoanView extends JDialog implements Observer {
 		sl_contentPane.putConstraint(SpringLayout.WEST, tableUsers, 10, SpringLayout.WEST, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, tableUsers, -234, SpringLayout.SOUTH, contentPane);
 		
-		lblTableLabelUsers = new JLabel("Users");
+		lblTableLabelUsers = new JLabel("Utenti");
 		sl_contentPane.putConstraint(SpringLayout.WEST, lblTableLabelUsers, 10, SpringLayout.WEST, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.NORTH, tableUsers, 11, SpringLayout.SOUTH, lblTableLabelUsers);
 		sl_contentPane.putConstraint(SpringLayout.NORTH, lblTableLabel, 0, SpringLayout.NORTH, lblTableLabelUsers);
@@ -251,7 +251,7 @@ public class NewLoanView extends JDialog implements Observer {
 //					System.out.println(endDate); 
 					
 					if (endDate.after(startDate)) {
-						System.out.println("saving loans");
+						//System.out.println("saving loans");
 						cleanTextFields();
 						controller.saveLoan(loan);
 					} else {
@@ -318,7 +318,7 @@ public class NewLoanView extends JDialog implements Observer {
 		lblSelectedBookValueYear.setSize(100, 40);
 		contentPane.add(lblSelectedBookValueYear);
 		
-		lblEnd_date = new JLabel("End Date:");
+		lblEnd_date = new JLabel("Fine Prestito:");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, lblEnd_date, 21, SpringLayout.SOUTH, lblBookSelected);
 		sl_contentPane.putConstraint(SpringLayout.WEST, lblEnd_date, 0, SpringLayout.WEST, lblUser);
 		contentPane.add(lblEnd_date);
@@ -355,7 +355,7 @@ public class NewLoanView extends JDialog implements Observer {
 	}
 	
 	private void filteredUsers(String criteria) {
-		Object[] columns = { "Id", "Nome", "Congnome", "Tessera"};
+		Object[] columns = { "Id", "Nome", "Congnome", "Num. Tessera"};
 		modelUsers = new DefaultTableModel();
 		modelUsers.setColumnIdentifiers(columns);
 		
@@ -371,7 +371,7 @@ public class NewLoanView extends JDialog implements Observer {
 	
 	
 	private void filteredBooks(String criteria) {
-		Object[] columns = { "id", "Title", "Author", "Year"};
+		Object[] columns = { "Book id", "Titolo", "Autore", "Casa editrice", "Anno"};
 		modelBooks = new DefaultTableModel();
 		modelBooks.setColumnIdentifiers(columns);
 		
@@ -380,7 +380,7 @@ public class NewLoanView extends JDialog implements Observer {
 //			System.out.println(String.format("size: %d", list.size()));
 //			System.out.println("*************************");
 //			System.out.println(b.getTitle());
-			modelBooks.addRow(new Object[] {b.getId(), b.getTitle(), b.getAuthor(), b.getYear()});
+			modelBooks.addRow(new Object[] {b.getId(), b.getTitle(), b.getAuthor(), b.getEditor(), b.getYear()});
 		}
 		
 		tableBooks.setModel(modelBooks);
