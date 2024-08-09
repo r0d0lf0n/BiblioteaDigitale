@@ -12,7 +12,7 @@ public class App {
 	private static final int regUserNumber = 20;
 	private static final int extUserNumber = 3;
 	private static final String[] FIRST_NAMES = {"Mario", "Luigi", "Giovanni", "Anna", "Maria", "Luca", "Rodolfo", "Ilaria", "Alessandro", "Marta", "Giacomo", "Josè", "Martin", "David", "Luca"};
-    private static final String[] LAST_NAMES = {"Rossi", "Bianchi", "Granata", "Mayo", "Conforti", "Durante", "Verza", "De Santis", "Lupini", "Casole", "Gioia"};
+    private static final String[] LAST_NAMES = {"Rossi", "Bianchi", "Granata", "Mayo", "Conforti", "Durante", "Verza", "Desantis", "Lupini", "Casole", "Gioia"};
 	/**
 	 * Launch the application.
 	 */
