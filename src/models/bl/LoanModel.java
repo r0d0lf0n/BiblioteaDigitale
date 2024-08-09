@@ -102,4 +102,20 @@ public class LoanModel {
 		}
 		return list;
 	}
+	
+	public List<LoanDAO> getLoansByTesseraId(int id) {
+		List<LoanDAO> list = null;
+		try {
+			loanDao = GestorePrestiti.getInstance().getLoanDao();			
+			list = loanDao.queryBuilder()
+					  .where()
+				      .eq("user_id", id)
+					  .query();
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+	}
 }

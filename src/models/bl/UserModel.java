@@ -51,4 +51,19 @@ public class UserModel {
 		}
 		return user;
 	}
+	
+	public UserDAO getUserByTesseraId(int id) {
+		UserDAO user = null;
+		try {
+			List<UserDAO> list = GestoreUtenti.getInstance().getUserDao().queryBuilder()
+					  .where()
+					  .eq("numTessera", id)
+					  .query();
+			if (list.size()>0)
+				return list.get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return user;
+	}
 }

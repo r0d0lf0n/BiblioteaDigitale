@@ -20,7 +20,9 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import controllers.views.LoansController;
+import models.db.BookDAO;
 import models.db.LoanDAO;
+import models.db.UserDAO;
 import utils.Observer;
 
 
@@ -154,10 +156,13 @@ public class UpdateLoanView extends JFrame implements Observer {
 	}
 	
 	private void initFields() {
+		UserDAO u  = controller.getUserById(loan.getUser_id().getId());
+		BookDAO b  = controller.getBookById(loan.getBook_id().getId());
+		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		textFieldUser.setText(String.valueOf(loan.getUser_id().getId()));
+		textFieldUser.setText(String.valueOf(u.getName()));
 		textFieldUser.setEditable(false);
-		textFieldBook.setText(String.valueOf(loan.getBook_id().getId()));
+		textFieldBook.setText(b.getTitle());
 		textFieldBook.setEditable(false);
 		textStartDate.setText(loan.getStart_date() != null ? sdf.format(loan.getStart_date()) : "null");
 		textEndDate.setText(loan.getEnd_date() != null ? sdf.format(loan.getEnd_date()) : "null");

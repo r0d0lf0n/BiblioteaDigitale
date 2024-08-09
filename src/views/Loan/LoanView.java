@@ -26,7 +26,9 @@ import javax.swing.table.DefaultTableModel;
 
 import controllers.views.LandingPageController;
 import controllers.views.LoansController;
+import models.db.BookDAO;
 import models.db.LoanDAO;
+import models.db.UserDAO;
 import utils.CustomDialog;
 import utils.Observer;
 
@@ -181,6 +183,13 @@ public class LoanView extends JFrame implements Observer{
 		controller.addObserver(this);
 		landingPageController.addObserver(this);
 		
+		if (idTessera == -1) {
+			initializeTable();
+		} else {
+			UserDAO user = controller.getUserByTesseraId(idTessera);
+			filteredLoansByUser(String.valueOf(user.getId()));
+		}
+		
 	}
 	
 	public static boolean isInteger(String s) {
@@ -238,32 +247,34 @@ public class LoanView extends JFrame implements Observer{
 		Object[] columns = { "Id", "User", "Book", "Start Date", "End Date" };
 		DefaultTableModel model = new DefaultTableModel();
 		model.setColumnIdentifiers(columns);
-		List<LoanDAO> loans = controller.getLoans();
 		
-		for(int i = 0; i < loans.size(); i++) {
-			System.out.println(loans.get(i).getUser_id());
+		List<LoanDAO> loans = controller.getLoans();
+		for (LoanDAO l : loans) {
+			UserDAO u  = controller.getUserById(l.getUser_id().getId());
+			BookDAO b  = controller.getBookById(l.getBook_id().getId());
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			String start = loans.get(i).getStart_date() != null ? sdf.format(loans.get(i).getStart_date()) : "";
-			String end = loans.get(i).getEnd_date() != null ? sdf.format(loans.get(i).getEnd_date()) : "";
-			model.addRow(new Object[] {loans.get(i).getId(), loans.get(i).getUser_id().getId(), loans.get(i).getBook_id().getId(), start, end});
+			String start = l.getStart_date() != null ? sdf.format(l.getStart_date()) : "";
+			String end = l.getEnd_date() != null ? sdf.format(l.getEnd_date()) : "";
+			if (u != null && b != null) 
+				model.addRow(new Object[] {l.getId(), u.getName(), b.getTitle(), start, end});
 		}
 
 		loanTable.setModel(model);
-	}
-	
-	
+	}	
 	
 	private void filteredLoansByUser(String criteria) {
 		Object[] columns = { "Id", "User", "Book", "Start Date", "End Date" };
 		DefaultTableModel model = new DefaultTableModel();
-		model.setColumnIdentifiers(columns);
+		model.setColumnIdentifiers(columns);	
 		
     	List<LoanDAO> list = controller.getLoansByRegex(criteria);
-		for (LoanDAO u : list) {
+		for (LoanDAO l : list) {
+			UserDAO u  = controller.getUserById(l.getUser_id().getId());
+			BookDAO b  = controller.getBookById(l.getBook_id().getId());
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			String start = u.getStart_date() != null ? sdf.format(u.getStart_date()) : "";
-			String end = u.getEnd_date() != null ? sdf.format(u.getEnd_date()) : "";
-			model.addRow(new Object[] {u.getId(), u.getUser_id(), u.getBook_id(),start, end});
+			String start = l.getStart_date() != null ? sdf.format(l.getStart_date()) : "";
+			String end = l.getEnd_date() != null ? sdf.format(l.getEnd_date()) : "";
+			model.addRow(new Object[] {l.getId(), u.getName(), b.getTitle(), start, end});
 		}
 		
 		loanTable.setModel(model);

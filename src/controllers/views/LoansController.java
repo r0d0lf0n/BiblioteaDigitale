@@ -61,6 +61,10 @@ public class LoansController implements Observable{
 		return loanModel.getAllLoans();
 	}
 	
+	public UserDAO getUserByTesseraId(int id) {
+		return userModel.getUserByTesseraId(id);
+	}
+	
 	public List<UserDAO> getUsers() {
 		return userModel.getAllUsers();
 	}
