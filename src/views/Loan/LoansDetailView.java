@@ -78,8 +78,8 @@ public class LoansDetailView extends JDialog implements Observer {
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnNewLoan, -148, SpringLayout.SOUTH, contentPane);
 		btnNewLoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(newLoanView == null)
-					newLoanView = new NewLoanView(controller);
+				//if(newLoanView == null)
+				newLoanView = new NewLoanView(controller);
 				newLoanView.setVisible(true);
 			}
 		});
