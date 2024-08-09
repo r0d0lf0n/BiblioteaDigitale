@@ -56,12 +56,13 @@ public class LandingPageController implements Observable{
 		setChanged("CLOSE_SEARCH", null);
 		setChanged("CLOSE_LOANS", null);
 		setChanged("OPEN_CATALOG", null);
+		setChanged("OPEN_CATALOG_LITE", null);
 	}
 	
 	public void openLandingPanel() {
 		setChanged("CLOSE_SEARCH", null);
 		setChanged("CLOSE_LOANS", null);
-		setChanged("CLOSE_CATALOG", null);
+		setChanged("CLOSE_CATALOG_LITE", null);
 		setChanged("OPEN_LANDING", null);
 
 	}

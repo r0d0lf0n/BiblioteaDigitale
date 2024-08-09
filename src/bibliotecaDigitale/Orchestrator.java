@@ -25,6 +25,7 @@ import models.users.Utente;
 import models.users.UtenteEsterno;
 import models.users.UtenteRegistrato;
 import views.Catalog.CatalogView;
+import views.Catalog.CatalogViewLite;
 import views.Landing.LandingPageView;
 import views.Loan.LoanView;
 import views.users.ExternalUserView;
@@ -38,6 +39,7 @@ public class Orchestrator {
 	private LandingPageView landingPage = null;
 	private LoanView loansPage = null;
 	private CatalogView catalogPage = null;
+	private CatalogViewLite catalogPageLite = null;
 	//private UserAdminView adminView = null;
 	private int maxNumberOfRegUsers = 3;
 	private int maxNumberOfExtUsers = 3;
@@ -65,6 +67,7 @@ public class Orchestrator {
 		landingPage.setVisible(true);
 		loansPage = new LoanView(landingPage.getLandingController(), -1);
 		catalogPage = new CatalogView(landingPage.getLandingController());
+		catalogPageLite = new CatalogViewLite(landingPage.getLandingController(), null);
 		catalogPage.addUser(admin);
 		
 		disposeUserUIPositions();
