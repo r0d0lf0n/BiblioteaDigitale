@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import controllers.bl.GestoreCatalogo;
+import controllers.bl.GestoreRicerche;
 import models.bl.CatalogModel;
 import models.db.BookDAO;
 import utils.Observable;
@@ -17,6 +18,7 @@ public class CatalogController implements Observable{
 	
 	public CatalogController() {
 		this.catalogModel = new CatalogModel();
+		GestoreRicerche.getInstance().setCatalog(this.catalogModel);
 		observers = new ArrayList<Observer>();
 	}
 

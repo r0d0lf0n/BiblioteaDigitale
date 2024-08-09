@@ -48,10 +48,9 @@ public class ExternalUserController implements Observable{
 
 
 	public void search(String isbn, String autore, String titolo, String casaEditrice, String anno) {
-		// TODO Auto-generated method stub
 		List<BookDAO> books = null;
 		try {
-			books = GestoreRicerche.getInstance().search(isbn, autore, titolo, casaEditrice, anno, null);
+			GestoreRicerche.getInstance().search(isbn, autore, titolo, casaEditrice, anno, null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

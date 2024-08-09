@@ -42,14 +42,12 @@ public class RegisteredUserController implements Observable{
 
 
 	public void search(String isbn, String autore, String titolo, String casaEditrice, String anno, Utente user) {
-		List<BookDAO> books = null;
 		try {
-			books = GestoreRicerche.getInstance().search(isbn, autore, titolo, casaEditrice, anno, user);
+			GestoreRicerche.getInstance().search(isbn, autore, titolo, casaEditrice, anno, user);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		setChanged("NEW_SEARCH_RESULTS", books);
+		//setChanged("NEW_SEARCH_RESULTS", books);
 	}
 	
 

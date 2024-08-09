@@ -1,7 +1,9 @@
 package controllers.bl;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import models.bl.CatalogModel;
 import models.db.BookDAO;
 import models.users.Utente;
 
@@ -11,6 +13,7 @@ public class GestoreRicerche {
 	 * singleton
 	 */
 	private static GestoreRicerche _instance = null;
+	private CatalogModel model = null;
 
 
 	private GestoreRicerche() {
@@ -22,7 +25,7 @@ public class GestoreRicerche {
 		return _instance;
 	}
 	
-	public ArrayList<BookDAO> search(String isbn, String autore, String titolo, String casaEditrice, String anno, Utente user){
+	public void search(String isbn, String autore, String titolo, String casaEditrice, String anno, Utente user){
 		
 		boolean isbnValid = isbn!=null && !isbn.trim().equals("");
 		boolean autoreValid = autore!=null && !autore.trim().equals("");
@@ -32,26 +35,66 @@ public class GestoreRicerche {
 		
 		synchronized (this) {
 			
+			String[] params = {"","","","",""};
+			
 			if(isbnValid)
-				System.out.println("isbn: "+isbn);
+				params[0]=isbn.trim();
 			if(autoreValid)
-				System.out.println("autore: "+autore);
+				params[1]=autore.trim();
 			if(titoloValid)
-				System.out.println("titolo: "+titolo);
+				params[2]=titolo.trim();
 			if(casaEditriceValid)
-				System.out.println("casa ed: "+casaEditrice);
+				params[3]=casaEditrice.trim();
 			if(annoValid)
-				System.out.println("anno: "+anno);
+				params[4]=anno.trim();
 			
-			if(user != null) {
-				System.out.println("USER: "+user.getIdTessera());
-			}
-			//REALIZZA RICERCA SU DB CON GESTIONE DELLA CONCORRENZA
-			// E THREAD PER OPERAZIONE ASINCRONA
-			// TODO 
+			if(user != null) 
+				new SearchThread(user, params).start();
+			else
+				new SearchThread(null, params).start();
 			
-			return new ArrayList<BookDAO>();
 		}
+	}
+	
+	public class SearchThread extends Thread {
+	    private Utente user = null;
+	    private String[] params;
+
+	    public SearchThread(Utente user, String[] params ) {
+	        this.user = user;
+	        this.params = params;
+	    }
+
+	    @Override
+	    public void run() {
+	        List<BookDAO> results = model.getAllBooks().stream()
+	            .filter(book -> 
+	                (!params[0].equals("") && book.getIsbn().contains(params[0])) ||
+	                (!params[1].equals("") && book.getAuthor().contains(params[1])) ||
+	                (!params[2].equals("") && book.getTitle().contains(params[2])) ||
+	                (!params[3].equals("") && book.getEditor().contains(params[3])) ||
+	                (!params[4].equals("") && book.getYear().equals(params[4]))
+	            )
+	            .collect(Collectors.toList());
+
+	        processResults(results);
+	    }
+
+	    private void processResults(List<BookDAO> results) {
+	        if (user != null) {
+	            // Invia i risultati all'utente o fai altre operazioni necessarie
+	          // user.notifySearchResults(results);
+	        	System.out.println(results);
+	        } else {
+	            // Altri comportamenti per quando l'utente è null
+	            System.out.println("Risultati trovati: " + results.size()+" "+results);
+	        }
+	    }
+	}
+
+	public void setCatalog(CatalogModel catalogModel) {
+		this.model = catalogModel;
+		
 	}
 	
 }
