@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.sql.SQLException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -126,6 +127,22 @@ public class GestoreCatalogo {
 
 	public boolean isLoadingInProgress() {
 		return loadingInProgress;
+	}
+
+	public void removeBook(BookDAO book) {
+		try {
+			bookDao.delete(book);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void addNewBook(BookDAO newBook) {
+		try {
+			bookDao.create(newBook);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	

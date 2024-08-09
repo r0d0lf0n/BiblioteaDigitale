@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -33,7 +34,7 @@ public class BookDetailView extends JDialog implements Observer {
 	//private LoanDAO loan;
 	int centerX;
 	int centerY;
-	private BookDAO book;
+	private BookDAO book = null;
 	private BookDAO newBook;
 	private JTextField textFieldId;
 	private JTextField textFieldTitle;
@@ -43,13 +44,16 @@ public class BookDetailView extends JDialog implements Observer {
 	private JTextField textFieldEditor;
 	private JTextField textFieldYear;
 	private Boolean editing = false;
+	private boolean isNewBook = false;
+
 	
 	/**
 	 * Create the frame.
 	 */
-	public BookDetailView(CatalogController catalogController, BookDAO b) {
+	public BookDetailView(CatalogController catalogController, BookDAO book) {
 		super((Frame)null, "Dettaglio Libro", true);
-		book = b;
+		if(book != null)
+			this.book = book;
 		//System.out.println(book.getId());
 		controller = catalogController;
 		catalogModel = new CatalogModel();
@@ -93,6 +97,9 @@ public class BookDetailView extends JDialog implements Observer {
 
         JButton btnClose = new JButton("Close");
         JButton btnEdit = new JButton("Edit");
+        JButton btnNew = new JButton("Aggiungi nuovo");
+        JButton btnDelete = new JButton("Elimina");
+
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -149,37 +156,94 @@ public class BookDetailView extends JDialog implements Observer {
         gbc.gridx = 0;
         contentPane.add(btnEdit, gbc);
 
-        gbc.gridx = 1;
+        gbc.gridx = 3;
         contentPane.add(btnClose, gbc);
+        
+       // gbc.gridy = 9;  
+        gbc.gridx = 1;
+        contentPane.add(btnNew, gbc);
+
+        gbc.gridx = 2;
+        contentPane.add(btnDelete, gbc);
 
 		
-		btnEdit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				if (!editing) {
-					toggleTextFieldEditing(true);
-					btnEdit.setText("Save");
-					editing = true;
-				} else {
-					toggleTextFieldEditing(false);
-					btnEdit.setText("Edit");
-					editing = false;
-					//catalogController.closeBookDetailPanel(editing);
-					//editing = false;
-				}
-			}
-		});
+        btnEdit.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (!editing) {
+                    toggleTextFieldEditing(true);
+                    textFieldId.setEditable(false); // ID non editabile
+                    btnEdit.setText("Save");
+                    btnDelete.setEnabled(false);
+                    editing = true;
+                } else {
+                    // Salva le modifiche al libro esistente
+                    saveBook();
+                   
+                    toggleTextFieldEditing(false);
+                    btnEdit.setText("Edit");
+                    btnDelete.setEnabled(true);
+                    editing = false;
+                    isNewBook = false; // Reset dello stato per il nuovo libro
+                }
+            }
+        });
 	//	sl_contentPane.putConstraint(SpringLayout.WEST, btnEdit, 0, SpringLayout.WEST, lblBookId);
 	//	sl_contentPane.putConstraint(SpringLayout.SOUTH, btnEdit, -22, SpringLayout.SOUTH, contentPane);
 	//	contentPane.add(btnEdit);
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				boolean isEdited = isBookEdited();
-				if(isEdited)
-					saveBook();
+				boolean isEdited = isBookEdited() || isNewBook;
 				catalogController.closeBookDetailPanel(isEdited);
 			}
 		});
+		
+		btnNew.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		    	if(isNewBook) {
+                    // Salva il nuovo libro
+                    BookDAO newBook = new BookDAO(); 
+                    newBook.setTitle(textFieldTitle.getText());
+                    newBook.setAuthor(textFieldAuthor.getText());
+                    newBook.setEditor(textFieldEditor.getText());
+                    newBook.setYear(textFieldYear.getText());
+                    newBook.setIsbn(textFieldISBN.getText());
+                    newBook.setDescription(textFieldDescription.getText());
+                    
+                    catalogController.addNewBook(newBook); 
+                    isNewBook = false;
+		    	}
+		    	
+		        // Imposta tutti i campi vuoti
+		        textFieldId.setText("");
+		        textFieldTitle.setText("");
+		        textFieldAuthor.setText("");
+		        textFieldEditor.setText("");
+		        textFieldYear.setText("");
+		        textFieldISBN.setText("");
+		        textFieldDescription.setText("");
+
+		        // Abilita l'editing su tutti i campi eccetto il campo Book ID
+		        toggleTextFieldEditing(true);
+		        textFieldId.setEditable(false);
+                btnNew.setText("Inserisci");
+                
+		        editing = false;
+		        isNewBook = true;
+		    }
+		});
+
+		btnDelete.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        int confirm = JOptionPane.showConfirmDialog(null, "Vuoi cancellare questo libro?", "Conferma eliminazioe", JOptionPane.YES_NO_OPTION);
+		        if (confirm == JOptionPane.YES_OPTION) {
+		            catalogController.deleteBook(book); 
+
+		            // Chiudi il pannello dopo la cancellazione
+		            catalogController.closeBookDetailPanel(false);
+		        }
+		    }
+		});
+
 		
 		controller.addObserver(this);
 		
@@ -194,10 +258,23 @@ public class BookDetailView extends JDialog implements Observer {
 
 	    });
 		
-		setTextFieldValues();
+		if(this.book != null ) {
+			setTextFieldValues();
+			btnNew.setEnabled(false);
+		}
+		else{
+			btnDelete.setEnabled(false);
+			btnEdit.setEnabled(false);
+		}
 	}
 	
 	private boolean isBookEdited() {
+		
+		if(!isNewBook && !editing)
+			return false;
+		if(isNewBook)
+			return false;
+		
 		String id = textFieldId.getText().trim();
 		String title = textFieldTitle.getText().trim();
 		String author = textFieldAuthor.getText().trim();

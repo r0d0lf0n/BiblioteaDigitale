@@ -53,86 +53,6 @@ public class CatalogView extends JFrame implements Observer{
 	 * Create the frame.
 	 */
 	public CatalogView(LandingPageController landingPageController) {
-	/*	controller = new CatalogController();
-		this.setTitle("Gestione Catalogo");
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setBounds(100, 100, 1000, 650);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setLocationRelativeTo(null);
-		setContentPane(contentPane);
-		SpringLayout sl_contentPane = new SpringLayout();
-		contentPane.setLayout(sl_contentPane);
-
-		JButton btnClose = new JButton("Close");
-		btnClose.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				landingPageController.openLandingPanel();
-			}
-		});
-		sl_contentPane.putConstraint(SpringLayout.WEST, btnClose, 0, SpringLayout.WEST, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnClose, -10, SpringLayout.SOUTH, contentPane);
-		contentPane.add(btnClose);
-
-		btnLoadData = new JButton("Load data");
-		sl_contentPane.putConstraint(SpringLayout.NORTH, btnLoadData, 20, SpringLayout.NORTH, contentPane);
-		btnLoadData.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JFileChooser fileChooser = new JFileChooser();
-                
-                FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV Files", "csv");
-                fileChooser.setFileFilter(filter);
-
-                int result = fileChooser.showOpenDialog(CatalogView.this);
-
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    File selectedFile = fileChooser.getSelectedFile();
-                    int confirm = JOptionPane.showConfirmDialog(CatalogView.this, 
-                        "File selezionato: " + selectedFile.getAbsolutePath() + "\nVuoi processarlo?",
-                        "Conferma processamento File", JOptionPane.YES_NO_OPTION);
-                    
-                    if (confirm == JOptionPane.YES_OPTION) {
-            			JOptionPane.showMessageDialog(CatalogView.this, 
-                                "Lettura e caricamento del dataset su DB, l'operazione potrebbe richiedere qualche minuto");
-            			catalogTable.setEnabled(false);
-            			btnLoadData.setEnabled(false);
-            			CatalogView.this.setTitle("Caricamento in corso...");
-                        loadCSV(selectedFile);
-                    }
-                } else if (result == JFileChooser.CANCEL_OPTION) {
-                    JOptionPane.showMessageDialog(CatalogView.this, 
-                        "File selection cancelled.");
-                }
-			}
-		});
-		sl_contentPane.putConstraint(SpringLayout.WEST, btnLoadData, 0, SpringLayout.WEST, btnClose);
-		contentPane.add(btnLoadData);
-
-//		JButton btnRefresh = new JButton("Refresh");
-//		btnRefresh.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				//TODO
-//			}
-//		});
-//		sl_contentPane.putConstraint(SpringLayout.NORTH, btnRefresh, 17, SpringLayout.SOUTH, btnLoadData);
-//		sl_contentPane.putConstraint(SpringLayout.WEST, btnRefresh, 0, SpringLayout.WEST, contentPane);
-//		sl_contentPane.putConstraint(SpringLayout.EAST, btnRefresh, 0, SpringLayout.EAST, btnLoadData);
-//		contentPane.add(btnRefresh);
-
-		JScrollPane scrollPane = new JScrollPane();
-		sl_contentPane.putConstraint(SpringLayout.NORTH, scrollPane, 36, SpringLayout.NORTH, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.WEST, scrollPane, 85, SpringLayout.EAST, btnLoadData);
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, scrollPane, -20, SpringLayout.SOUTH, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.EAST, scrollPane, -10, SpringLayout.EAST, contentPane);
-		contentPane.add(scrollPane);
-
-		catalogTable = new JTable();
-		scrollPane.setViewportView(catalogTable);
-		sl_contentPane.putConstraint(SpringLayout.WEST, catalogTable, 0, SpringLayout.WEST, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, catalogTable, -211, SpringLayout.NORTH, btnClose);
-		sl_contentPane.putConstraint(SpringLayout.EAST, catalogTable, -420, SpringLayout.EAST, contentPane);
-		
-		*/
 		
 		controller = new CatalogController();
 		this.setTitle("Gestione Catalogo");
@@ -239,12 +159,12 @@ public class CatalogView extends JFrame implements Observer{
 		contentPane.add(btnLoadData);
 
 		// Pulsante "Insert new book"
-		JButton btnInsertNewBook = new JButton("Insert new book");
+		JButton btnInsertNewBook = new JButton("Gestione Libro");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, btnInsertNewBook, 17, SpringLayout.SOUTH, btnLoadData);
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnInsertNewBook, 0, SpringLayout.WEST, contentPane);
 		btnInsertNewBook.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		        InsertBookView insertBook = new InsertBookView();
+		        BookDetailView insertBook = new BookDetailView(CatalogView.this.controller, null);
 		        insertBook.setVisible(true);
 		    }
 		});
