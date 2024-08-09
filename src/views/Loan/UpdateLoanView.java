@@ -160,7 +160,7 @@ public class UpdateLoanView extends JFrame implements Observer {
 		BookDAO b  = controller.getBookById(loan.getBook_id().getId());
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		textFieldUser.setText(String.valueOf(u.getName()));
+		textFieldUser.setText(String.valueOf(u.getName() + " " + u.getSurname()));
 		textFieldUser.setEditable(false);
 		textFieldBook.setText(b.getTitle());
 		textFieldBook.setEditable(false);

@@ -256,7 +256,7 @@ public class LoanView extends JFrame implements Observer{
 			String start = l.getStart_date() != null ? sdf.format(l.getStart_date()) : "";
 			String end = l.getEnd_date() != null ? sdf.format(l.getEnd_date()) : "";
 			if (u != null && b != null) 
-				model.addRow(new Object[] {l.getId(), u.getName(), b.getTitle(), start, end});
+				model.addRow(new Object[] {l.getId(), u.getName() + " " + u.getSurname(), b.getTitle(), start, end});
 		}
 
 		loanTable.setModel(model);
@@ -274,7 +274,7 @@ public class LoanView extends JFrame implements Observer{
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			String start = l.getStart_date() != null ? sdf.format(l.getStart_date()) : "";
 			String end = l.getEnd_date() != null ? sdf.format(l.getEnd_date()) : "";
-			model.addRow(new Object[] {l.getId(), u.getName(), b.getTitle(), start, end});
+			model.addRow(new Object[] {l.getId(), u.getName() + " " + u.getSurname(), b.getTitle(), start, end});
 		}
 		
 		loanTable.setModel(model);
