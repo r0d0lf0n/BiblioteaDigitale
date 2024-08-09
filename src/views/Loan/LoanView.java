@@ -284,6 +284,7 @@ public class LoanView extends JFrame implements Observer{
 //				    	System.out.println("New loan!");
 						d.setVisible(false);
 						d.dispose();
+						landingPageController.openLandingPanel();
 						newLoanView = new NewLoanView(controller);
 						controller.openNewLoan();
 						//controller.setChanged("OPEN_NEW_LOAN", null);

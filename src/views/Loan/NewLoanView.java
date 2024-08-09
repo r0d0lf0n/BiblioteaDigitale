@@ -408,38 +408,13 @@ public class NewLoanView extends JDialog implements Observer {
 		public void mouseClicked(MouseEvent e) {
 			// TODO Auto-generated method stub
 			System.out.println("clicking.....");
-//        	if (!event.getValueIsAdjusting()) {
-    		String bookId = tableBooks.getValueAt(tableBooks.getSelectedRow(), 0).toString();
-    		String title = tableBooks.getValueAt(tableBooks.getSelectedRow(), 1).toString();
-    		String author = tableBooks.getValueAt(tableBooks.getSelectedRow(), 2).toString();
-    		String year = tableBooks.getValueAt(tableBooks.getSelectedRow(), 3).toString();
-    		System.out.println(bookId);
-    		System.out.println(title);
-    		System.out.println(author);
-    		System.out.println(year);
-    		
-    	    selectedBook = new BookDAO();
-    	    selectedBook.setId(Integer.valueOf(bookId));
-    	    selectedBook.setTitle(title);
-    	    selectedBook.setAuthor(author);
-    	    selectedBook.setYear(year);
-    		
-    	    
-    	    int titleMaxLenght = 20;
-    	    if (!(selectedBook.getTitle().length() > 20)) {
-    	    	titleMaxLenght = selectedBook.getTitle().length();
-    	    }
-    		lblSelectedBookValueID.setText(String.valueOf(bookId));
-    		lblSelectedBookValueTitle.setText(selectedBook.getTitle().substring(0, titleMaxLenght));
-    		lblSelectedBookValueAuthor.setText(selectedBook.getAuthor());
-    		lblSelectedBookValueYear.setText(selectedBook.getYear());
-//        	}
+			getDataFromBooksTable();
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+			getDataFromBooksTable();
 		}
 
 		@Override
@@ -464,24 +439,13 @@ public class NewLoanView extends JDialog implements Observer {
 	public class UsersRowSelectionListener implements MouseListener {
 		@Override
 		public void mouseClicked(MouseEvent e) {
-    		String userId = tableUsers.getValueAt(tableUsers.getSelectedRow(), 0).toString();
-    		String name = tableUsers.getValueAt(tableUsers.getSelectedRow(), 1).toString();
-    		String surname = tableUsers.getValueAt(tableUsers.getSelectedRow(), 2).toString();
-
-    		selectedUser = new UserDAO();
-    		selectedUser.setId(Integer.valueOf(userId));
-    		selectedUser.setName(name);
-    		selectedUser.setSurname(surname);
-    		
-    		lblSelectedUserValueId.setText(String.valueOf(userId));
-    		lblSelectedUserValueName.setText(selectedUser.getName());
-    		lblSelectedUserValueSurname.setText(selectedUser.getSurname());
+			getDataFromUsersTable();
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+			getDataFromUsersTable();
 		}
 
 		@Override
@@ -501,5 +465,50 @@ public class NewLoanView extends JDialog implements Observer {
 			// TODO Auto-generated method stub
 			
 		}
+	}
+	
+	private void getDataFromBooksTable() {
+//    	if (!event.getValueIsAdjusting()) {
+		String bookId = tableBooks.getValueAt(tableBooks.getSelectedRow(), 0).toString();
+		String title = tableBooks.getValueAt(tableBooks.getSelectedRow(), 1).toString();
+		String author = tableBooks.getValueAt(tableBooks.getSelectedRow(), 2).toString();
+		String year = tableBooks.getValueAt(tableBooks.getSelectedRow(), 3).toString();
+		System.out.println(bookId);
+		System.out.println(title);
+		System.out.println(author);
+		System.out.println(year);
+		
+	    selectedBook = new BookDAO();
+	    selectedBook.setId(Integer.valueOf(bookId));
+	    selectedBook.setTitle(title);
+	    selectedBook.setAuthor(author);
+	    selectedBook.setYear(year);
+		
+	    
+	    int titleMaxLenght = 20;
+	    if (!(selectedBook.getTitle().length() > 20)) {
+	    	titleMaxLenght = selectedBook.getTitle().length();
+	    }
+		lblSelectedBookValueID.setText(String.valueOf(bookId));
+		lblSelectedBookValueTitle.setText(selectedBook.getTitle().substring(0, titleMaxLenght));
+		lblSelectedBookValueAuthor.setText(selectedBook.getAuthor());
+		lblSelectedBookValueYear.setText(selectedBook.getYear());
+//    	}
+	}
+	
+	
+	private void getDataFromUsersTable() {
+		String userId = tableUsers.getValueAt(tableUsers.getSelectedRow(), 0).toString();
+		String name = tableUsers.getValueAt(tableUsers.getSelectedRow(), 1).toString();
+		String surname = tableUsers.getValueAt(tableUsers.getSelectedRow(), 2).toString();
+
+		selectedUser = new UserDAO();
+		selectedUser.setId(Integer.valueOf(userId));
+		selectedUser.setName(name);
+		selectedUser.setSurname(surname);
+		
+		lblSelectedUserValueId.setText(String.valueOf(userId));
+		lblSelectedUserValueName.setText(selectedUser.getName());
+		lblSelectedUserValueSurname.setText(selectedUser.getSurname());
 	}
 }
