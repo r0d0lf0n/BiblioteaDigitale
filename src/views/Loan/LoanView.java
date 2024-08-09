@@ -240,7 +240,8 @@ public class LoanView extends JFrame implements Observer{
 		model.setColumnIdentifiers(columns);
 		List<LoanDAO> loans = controller.getLoans();
 		
-		for(int i = 1; i < loans.size(); i++) {
+		for(int i = 0; i < loans.size(); i++) {
+			System.out.println(loans.get(i).getUser_id());
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			String start = loans.get(i).getStart_date() != null ? sdf.format(loans.get(i).getStart_date()) : "";
 			String end = loans.get(i).getEnd_date() != null ? sdf.format(loans.get(i).getEnd_date()) : "";
