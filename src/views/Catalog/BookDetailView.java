@@ -74,11 +74,11 @@ public class BookDetailView extends JDialog implements Observer {
         gbc.fill = GridBagConstraints.HORIZONTAL; 
 
         JLabel lblBookId = new JLabel("Book ID:");
-        JLabel lblTitle = new JLabel("Title:");
-        JLabel lblAuthor = new JLabel("Author:");
-        JLabel lblEditor = new JLabel("Editor:");
-        JLabel lblYear = new JLabel("Year:");
-        JLabel lblDescription = new JLabel("Description:");
+        JLabel lblTitle = new JLabel("Titolo:");
+        JLabel lblAuthor = new JLabel("Autore:");
+        JLabel lblEditor = new JLabel("Casa Editrice:");
+        JLabel lblYear = new JLabel("Anno:");
+        JLabel lblDescription = new JLabel("Descrizione:");
         JLabel lblISBN = new JLabel("ISBN:");
 
         textFieldId = new JTextField(40);

@@ -38,7 +38,7 @@ public class CatalogView extends JFrame implements Observer{
 	private JButton btnLoadData;
 	private CatalogController controller = null;
 	//private List<BookDAO> book_catalog = null;
-	private Object[] columns = {"Book Num.", "Title", "Author", "Editor", "Year", "Description", "ISBN" };
+	private Object[] columns = {"Book ID", "Titolo", "Autore", "Casa Editrice", "Anno", "Descrizione", "ISBN" };
 	private BookDAO selectedBook;
 	private BookDetailView bookDetailView = null;
 	//private JButton btnRefresh;
