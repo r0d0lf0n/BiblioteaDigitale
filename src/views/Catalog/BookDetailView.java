@@ -177,7 +177,12 @@ public class BookDetailView extends JDialog implements Observer {
                     editing = true;
                 } else {
                     // Salva le modifiche al libro esistente
-                    saveBook();
+                	boolean isEdited = isBookEdited();
+    				if(isEdited)
+    				{
+    					saveBook();
+    	        	    catalogController.closeBookDetailPanel(isEdited);
+    				}
                    
                     toggleTextFieldEditing(false);
                     btnEdit.setText("Edit");
@@ -239,7 +244,7 @@ public class BookDetailView extends JDialog implements Observer {
 		            catalogController.deleteBook(book); 
 
 		            // Chiudi il pannello dopo la cancellazione
-		            catalogController.closeBookDetailPanel(false);
+		            catalogController.closeBookDetailPanel(true);
 		        }
 		    }
 		});
