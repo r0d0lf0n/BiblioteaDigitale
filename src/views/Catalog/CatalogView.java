@@ -27,8 +27,10 @@ import javax.swing.table.DefaultTableModel;
 import controllers.views.CatalogController;
 import controllers.views.LandingPageController;
 import models.db.BookDAO;
+import models.db.LoanDAO;
 import models.users.Utente;
 import utils.Observer;
+import views.Loan.UpdateLoanView;
 
 public class CatalogView extends JFrame implements Observer{
 
@@ -163,9 +165,13 @@ public class CatalogView extends JFrame implements Observer{
 		sl_contentPane.putConstraint(SpringLayout.NORTH, btnInsertNewBook, 17, SpringLayout.SOUTH, btnLoadData);
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnInsertNewBook, 0, SpringLayout.WEST, contentPane);
 		btnInsertNewBook.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        BookDetailView insertBook = new BookDetailView(CatalogView.this.controller, null);
-		        insertBook.setVisible(true);
+		    public void actionPerformed(ActionEvent e) {	    	
+				if (!catalogTable.getSelectionModel().isSelectionEmpty()) {		
+			        BookDetailView insertBook = new BookDetailView(CatalogView.this.controller, selectedBook);
+			        insertBook.setVisible(true);
+				} else {
+	       			JOptionPane.showMessageDialog(CatalogView.this, "Select book to edit!");
+				}
 		    }
 		});
 		contentPane.add(btnInsertNewBook);
