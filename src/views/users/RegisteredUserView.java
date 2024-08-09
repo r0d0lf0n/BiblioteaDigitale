@@ -7,7 +7,6 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 
 import javax.swing.BorderFactory;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -15,7 +14,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import controllers.views.LandingPageController;
-import controllers.views.LoansController;
 import controllers.views.RegisteredUserController;
 import models.users.Utente;
 import utils.Observer;
@@ -25,16 +23,16 @@ public class RegisteredUserView extends JFrame implements Observer {
 
     private static final long serialVersionUID = 1L;
     private final RegisteredUserController controller;
-    private final LoansController loansController;
-    private DefaultComboBoxModel<String> comboGenereModel = null;
+    //private final LoansController loansController;
+    //private DefaultComboBoxModel<String> comboGenereModel = null;
 	//public LoansDetailView loansDetailView = null;
 	private Utente user = null;
 
     
     public RegisteredUserView(LandingPageController landingPageController, Utente user) {
     	 this.controller = new RegisteredUserController();
-         this.loansController = new LoansController();
-         this.comboGenereModel = new DefaultComboBoxModel<>();
+        // this.loansController = new LoansController();
+         //this.comboGenereModel = new DefaultComboBoxModel<>();
          this.user = user;
 
          setTitle("Gestione Biblioteca - Utente Registrato");
