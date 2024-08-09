@@ -52,6 +52,11 @@ public class LoansController implements Observable{
 
 	}
 	
+	public void closeNewLoan() {
+		setChanged("CLOSE_NEW_LOAN", null);
+
+	}
+	
 	public List<LoanDAO> getLoans() {
 		return loanModel.getAllLoans();
 	}

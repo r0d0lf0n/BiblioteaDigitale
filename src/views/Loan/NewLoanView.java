@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,6 +29,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import controllers.views.LoansController;
 import models.bl.CatalogModel;
@@ -44,8 +47,6 @@ public class NewLoanView extends JDialog implements Observer {
 	private LoansController controller = null;
 	private JTextField textFieldUser;
 	private JTable tableBooks;
-	private JTable table_1;
-	private JTable table_2;
 	private JTextField textFieldBook;
 	private JLabel lblTableLabel;
 	private JTable tableUsers;
@@ -55,12 +56,7 @@ public class NewLoanView extends JDialog implements Observer {
 	private JLabel lblSelectedUserValueId;
 	private JLabel lblBookSelected;
 	private JLabel lblSelectedBookValueID;
-	private List<BookDAO> filteredBooks = null;
-	private List<UserDAO> filteredUsers = null;
-	private CatalogModel catalogModel;
-	private UserModel userModel;
 	private JScrollPane scrollPaneBooks;
-	private JTable table;
 	private JScrollPane scrollPaneUsers;
 	private JLabel lblSelectedBookValueTitle;
 	private JLabel lblSelectedBookValueAuthor;
@@ -76,8 +72,8 @@ public class NewLoanView extends JDialog implements Observer {
 	private DefaultTableModel modelBooks;
 	int centerX;
 	int centerY;
-	private CustomDialog dialog;
-
+	private BooksRowSelectionListener tableBooksListener = new BooksRowSelectionListener();
+	private UsersRowSelectionListener tableUsersListener = new UsersRowSelectionListener();
 	/**
 	 * Launch the application.
 	 */
@@ -116,10 +112,18 @@ public class NewLoanView extends JDialog implements Observer {
 		SpringLayout sl_contentPane = new SpringLayout();
 		contentPane.setLayout(sl_contentPane);
 	
-		JButton btnNewButton = new JButton("Close");
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnNewButton, -10, SpringLayout.SOUTH, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.EAST, btnNewButton, -10, SpringLayout.EAST, contentPane);
-		contentPane.add(btnNewButton);
+		JButton btnClose = new JButton("Close");
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnClose, -10, SpringLayout.SOUTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.EAST, btnClose, -10, SpringLayout.EAST, contentPane);
+		contentPane.add(btnClose);
+		btnClose.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				tableBooks.removeMouseListener(tableBooksListener);
+				tableUsers.removeMouseListener(tableUsersListener);
+				cleanTextFields();
+				controller.closeNewLoan();
+			}
+		});
 		
 		JLabel lblUser = new JLabel("User Name:");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, lblUser, 26, SpringLayout.NORTH, contentPane);
@@ -142,8 +146,7 @@ public class NewLoanView extends JDialog implements Observer {
 
 		    @Override
 		    public void removeUpdate(DocumentEvent e) {
-		    	String txt = textFieldUser.getText();
-//		    	filteredUsers(txt);
+		    	textFieldUser.getText();
 		    }
 
 		    @Override
@@ -207,7 +210,7 @@ public class NewLoanView extends JDialog implements Observer {
 		contentPane.add(lblTableLabelUsers);
 		
 		btnSave = new JButton("Save");
-		sl_contentPane.putConstraint(SpringLayout.NORTH, btnSave, 0, SpringLayout.NORTH, btnNewButton);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, btnSave, 0, SpringLayout.NORTH, btnClose);
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnSave, 0, SpringLayout.WEST, contentPane);
 		contentPane.add(btnSave);
 		
@@ -237,8 +240,8 @@ public class NewLoanView extends JDialog implements Observer {
 					
 					if (endDate.after(startDate)) {
 						System.out.println("saving loans");
-						controller.saveLoan(loan);
 						cleanTextFields();
+						controller.saveLoan(loan);
 					} else {
 						System.out.println("End date equals to start date");
 					}
@@ -279,37 +282,7 @@ public class NewLoanView extends JDialog implements Observer {
 		sl_contentPane.putConstraint(SpringLayout.EAST, scrollPaneBooks, 334, SpringLayout.EAST, lblTableLabel);
 		contentPane.add(scrollPaneBooks);
 		scrollPaneBooks.setViewportView(tableBooks);
-		tableBooks.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-	        public void valueChanged(ListSelectionEvent event) {
-	        	if (!event.getValueIsAdjusting()) {
-	        		String bookId = tableBooks.getValueAt(tableBooks.getSelectedRow(), 0).toString();
-	        		String title = tableBooks.getValueAt(tableBooks.getSelectedRow(), 1).toString();
-	        		String author = tableBooks.getValueAt(tableBooks.getSelectedRow(), 2).toString();
-	        		String year = tableBooks.getValueAt(tableBooks.getSelectedRow(), 3).toString();
-	        		System.out.println(bookId);
-	        		System.out.println(title);
-	        		System.out.println(author);
-	        		System.out.println(year);
-	        		
-	        	    selectedBook = new BookDAO();
-	        	    selectedBook.setId(Integer.valueOf(bookId));
-	        	    selectedBook.setTitle(title);
-	        	    selectedBook.setAuthor(author);
-	        	    selectedBook.setYear(year);
-	        		
-	        	    
-	        	    int titleMaxLenght = 20;
-	        	    if (!(selectedBook.getTitle().length() > 20)) {
-	        	    	titleMaxLenght = selectedBook.getTitle().length();
-	        	    }
-	        		lblSelectedBookValueID.setText(String.valueOf(bookId));
-	        		lblSelectedBookValueTitle.setText(selectedBook.getTitle().substring(0, titleMaxLenght));
-	        		lblSelectedBookValueAuthor.setText(selectedBook.getAuthor());
-	        		lblSelectedBookValueYear.setText(selectedBook.getYear());
-	        	}
-//	            System.out.println(tableBooks.getValueAt(tableBooks.getSelectedRow(), 0).toString());
-	        }
-	    });
+		tableBooks.addMouseListener(tableBooksListener);
 		
 		scrollPaneUsers = new JScrollPane();
 		sl_contentPane.putConstraint(SpringLayout.NORTH, scrollPaneUsers, 0, SpringLayout.NORTH, scrollPaneBooks);
@@ -318,29 +291,7 @@ public class NewLoanView extends JDialog implements Observer {
 		sl_contentPane.putConstraint(SpringLayout.EAST, scrollPaneUsers, -6, SpringLayout.WEST, scrollPaneBooks);
 		contentPane.add(scrollPaneUsers);
 		scrollPaneUsers.setViewportView(tableUsers);
-		tableUsers.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-	        public void valueChanged(ListSelectionEvent event) {
-	        	if (!event.getValueIsAdjusting()) {
-	        		String userId = tableUsers.getValueAt(tableUsers.getSelectedRow(), 0).toString();
-	        		String name = tableUsers.getValueAt(tableUsers.getSelectedRow(), 1).toString();
-	        		String surname = tableUsers.getValueAt(tableUsers.getSelectedRow(), 2).toString();
-
-	        		selectedUser = new UserDAO();
-	        		selectedUser.setId(Integer.valueOf(userId));
-	        		selectedUser.setName(name);
-	        		selectedUser.setSurname(surname);
-	        	    
-//	        	    int titleMaxLenght = 20;
-//	        	    if (!(selectedBook.getTitle().length() > 20)) {
-//	        	    	titleMaxLenght = selectedBook.getTitle().length();
-//	        	    }
-	        		
-	        		lblSelectedUserValueId.setText(String.valueOf(userId));
-	        		lblSelectedUserValueName.setText(selectedUser.getName());
-	        		lblSelectedUserValueSurname.setText(selectedUser.getSurname());
-	        	}
-	        }
-	    });
+		tableUsers.addMouseListener(tableUsersListener);
 		
 		lblSelectedBookValueTitle = new JLabel("none");
 		lblSelectedBookValueTitle.setSize(100, 40);
@@ -382,7 +333,6 @@ public class NewLoanView extends JDialog implements Observer {
 		contentPane.add(lblSelectedUserValueSurname);
 
 		
-		
 		controller.addObserver(this);
 	}
 
@@ -411,6 +361,7 @@ public class NewLoanView extends JDialog implements Observer {
 		
 		tableUsers.setModel(modelUsers);
 	}
+	
 	
 	private void filteredBooks(String criteria) {
 		Object[] columns = { "id", "Title", "Author", "Year"};
@@ -446,8 +397,109 @@ public class NewLoanView extends JDialog implements Observer {
 		tableBooks.setModel(modelBooks);
 		modelUsers = new DefaultTableModel();
 		tableUsers.setModel(modelUsers);
-		
+	
+		tableBooks.clearSelection();
 		textFieldBook.setText("");
 		textFieldUser.setText("");
+	}
+	
+	public class BooksRowSelectionListener implements MouseListener {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// TODO Auto-generated method stub
+			System.out.println("clicking.....");
+//        	if (!event.getValueIsAdjusting()) {
+    		String bookId = tableBooks.getValueAt(tableBooks.getSelectedRow(), 0).toString();
+    		String title = tableBooks.getValueAt(tableBooks.getSelectedRow(), 1).toString();
+    		String author = tableBooks.getValueAt(tableBooks.getSelectedRow(), 2).toString();
+    		String year = tableBooks.getValueAt(tableBooks.getSelectedRow(), 3).toString();
+    		System.out.println(bookId);
+    		System.out.println(title);
+    		System.out.println(author);
+    		System.out.println(year);
+    		
+    	    selectedBook = new BookDAO();
+    	    selectedBook.setId(Integer.valueOf(bookId));
+    	    selectedBook.setTitle(title);
+    	    selectedBook.setAuthor(author);
+    	    selectedBook.setYear(year);
+    		
+    	    
+    	    int titleMaxLenght = 20;
+    	    if (!(selectedBook.getTitle().length() > 20)) {
+    	    	titleMaxLenght = selectedBook.getTitle().length();
+    	    }
+    		lblSelectedBookValueID.setText(String.valueOf(bookId));
+    		lblSelectedBookValueTitle.setText(selectedBook.getTitle().substring(0, titleMaxLenght));
+    		lblSelectedBookValueAuthor.setText(selectedBook.getAuthor());
+    		lblSelectedBookValueYear.setText(selectedBook.getYear());
+//        	}
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+	}
+	
+	public class UsersRowSelectionListener implements MouseListener {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+    		String userId = tableUsers.getValueAt(tableUsers.getSelectedRow(), 0).toString();
+    		String name = tableUsers.getValueAt(tableUsers.getSelectedRow(), 1).toString();
+    		String surname = tableUsers.getValueAt(tableUsers.getSelectedRow(), 2).toString();
+
+    		selectedUser = new UserDAO();
+    		selectedUser.setId(Integer.valueOf(userId));
+    		selectedUser.setName(name);
+    		selectedUser.setSurname(surname);
+    		
+    		lblSelectedUserValueId.setText(String.valueOf(userId));
+    		lblSelectedUserValueName.setText(selectedUser.getName());
+    		lblSelectedUserValueSurname.setText(selectedUser.getSurname());
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
 	}
 }

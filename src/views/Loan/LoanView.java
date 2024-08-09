@@ -245,7 +245,7 @@ public class LoanView extends JFrame implements Observer{
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			String start = loans.get(i).getStart_date() != null ? sdf.format(loans.get(i).getStart_date()) : "";
 			String end = loans.get(i).getEnd_date() != null ? sdf.format(loans.get(i).getEnd_date()) : "";
-			model.addRow(new Object[] {loans.get(i).getId(), loans.get(i).getUser_id(), loans.get(i).getBook_id(), start, end});
+			model.addRow(new Object[] {loans.get(i).getId(), loans.get(i).getUser_id().getId(), loans.get(i).getBook_id().getId(), start, end});
 		}
 
 		loanTable.setModel(model);
