@@ -3,6 +3,9 @@ package controllers.views;
 import java.util.ArrayList;
 import java.util.List;
 
+import controllers.bl.GestoreRicerche;
+import models.db.BookDAO;
+import models.users.Utente;
 import utils.Observable;
 import utils.Observer;
 
@@ -38,9 +41,15 @@ public class RegisteredUserController implements Observable{
     }
 
 
-	public void search(String isbn, String autore, String titolo, String casaEditrice, String anno) {
-		// TODO Auto-generated method stub
-		setChanged("NEW_SEARCH_RESULTS", null);
+	public void search(String isbn, String autore, String titolo, String casaEditrice, String anno, Utente user) {
+		List<BookDAO> books = null;
+		try {
+			books = GestoreRicerche.getInstance().search(isbn, autore, titolo, casaEditrice, anno, user);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		setChanged("NEW_SEARCH_RESULTS", books);
 	}
 	
 
