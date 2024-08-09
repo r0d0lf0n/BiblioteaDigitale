@@ -2,6 +2,7 @@ package views.Loan;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,18 +27,12 @@ import javax.swing.SpringLayout;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 import controllers.views.LoansController;
-import models.bl.CatalogModel;
-import models.bl.UserModel;
 import models.db.BookDAO;
 import models.db.LoanDAO;
 import models.db.UserDAO;
-import utils.CustomDialog;
 import utils.Observer;
 
 public class NewLoanView extends JDialog implements Observer {
@@ -77,24 +72,25 @@ public class NewLoanView extends JDialog implements Observer {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-//					NewLoanView frame = new NewLoanView();
-//					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+////					NewLoanView frame = new NewLoanView();
+////					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.
 	 */
 	public NewLoanView(LoansController loanController) {
 //		cleanTextFields();
+		super((Frame)null, "Nuovo prestito", true);
 		controller = loanController;
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int screenWidth = screenSize.width;
@@ -121,6 +117,7 @@ public class NewLoanView extends JDialog implements Observer {
 				tableBooks.removeMouseListener(tableBooksListener);
 				tableUsers.removeMouseListener(tableUsersListener);
 				cleanTextFields();
+				dispose();
 				controller.closeNewLoan();
 			}
 		});
