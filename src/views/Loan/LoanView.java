@@ -166,7 +166,12 @@ public class LoanView extends JFrame implements Observer{
 		JButton btnRefresh = new JButton("Aggiorna");
 		btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				initializeTable();
+				if (idTessera == -1) {
+					initializeTable();
+				} else {
+					UserDAO user = controller.getUserByTesseraId(idTessera);
+					filteredLoansByUser(String.valueOf(user.getId()));
+				}
 			}
 		});
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnRefresh, -6, SpringLayout.NORTH, scrollPane);
