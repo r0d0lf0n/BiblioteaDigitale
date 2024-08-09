@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -103,10 +104,14 @@ public class LoanView extends JFrame implements Observer{
 		sl_contentPane.putConstraint(SpringLayout.EAST, btnEditLoan, -2, SpringLayout.EAST, btnNewLoan);
 		btnEditLoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String loanId = loanTable.getValueAt(loanTable.getSelectedRow(), 0) != null ? loanTable.getValueAt(loanTable.getSelectedRow(), 0).toString() : "-1";
-        		LoanDAO selectedLoan = controller.getLoanById(Integer.valueOf(loanId));
-        	    updateLoanView = new UpdateLoanView(controller, selectedLoan);
-        	    updateLoanView.setVisible(true);
+				if (!loanTable.getSelectionModel().isSelectionEmpty()) {		
+					String loanId = loanTable.getValueAt(loanTable.getSelectedRow(), 0) != null ? loanTable.getValueAt(loanTable.getSelectedRow(), 0).toString() : "-1";
+	        		LoanDAO selectedLoan = controller.getLoanById(Integer.valueOf(loanId));
+	        	    updateLoanView = new UpdateLoanView(controller, selectedLoan);
+	        	    updateLoanView.setVisible(true);
+				} else {
+	       			JOptionPane.showMessageDialog(updateLoanView, "Select loan to edit!");
+				}
 			}
 		});
 		contentPane.add(btnEditLoan);
