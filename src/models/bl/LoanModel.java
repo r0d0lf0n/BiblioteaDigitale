@@ -1,14 +1,20 @@
 package models.bl;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.UpdateBuilder;
 
+import controllers.bl.GestoreCatalogo;
 import controllers.bl.GestorePrestiti;
+import controllers.bl.GestoreUtenti;
+import models.db.BookDAO;
 import models.db.LoanDAO;
+import models.db.UserDAO;
 
 public class LoanModel {
 	Dao<LoanDAO, String> loanDao;
@@ -84,18 +90,46 @@ public class LoanModel {
 		}
 		return list;
 	}
+	
+	
+
+ 	
+//QueryBuilder<Order, Integer> orderQb = orderDao.queryBuilder();
+//orderQb.where().ge("amount", 100.0F);
+//QueryBuilder<Account, Integer> accountQb = accountDao.queryBuilder();
+//// join with the order query
+//List<Account> results = accountQb.join(orderQb).query();
 
 	public List<LoanDAO> getLoansByRegex(String criteria) {
+		List<UserDAO> userList = null;
+		Dao<UserDAO, String> userDao = GestoreUtenti.getInstance().getUserDao();
+		QueryBuilder<UserDAO, String> userQB = userDao.queryBuilder();
+		
+		List<BookDAO> bookList = null;
+		Dao<BookDAO, String> bookDao = GestoreCatalogo.getInstance().getBookDao();
+		QueryBuilder<BookDAO, String> bookQB = bookDao.queryBuilder();
+		
 		List<LoanDAO> list = null;
+		loanDao = GestorePrestiti.getInstance().getLoanDao();
+		QueryBuilder<LoanDAO, String> loanQB = loanDao.queryBuilder();
+		
 		try {
-			loanDao = GestorePrestiti.getInstance().getLoanDao();			
-			list = loanDao.queryBuilder()
-					  .where()
-					  .eq("book_id", criteria)
-				      .or()
-				      .eq("user_id", criteria)
-					  .query();
+			userQB
+			.where()
+			.like("name", "%"+criteria+"%")
+			.or()
+			.like("surname", "%"+criteria+"%")
+			.query();
 			
+			
+			bookQB
+			.where()
+			.like("title", "%"+criteria+"%")
+			.query();
+			
+			list = loanQB
+					.join(userQB)
+					.query();	
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

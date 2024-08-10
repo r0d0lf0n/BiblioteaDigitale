@@ -147,15 +147,15 @@ public class LoanView extends JFrame implements Observer{
 		    @Override
 		    public void insertUpdate(DocumentEvent e) {
 		    	String txt = textField.getText();
-		    	if (isInteger(txt))
-		    		filteredLoansByUser(txt);
+//		    	if (isInteger(txt))
+		    	filteredLoansByUser(txt);
 		    }
 
 		    @Override
 		    public void removeUpdate(DocumentEvent e) {
 		    	String txt = textField.getText();
-		    	if (isInteger(txt))
-		    		filteredLoansByUser(txt);
+//		    	if (isInteger(txt))
+		    	filteredLoansByUser(txt);
 		    }
 
 		    @Override
@@ -273,6 +273,7 @@ public class LoanView extends JFrame implements Observer{
 	}	
 	
 	private void filteredLoansByUser(String criteria) {
+		System.out.println("filteredLoansByUser");
 		Object[] columns = { "Id", "User", "Book", "Start Date", "End Date" };
 		DefaultTableModel model = new DefaultTableModel();
 		model.setColumnIdentifiers(columns);	

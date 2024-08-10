@@ -28,7 +28,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 import controllers.views.CatalogController;
-import controllers.views.ExternalUserController;
 import controllers.views.LandingPageController;
 import models.db.BookDAO;
 import models.db.LoanDAO;
@@ -43,7 +42,6 @@ public class CatalogViewLite extends JFrame implements Observer{
 	private JPanel contentPane;
 	private JTable catalogTable;
 	private CatalogController controller = null;
-	private ExternalUserController controllerExternal = null;
 	//private List<BookDAO> book_catalog = null;
 	private Object[] columns = {"Book ID", "Titolo", "Autore", "Casa Editrice", "Anno", "Descrizione", "ISBN" };
 	private BookDAO selectedBook;
@@ -60,7 +58,6 @@ public class CatalogViewLite extends JFrame implements Observer{
 	public CatalogViewLite(LandingPageController landingPageController, List<BookDAO> books) {
 		
 		controller = new CatalogController();
-		controllerExternal = new ExternalUserController();
 		this.setTitle("Gestione Catalogo");
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
@@ -127,7 +124,6 @@ public class CatalogViewLite extends JFrame implements Observer{
 		initializeTable();
 		this.books_found = books;
 		controller.addObserver(this);
-		controllerExternal.addObserver(this);
 		landingPageController.addObserver(this);
 	}
 
