@@ -150,12 +150,21 @@ public class NewLoanView extends JDialog implements Observer {
 		    @Override
 		    public void insertUpdate(DocumentEvent e) {
 		    	String txt = textFieldUser.getText();
-		    	filteredUsers(txt);
+		    	if (txt.length() > 0) {
+		    		filteredUsers(txt);
+		    	} else {
+		    		cleanTextFields();
+		    	}
 		    }
 
 		    @Override
 		    public void removeUpdate(DocumentEvent e) {
-		    	textFieldUser.getText();
+		    	String txt = textFieldUser.getText();		    	
+		    	if (txt.length() > 0) {
+		    		filteredUsers(txt);
+		    	} else {
+		    		cleanTextFields();
+		    	}
 		    }
 
 		    @Override
@@ -181,15 +190,21 @@ public class NewLoanView extends JDialog implements Observer {
 		    @Override
 		    public void insertUpdate(DocumentEvent e) {
 		    	String txt = textFieldBook.getText();
-		    	filteredBooks(txt);
-//		    	cleanTextFields();
+		    	if (txt.length() > 0) {
+			    	filteredBooks(txt);
+		    	} else {
+		    		cleanTextFields();
+		    	}   
 		    }
 
 		    @Override
 		    public void removeUpdate(DocumentEvent e) {
-//		    	String txt = textFieldBook.getText();
-//		    	filteredBooks(txt);
-//		    	cleanTextFields();
+		    	String txt = textFieldBook.getText();
+		    	if (txt.length() > 0) {
+			    	filteredBooks(txt);
+		    	} else {
+		    		cleanTextFields();
+		    	}   	
 		    }
 
 		    @Override
