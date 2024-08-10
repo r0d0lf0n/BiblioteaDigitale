@@ -8,6 +8,7 @@ import java.util.List;
 
 import controllers.bl.GestoreRicerche;
 import models.db.BookDAO;
+import models.users.Utente;
 import utils.Observable;
 import utils.Observer;
 
@@ -47,10 +48,10 @@ public class ExternalUserController implements Observable{
 	
 
 
-	public void search(String isbn, String autore, String titolo, String casaEditrice, String anno) {
+	public void search(String isbn, String autore, String titolo, String casaEditrice, String anno, Utente user) {
 		List<BookDAO> books = null;
 		try {
-			GestoreRicerche.getInstance().search(isbn, autore, titolo, casaEditrice, anno, null);
+			GestoreRicerche.getInstance().search(isbn, autore, titolo, casaEditrice, anno, user);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -1,11 +1,14 @@
 package controllers.bl;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import models.bl.CatalogModel;
 import models.db.BookDAO;
 import models.users.Utente;
+import models.users.UtenteEsterno;
+import models.users.UtenteRegistrato;
 
 public class GestoreRicerche {
 
@@ -95,13 +98,18 @@ public class GestoreRicerche {
 	    }
 
 	    private void processResults(List<BookDAO> results) {
+	        	for (Iterator iterator = results.iterator(); iterator.hasNext();) {
+					BookDAO bookDAO = (BookDAO) iterator.next();
+					System.out.println(bookDAO);
+				}
 	        if (user != null) {
-	            // Invia i risultati all'utente o fai altre operazioni necessarie
-	          // user.notifySearchResults(results);
-	        	System.out.println(results);
+	        	System.out.println("notifica a utente specifico");
+	        	if(user instanceof UtenteRegistrato)
+	        		System.out.println(((UtenteRegistrato)user).getIdTessera());
+	        	else if(user instanceof UtenteEsterno)
+	        		System.out.println(((UtenteEsterno)user).getRandomKey());
 	        } else {
-	            // Altri comportamenti per quando l'utente è null
-	            System.out.println("Risultati trovati: " + results.size()+" "+results);
+	            System.out.println("Notifica di errore, user == null");
 	        }
 	    }
 	}

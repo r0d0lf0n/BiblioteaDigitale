@@ -103,7 +103,8 @@ public class ExternalUserView extends JFrame implements Observer {
                     authorField.getText(),
                     titleField.getText(),
                     publisherField.getText(),
-                    yearField.getText()
+                    yearField.getText(),
+                    user
                 );
             }
         });
