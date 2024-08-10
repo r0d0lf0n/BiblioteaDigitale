@@ -50,14 +50,14 @@ public class NewLoanView extends JDialog implements Observer {
 	private JLabel lblTableLabelUsers;
 	private JButton btnSave;
 	private JLabel lblUserSelected;
-	private JLabel lblSelectedUserTessera;
+	private JLabel lblSelectedUserid;
 	private JLabel lblBookSelected;
 	private JLabel lblSelectedBookValueID;
 	private JScrollPane scrollPaneBooks;
 	private JScrollPane scrollPaneUsers;
 	private JLabel lblSelectedBookValueTitle;
 	private JLabel lblSelectedBookValueAuthor;
-	private JLabel lblSelectedBookValueYear;
+	private JLabel lblSelectedBookValueEditor;
 	private BookDAO selectedBook;
 	private UserDAO selectedUser;
 	private LoanDAO loan;
@@ -243,18 +243,19 @@ public class NewLoanView extends JDialog implements Observer {
 				String bookId = lblSelectedBookValueID.getText();
 				String title = lblSelectedBookValueTitle.getText();
 				String author = lblSelectedBookValueAuthor.getText();
-				String year = lblSelectedBookValueYear.getText();
+				String editor = lblSelectedBookValueEditor.getText();
 				
-				String numTessera = lblSelectedUserTessera.getText();
+				String id = lblSelectedUserid.getText();
 				String name = lblSelectedUserValueName.getText();
 				String surname = lblSelectedUserValueSurname.getText();
 				
 				String endDateString = datePickerEnd.getModel().getValue() != null ? datePickerEnd.getModel().getValue().toString() : "";
+				
 									
 				if (bookId.length() == 0 || title.length() == 0 || 
-						author.length() == 0 || year.length() == 0 ||
-								numTessera.length() == 0 || name.length() == 0 ||
-						surname.length() == 0 || endDateString.length() == 0) {
+						author.length() == 0 || editor.length() == 0 ||
+								id.length() == 0 || name.length() == 0 ||
+						surname.length() == 0) {
 	       			JOptionPane.showMessageDialog(NewLoanView.this, 
                             "All field are required!");
 				} else {
@@ -282,11 +283,11 @@ public class NewLoanView extends JDialog implements Observer {
 		sl_contentPane.putConstraint(SpringLayout.WEST, lblUserSelected, 0, SpringLayout.WEST, lblUser);
 		contentPane.add(lblUserSelected);
 		
-		lblSelectedUserTessera = new JLabel("none");
-		sl_contentPane.putConstraint(SpringLayout.WEST, datePickerEnd, 0, SpringLayout.WEST, lblSelectedUserTessera);
-		sl_contentPane.putConstraint(SpringLayout.WEST, lblSelectedUserTessera, 17, SpringLayout.EAST, lblUserSelected);
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, lblSelectedUserTessera, 0, SpringLayout.SOUTH, lblUserSelected);
-		contentPane.add(lblSelectedUserTessera);
+		lblSelectedUserid = new JLabel("none");
+		sl_contentPane.putConstraint(SpringLayout.WEST, datePickerEnd, 0, SpringLayout.WEST, lblSelectedUserid);
+		sl_contentPane.putConstraint(SpringLayout.WEST, lblSelectedUserid, 17, SpringLayout.EAST, lblUserSelected);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, lblSelectedUserid, 0, SpringLayout.SOUTH, lblUserSelected);
+		contentPane.add(lblSelectedUserid);
 		
 		lblBookSelected = new JLabel("Selected Book:");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, lblBookSelected, 25, SpringLayout.SOUTH, lblUserSelected);
@@ -295,7 +296,7 @@ public class NewLoanView extends JDialog implements Observer {
 		
 		lblSelectedBookValueID = new JLabel("none");
 		lblSelectedBookValueID.setSize(30, 40);
-		sl_contentPane.putConstraint(SpringLayout.WEST, lblSelectedBookValueID, 0, SpringLayout.WEST, lblSelectedUserTessera);
+		sl_contentPane.putConstraint(SpringLayout.WEST, lblSelectedBookValueID, 0, SpringLayout.WEST, lblSelectedUserid);
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, lblSelectedBookValueID, 0, SpringLayout.SOUTH, lblBookSelected);
 		contentPane.add(lblSelectedBookValueID);
 		
@@ -306,7 +307,7 @@ public class NewLoanView extends JDialog implements Observer {
 		sl_contentPane.putConstraint(SpringLayout.EAST, scrollPaneBooks, 334, SpringLayout.EAST, lblTableLabel);
 		contentPane.add(scrollPaneBooks);
 		scrollPaneBooks.setViewportView(tableBooks);
-//		tableBooks.addMouseListener(tableBooksListener);
+		tableBooks.addMouseListener(tableBooksListener);
 		
 		scrollPaneUsers = new JScrollPane();
 		sl_contentPane.putConstraint(SpringLayout.NORTH, scrollPaneUsers, 0, SpringLayout.NORTH, scrollPaneBooks);
@@ -315,7 +316,7 @@ public class NewLoanView extends JDialog implements Observer {
 		sl_contentPane.putConstraint(SpringLayout.EAST, scrollPaneUsers, -6, SpringLayout.WEST, scrollPaneBooks);
 		contentPane.add(scrollPaneUsers);
 		scrollPaneUsers.setViewportView(tableUsers);
-//		tableUsers.addMouseListener(tableUsersListener);
+		tableUsers.addMouseListener(tableUsersListener);
 		
 		lblSelectedBookValueTitle = new JLabel("none");
 		lblSelectedBookValueTitle.setSize(100, 40);
@@ -329,11 +330,11 @@ public class NewLoanView extends JDialog implements Observer {
 		lblSelectedBookValueAuthor.setSize(100, 40);
 		contentPane.add(lblSelectedBookValueAuthor);
 		
-		lblSelectedBookValueYear = new JLabel("none");
-		sl_contentPane.putConstraint(SpringLayout.NORTH, lblSelectedBookValueYear, 0, SpringLayout.NORTH, lblBookSelected);
-		sl_contentPane.putConstraint(SpringLayout.WEST, lblSelectedBookValueYear, 108, SpringLayout.EAST, lblSelectedBookValueAuthor);
-		lblSelectedBookValueYear.setSize(100, 40);
-		contentPane.add(lblSelectedBookValueYear);
+		lblSelectedBookValueEditor = new JLabel("none");
+		sl_contentPane.putConstraint(SpringLayout.NORTH, lblSelectedBookValueEditor, 0, SpringLayout.NORTH, lblBookSelected);
+		sl_contentPane.putConstraint(SpringLayout.WEST, lblSelectedBookValueEditor, 108, SpringLayout.EAST, lblSelectedBookValueAuthor);
+		lblSelectedBookValueEditor.setSize(100, 40);
+		contentPane.add(lblSelectedBookValueEditor);
 		
 		lblEnd_date = new JLabel("Fine Prestito:");
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, datePickerEnd, 0, SpringLayout.SOUTH, lblEnd_date);
@@ -401,14 +402,14 @@ public class NewLoanView extends JDialog implements Observer {
 	}
 	
 	private void cleanTextFields() {
-		lblSelectedUserTessera.setText("none");
+		lblSelectedUserid.setText("none");
 		lblSelectedUserValueName.setText("none");
 		lblSelectedUserValueSurname.setText("none");
 		
 		lblSelectedBookValueID.setText("none");
 		lblSelectedBookValueTitle.setText("none");
 		lblSelectedBookValueAuthor.setText("none");
-		lblSelectedBookValueYear.setText("none");
+		lblSelectedBookValueEditor.setText("none");
 		
 		modelEnd = new UtilDateModel();
 		Properties p=new Properties();
@@ -520,7 +521,7 @@ public class NewLoanView extends JDialog implements Observer {
 		lblSelectedBookValueID.setText(String.valueOf(bookId));
 		lblSelectedBookValueTitle.setText(selectedBook.getTitle().substring(0, titleMaxLenght));
 		lblSelectedBookValueAuthor.setText(selectedBook.getAuthor());
-		lblSelectedBookValueYear.setText(selectedBook.getYear());
+		lblSelectedBookValueEditor.setText(selectedBook.getYear());
 //    	}
 	}
 	
@@ -537,7 +538,7 @@ public class NewLoanView extends JDialog implements Observer {
 		selectedUser.setSurname(surname);
 		selectedUser.setNumTessera(Integer.valueOf(tessera));
 		
-		lblSelectedUserTessera.setText(String.valueOf(tessera));
+		lblSelectedUserid.setText(String.valueOf(tessera));
 		lblSelectedUserValueName.setText(selectedUser.getName());
 		lblSelectedUserValueSurname.setText(selectedUser.getSurname());
 	}

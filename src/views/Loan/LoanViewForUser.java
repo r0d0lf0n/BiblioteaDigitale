@@ -8,7 +8,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
 import java.util.List;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -24,12 +23,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
-
 import controllers.views.LandingPageController;
 import controllers.views.LoansController;
 import models.db.BookDAO;
 import models.db.LoanDAO;
 import models.db.UserDAO;
+import models.users.Utente;
 import utils.CustomDialog;
 import utils.Observer;
 
@@ -49,7 +48,7 @@ public class LoanViewForUser extends JFrame implements Observer{
 	int centerY;
 	private LandingPageController landingPageController = null;
 	private int idTessera = -1;
-
+	private UserDAO selectedUser;
 	
 
 	/**
@@ -57,6 +56,7 @@ public class LoanViewForUser extends JFrame implements Observer{
 	 * @param landingPageController 
 	 */
 	public LoanViewForUser(LandingPageController landingPageController, int id) {
+//		this.user = u;
 		this.idTessera = id;
 		this.landingPageController = landingPageController;
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -95,7 +95,7 @@ public class LoanViewForUser extends JFrame implements Observer{
 		btnNewLoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//if(newLoanView == null)
-				newLoanView = new NewLoanViewForUser(controller);
+				newLoanView = new NewLoanViewForUser(controller, selectedUser);
 				newLoanView.setVisible(true);
 			}
 		});
@@ -144,12 +144,12 @@ public class LoanViewForUser extends JFrame implements Observer{
 		sl_contentPane.putConstraint(SpringLayout.EAST, btnRefresh, 0, SpringLayout.EAST, btnClose);
 		btnRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (idTessera == -1) {
-					initializeTable();
-				} else {
+//				if (idTessera == -1) {
+//					initializeTable();
+//				} else {
 					UserDAO user = controller.getUserByTesseraId(idTessera);
 					filteredLoansByTessera(String.valueOf(user.getId()));
-				}
+//				}
 			}
 		});
 		contentPane.add(btnRefresh);
@@ -164,12 +164,8 @@ public class LoanViewForUser extends JFrame implements Observer{
 		controller.addObserver(this);
 		landingPageController.addObserver(this);
 		
-		if (idTessera == -1) {
-			initializeTable();
-		} else {
-			UserDAO user = controller.getUserByTesseraId(idTessera);
-			filteredLoansByTessera(String.valueOf(user.getId()));
-		}
+		UserDAO selectedUser = controller.getUserByTesseraId(idTessera);
+		filteredLoansByTessera(String.valueOf(selectedUser.getId()));
 		
 	}
 	
@@ -183,26 +179,6 @@ public class LoanViewForUser extends JFrame implements Observer{
 	    }
 	    // only got here if we didn't return false
 	    return true;
-	}
-
-	
-	private void initializeTable() {
-		Object[] columns = { "Id", "User", "Book", "Start Date", "End Date" };
-		DefaultTableModel model = new DefaultTableModel();
-		model.setColumnIdentifiers(columns);
-		
-		List<LoanDAO> loans = controller.getLoans();
-		for (LoanDAO l : loans) {
-			UserDAO u  = controller.getUserById(l.getUser_id().getId());
-			BookDAO b  = controller.getBookById(l.getBook_id().getId());
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			String start = l.getStart_date() != null ? sdf.format(l.getStart_date()) : "";
-			String end = l.getEnd_date() != null ? sdf.format(l.getEnd_date()) : "";
-			if (u != null && b != null) 
-				model.addRow(new Object[] {l.getId(), u.getName() + " " + u.getSurname(), b.getTitle(), start, end});
-		}
-
-		loanTable.setModel(model);
 	}	
 	
 	private void filteredLoansByTessera(String criteria) {
@@ -212,59 +188,19 @@ public class LoanViewForUser extends JFrame implements Observer{
 		
     	List<LoanDAO> list = controller.getLoansByTessera(Integer.valueOf(criteria));
 		for (LoanDAO l : list) {
-			UserDAO u  = controller.getUserById(l.getUser_id().getId());
+//		    selectedUser  = controller.getUserById(idTessera);
 			BookDAO b  = controller.getBookById(l.getBook_id().getId());
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			String start = l.getStart_date() != null ? sdf.format(l.getStart_date()) : "";
 			String end = l.getEnd_date() != null ? sdf.format(l.getEnd_date()) : "";
-			if (u != null && b != null) {
-				model.addRow(new Object[] {l.getId(), u.getName() + " " + u.getSurname(), b.getTitle(), start, end});
+			if (selectedUser != null && b != null) {
+				model.addRow(new Object[] {l.getId(), selectedUser.getName() + " " + selectedUser.getSurname(), b.getTitle(), start, end});
 			}
 		}
 		
 		loanTable.setModel(model);
 	}
 	
-	private void filteredLoansByUser(String criteria) {
-		Object[] columns = { "Id", "User", "Book", "Start Date", "End Date" };
-		DefaultTableModel model = new DefaultTableModel();
-		model.setColumnIdentifiers(columns);	
-		
-    	List<LoanDAO> list = controller.getLoansByUser(criteria);
-		for (LoanDAO l : list) {
-			UserDAO u  = controller.getUserById(l.getUser_id().getId());
-			BookDAO b  = controller.getBookById(l.getBook_id().getId());
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			String start = l.getStart_date() != null ? sdf.format(l.getStart_date()) : "";
-			String end = l.getEnd_date() != null ? sdf.format(l.getEnd_date()) : "";
-			if (u != null && b != null) {
-				model.addRow(new Object[] {l.getId(), u.getName() + " " + u.getSurname(), b.getTitle(), start, end});
-			}
-		}
-		
-		loanTable.setModel(model);
-	}
-	
-	private void filteredLoansByTitle(String criteria) {
-		Object[] columns = { "Id", "User", "Book", "Start Date", "End Date" };
-		DefaultTableModel model = new DefaultTableModel();
-		model.setColumnIdentifiers(columns);	
-		
-    	List<LoanDAO> list = controller.getLoansByTitle(criteria);
-		for (LoanDAO l : list) {
-			UserDAO u  = controller.getUserById(l.getUser_id().getId());
-			BookDAO b  = controller.getBookById(l.getBook_id().getId());
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			String start = l.getStart_date() != null ? sdf.format(l.getStart_date()) : "";
-			String end = l.getEnd_date() != null ? sdf.format(l.getEnd_date()) : "";
-			
-			if (u != null && b != null) {
-				model.addRow(new Object[] {l.getId(), u.getName() + " " + u.getSurname(), b.getTitle(), start, end});
-			}
-		}
-		
-		loanTable.setModel(model);
-	}
 	
 	@Override
 	public void update(String type, Object arg) {
@@ -282,7 +218,7 @@ public class LoanViewForUser extends JFrame implements Observer{
 						d.setVisible(false);
 						d.dispose();
 						landingPageController.openLandingPanel();
-						newLoanView = new NewLoanViewForUser(controller);
+						newLoanView = new NewLoanViewForUser(controller, selectedUser);
 						controller.openNewLoan();
 						//controller.setChanged("OPEN_NEW_LOAN", null);
 						//LoanModel loanModel = new LoanModel();
@@ -313,7 +249,7 @@ public class LoanViewForUser extends JFrame implements Observer{
 			} else {
 				this.setVisible(true);
 				lblNoLoans.setVisible(false);
-				initializeTable();
+//				initializeTable();
 			}
 		} 
 		
@@ -322,8 +258,8 @@ public class LoanViewForUser extends JFrame implements Observer{
 			this.setVisible(false);
 		}
 		
-		if(type.equals("REFRESH_LOANS_DETAIL")) {
-			initializeTable();
-		}
+//		if(type.equals("REFRESH_LOANS_DETAIL")) {
+//			initializeTable();
+//		}
 	}
 }
