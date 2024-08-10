@@ -66,7 +66,6 @@ public class Orchestrator {
 		landingPage.setVisible(true);
 		loansPage = new LoanView(landingPage.getLandingController(), -1);
 		catalogPage = new CatalogView(landingPage.getLandingController());
-		catalogPageLite = new CatalogViewLite(landingPage.getLandingController(), null);
 		catalogPage.addUser(admin);
 		
 		disposeUserUIPositions();
