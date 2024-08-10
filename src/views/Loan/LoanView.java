@@ -50,6 +50,7 @@ public class LoanView extends JFrame implements Observer{
 	int centerY;
 	private LandingPageController landingPageController = null;
 	private JTextField textFieldByBook;
+	private int idTessera = -1;
 
 	
 
@@ -57,7 +58,8 @@ public class LoanView extends JFrame implements Observer{
 	 * Create the frame.
 	 * @param landingPageController 
 	 */
-	public LoanView(LandingPageController landingPageController, int idTessera) {
+	public LoanView(LandingPageController landingPageController, int id) {
+		this.idTessera = id;
 		this.landingPageController = landingPageController;
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int screenWidth = screenSize.width;
@@ -182,7 +184,7 @@ public class LoanView extends JFrame implements Observer{
 					initializeTable();
 				} else {
 					UserDAO user = controller.getUserByTesseraId(idTessera);
-					filteredLoansByUser(String.valueOf(user.getId()));
+					filteredLoansByTessera(String.valueOf(user.getId()));
 				}
 			}
 		});
@@ -244,7 +246,7 @@ public class LoanView extends JFrame implements Observer{
 			initializeTable();
 		} else {
 			UserDAO user = controller.getUserByTesseraId(idTessera);
-			filteredLoansByUser(String.valueOf(user.getId()));
+			filteredLoansByTessera(String.valueOf(user.getId()));
 		}
 		
 	}
@@ -280,6 +282,26 @@ public class LoanView extends JFrame implements Observer{
 
 		loanTable.setModel(model);
 	}	
+	
+	private void filteredLoansByTessera(String criteria) {
+		Object[] columns = { "Id", "User", "Book", "Start Date", "End Date" };
+		DefaultTableModel model = new DefaultTableModel();
+		model.setColumnIdentifiers(columns);	
+		
+    	List<LoanDAO> list = controller.getLoansByTessera(Integer.valueOf(criteria));
+		for (LoanDAO l : list) {
+			UserDAO u  = controller.getUserById(l.getUser_id().getId());
+			BookDAO b  = controller.getBookById(l.getBook_id().getId());
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			String start = l.getStart_date() != null ? sdf.format(l.getStart_date()) : "";
+			String end = l.getEnd_date() != null ? sdf.format(l.getEnd_date()) : "";
+			if (u != null && b != null) {
+				model.addRow(new Object[] {l.getId(), u.getName() + " " + u.getSurname(), b.getTitle(), start, end});
+			}
+		}
+		
+		loanTable.setModel(model);
+	}
 	
 	private void filteredLoansByUser(String criteria) {
 		Object[] columns = { "Id", "User", "Book", "Start Date", "End Date" };
@@ -374,6 +396,7 @@ public class LoanView extends JFrame implements Observer{
 		} 
 		
 		if(type.equals("CLOSE_LOANS")){
+			this.idTessera = -1;
 			this.setVisible(false);
 		}
 		

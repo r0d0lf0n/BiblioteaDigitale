@@ -75,6 +75,24 @@ public class LoanModel {
 		}
 	}
 	
+	public List<LoanDAO> getLoansByRegex(String criteria) {
+		List<LoanDAO> list = null;
+		try {
+			loanDao = GestorePrestiti.getInstance().getLoanDao();			
+			list = loanDao.queryBuilder()
+					  .where()
+//					  .eq("book_id", criteria)
+//				      .or()
+				      .eq("user_id", criteria)
+					  .query();
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
 	public List<LoanDAO> getLoansByUserId(int id) {
 		List<LoanDAO> list = null;
 		try {
@@ -90,15 +108,6 @@ public class LoanModel {
 		}
 		return list;
 	}
-	
-	
-
- 	
-//QueryBuilder<Order, Integer> orderQb = orderDao.queryBuilder();
-//orderQb.where().ge("amount", 100.0F);
-//QueryBuilder<Account, Integer> accountQb = accountDao.queryBuilder();
-//// join with the order query
-//List<Account> results = accountQb.join(orderQb).query();
 
 	public List<LoanDAO> getLoansByUser(String criteria) {
 		List<UserDAO> userList = null;
