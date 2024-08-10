@@ -306,7 +306,7 @@ public class NewLoanView extends JDialog implements Observer {
 		sl_contentPane.putConstraint(SpringLayout.EAST, scrollPaneBooks, 334, SpringLayout.EAST, lblTableLabel);
 		contentPane.add(scrollPaneBooks);
 		scrollPaneBooks.setViewportView(tableBooks);
-		tableBooks.addMouseListener(tableBooksListener);
+//		tableBooks.addMouseListener(tableBooksListener);
 		
 		scrollPaneUsers = new JScrollPane();
 		sl_contentPane.putConstraint(SpringLayout.NORTH, scrollPaneUsers, 0, SpringLayout.NORTH, scrollPaneBooks);
@@ -315,7 +315,7 @@ public class NewLoanView extends JDialog implements Observer {
 		sl_contentPane.putConstraint(SpringLayout.EAST, scrollPaneUsers, -6, SpringLayout.WEST, scrollPaneBooks);
 		contentPane.add(scrollPaneUsers);
 		scrollPaneUsers.setViewportView(tableUsers);
-		tableUsers.addMouseListener(tableUsersListener);
+//		tableUsers.addMouseListener(tableUsersListener);
 		
 		lblSelectedBookValueTitle = new JLabel("none");
 		lblSelectedBookValueTitle.setSize(100, 40);
@@ -359,6 +359,8 @@ public class NewLoanView extends JDialog implements Observer {
 	public void update(String type, Object arg) {
 		System.out.println("New loan!");
 		if(type.equals("OPEN_NEW_LOAN")) {
+			tableBooks.addMouseListener(tableBooksListener);
+			tableUsers.addMouseListener(tableUsersListener);
 			this.setVisible(true);
 		}
 		if(type.equals("CLOSE_NEW_LOAN")){
