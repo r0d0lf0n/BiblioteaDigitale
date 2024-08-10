@@ -197,8 +197,12 @@ public class BookDetailView extends JDialog implements Observer {
 	//	contentPane.add(btnEdit);
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				boolean isEdited = isBookEdited() || isNewBook;
-				catalogController.closeBookDetailPanel(isEdited);
+				if(catalogController != null) {
+					boolean isEdited = isBookEdited() || isNewBook;
+					catalogController.closeBookDetailPanel(isEdited);
+				}
+				else 
+					dispose();
 			}
 		});
 		
@@ -249,8 +253,13 @@ public class BookDetailView extends JDialog implements Observer {
 		    }
 		});
 
-		
-		controller.addObserver(this);
+		if(catalogController != null)
+			controller.addObserver(this);
+		else {
+			btnDelete.setVisible(false);
+			btnEdit.setVisible(false);
+			btnNew.setVisible(false);
+		}
 		
 		this.addWindowListener(new WindowAdapter() {
 	        @Override
@@ -258,7 +267,10 @@ public class BookDetailView extends JDialog implements Observer {
 				boolean isEdited = isBookEdited();
 				if(isEdited)
 					saveBook();
-	        	catalogController.closeBookDetailPanel(isEdited);
+				if(catalogController != null)
+					catalogController.closeBookDetailPanel(isEdited);
+				else
+					dispose();
 	        }
 
 	    });

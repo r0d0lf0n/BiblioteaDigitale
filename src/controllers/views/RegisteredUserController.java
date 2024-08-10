@@ -9,7 +9,7 @@ import models.users.Utente;
 import utils.Observable;
 import utils.Observer;
 
-public class RegisteredUserController implements Observable{
+public class RegisteredUserController implements Observable,GenericController{
 	
 	private List<Observer> observers = null;
     private Object obj;
@@ -43,11 +43,19 @@ public class RegisteredUserController implements Observable{
 
 	public void search(String isbn, String autore, String titolo, String casaEditrice, String anno, Utente user) {
 		try {
-			GestoreRicerche.getInstance().search(isbn, autore, titolo, casaEditrice, anno, user);
+			GestoreRicerche.getInstance().search(isbn, autore, titolo, casaEditrice, anno, user, this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//setChanged("NEW_SEARCH_RESULTS", books);
+	}
+
+	@Override
+	public void returnSearchResults(List<BookDAO> books, Utente user) {
+		Object[] couple = new Object[2];
+		couple[0] = books;
+		couple[1] = user;
+		setChanged("NEW_SEARCH_READY", couple);
+		
 	}
 	
 

@@ -1,14 +1,12 @@
 package controllers.bl;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import controllers.views.GenericController;
 import models.bl.CatalogModel;
 import models.db.BookDAO;
 import models.users.Utente;
-import models.users.UtenteEsterno;
-import models.users.UtenteRegistrato;
 
 public class GestoreRicerche {
 
@@ -28,7 +26,7 @@ public class GestoreRicerche {
 		return _instance;
 	}
 	
-	public void search(String isbn, String autore, String titolo, String casaEditrice, String anno, Utente user){
+	public void search(String isbn, String autore, String titolo, String casaEditrice, String anno, Utente user, GenericController controller){
 		
 		boolean isbnValid = isbn!=null && !isbn.trim().equals("");
 		boolean autoreValid = autore!=null && !autore.trim().equals("");
@@ -51,21 +49,25 @@ public class GestoreRicerche {
 			if(annoValid)
 				params[4]=anno.trim().toLowerCase();
 			
-			if(user != null) 
-				new SearchThread(user, params).start();
+			if(user != null) {
+				new SearchThread(controller, user, params).start();
+			}
 			else
-				new SearchThread(null, params).start();
-			
+				System.out.println("SEARCH - Violazione Utente");
+
 		}
+		
 	}
 	
 	public class SearchThread extends Thread {
 	    private Utente user = null;
 	    private String[] params;
+	    private GenericController controller = null;
 
-	    public SearchThread(Utente user, String[] params ) {
+	    public SearchThread(GenericController controller, Utente user, String[] params ) {
 	        this.user = user;
 	        this.params = params;
+	        this.controller = controller;
 	    }
 
 	    @Override
@@ -93,24 +95,11 @@ public class GestoreRicerche {
 		            return matches;
 		        })
 		        .collect(Collectors.toList());
-
-    		    processResults(results);
-	    }
-
-	    private void processResults(List<BookDAO> results) {
-	        	for (Iterator iterator = results.iterator(); iterator.hasNext();) {
-					BookDAO bookDAO = (BookDAO) iterator.next();
-					System.out.println(bookDAO);
-				}
-	        if (user != null) {
-	        	System.out.println("notifica a utente specifico");
-	        	if(user instanceof UtenteRegistrato)
-	        		System.out.println(((UtenteRegistrato)user).getIdTessera());
-	        	else if(user instanceof UtenteEsterno)
-	        		System.out.println(((UtenteEsterno)user).getRandomKey());
-	        } else {
-	            System.out.println("Notifica di errore, user == null");
-	        }
+	    	
+	    	if(results != null)
+	    		controller.returnSearchResults(results, user);
+	    	else
+	    		System.out.println("SEARCH - QUERY ERROR");
 	    }
 	}
 

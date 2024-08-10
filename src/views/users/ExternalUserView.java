@@ -6,6 +6,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -16,14 +17,17 @@ import javax.swing.JTextField;
 
 import controllers.views.ExternalUserController;
 import controllers.views.LandingPageController;
+import models.db.BookDAO;
 import models.users.Utente;
 import utils.Observer;
+import views.Catalog.CatalogViewLite;
 
 public class ExternalUserView extends JFrame implements Observer {
 
     private static final long serialVersionUID = 1L;
     private ExternalUserController controller = null;
     private Utente user = null;
+	private CatalogViewLite searchView;
 
     public ExternalUserView(LandingPageController landingPageController, Utente user) {
     	this.user = user;
@@ -130,8 +134,14 @@ public class ExternalUserView extends JFrame implements Observer {
     @Override
     public void update(String type, Object arg) {
 
-        if(type.equals("SEARCH_RESULTS")) {
-        	System.out.println("SEARCH RESULTS"); //TODO
+        if(type.equals("NEW_SEARCH_READY")) {
+        	Object[] couple = (Object[])arg;
+        	List<BookDAO> books = (List<BookDAO>)couple[0];
+        	Utente user = (Utente)couple[1];
+        //	if(user == this.user)
+        //		System.out.println("UPDATE "+books);
+        	this.searchView = new CatalogViewLite(user, null, books);
+        	searchView.setVisible(true);
         }
         
 		if(type.equals("OPEN_SEARCH")) {
