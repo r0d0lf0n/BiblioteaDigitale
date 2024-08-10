@@ -1,7 +1,12 @@
 package views.Catalog;
 
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
@@ -194,7 +199,7 @@ public class CatalogView extends JFrame implements Observer{
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, catalogTable, -211, SpringLayout.NORTH, btnClose);
 		sl_contentPane.putConstraint(SpringLayout.EAST, catalogTable, -320, SpringLayout.EAST, contentPane);
 
-		catalogTable.addMouseListener(catalogRowSelectionListener);
+//		catalogTable.addMouseListener(catalogRowSelectionListener);
 	
 		
 		this.addWindowListener(new WindowAdapter() {
@@ -204,11 +209,24 @@ public class CatalogView extends JFrame implements Observer{
 	         }
 	     });
 		
+	    ComponentListener visibilityListener = new ComponentListener() {
+	        public void componentShown(ComponentEvent evt) {
+//	        	catalogTable.addMouseListener(catalogRowSelectionListener);
+	        }
+
+	        public void componentHidden(ComponentEvent evt) {}
+
+	        public void componentMoved(ComponentEvent evt) {}
+
+	        public void componentResized(ComponentEvent evt) {}
+	      };
+		
 //		if(getBookCatalog().size() == 0)
 		initializeTable();
 		
 		controller.addObserver(this);
 		landingPageController.addObserver(this);
+		CatalogView.this.addComponentListener(visibilityListener);
 	}
 
 	protected void loadCSV(File selectedFile) {
@@ -251,6 +269,7 @@ public class CatalogView extends JFrame implements Observer{
 	@Override
 	public void update(String type, Object arg) {
 		if(type.equals("OPEN_CATALOG")) {
+			catalogTable.addMouseListener(catalogRowSelectionListener);
 			this.setVisible(true);
 		}
 		if(type.equals("CLOSE_CATALOG")){

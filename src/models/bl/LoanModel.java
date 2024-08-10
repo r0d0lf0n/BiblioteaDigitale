@@ -81,8 +81,8 @@ public class LoanModel {
 			loanDao = GestorePrestiti.getInstance().getLoanDao();			
 			list = loanDao.queryBuilder()
 					  .where()
-//					  .eq("book_id", criteria)
-//				      .or()
+					  .eq("book_id", criteria)
+				      .or()
 				      .eq("user_id", criteria)
 					  .query();
 			
