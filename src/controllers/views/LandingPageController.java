@@ -66,6 +66,14 @@ public class LandingPageController implements Observable{
 
 	}
 	
+	public void openLandingPanelUser() {
+//		setChanged("CLOSE_SEARCH", null);
+		setChanged("CLOSE_LOANS_USER", null);
+//		setChanged("CLOSE_CATALOG", null);
+//		setChanged("OPEN_LANDING", null);
+
+	}
+	
 //	public void ShowView() {
 //		System.out.println("Loading view.......");
 //		landingPageView.setVisible(true);

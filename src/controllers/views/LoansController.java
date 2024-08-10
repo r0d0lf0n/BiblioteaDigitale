@@ -52,6 +52,12 @@ public class LoansController implements Observable{
 
 	}
 	
+	public void saveLoanForUser(LoanDAO loan) {
+		loanModel.saveLoan(loan);
+		setChanged("CLOSE_NEW_LOAN_USER", null);
+
+	}
+	
 	public void closeNewLoan() {
 		setChanged("CLOSE_NEW_LOAN", null);
 

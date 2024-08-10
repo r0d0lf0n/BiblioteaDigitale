@@ -18,6 +18,7 @@ import controllers.views.RegisteredUserController;
 import models.users.Utente;
 import utils.Observer;
 import views.Loan.LoanView;
+import views.Loan.LoanViewForUser;
 
 public class RegisteredUserView extends JFrame implements Observer {
 
@@ -148,7 +149,7 @@ public class RegisteredUserView extends JFrame implements Observer {
          JButton manageLoansButton = new JButton("Gestione Prestiti");
          manageLoansButton.addActionListener(e -> {
              //if (loansDetailView == null)
-             LoanView loansView = new LoanView(landingPageController, user.getIdTessera());
+             LoanViewForUser loansView = new LoanViewForUser(landingPageController, user.getIdTessera());
              loansView.setVisible(true);
          });
 
