@@ -29,7 +29,7 @@ public class CatalogViewLite extends JFrame implements Observer{
 	private JPanel contentPane;
 	private JTable catalogTable;
 	//private List<BookDAO> book_catalog = null;
-	private Object[] columns = {"Book ID", "Titolo", "Autore", "Casa Editrice", "Anno", "Descrizione", "ISBN" };
+	private final Object[] columns = {"Book ID", "Titolo", "Autore", "Casa Editrice", "Anno", "Descrizione", "ISBN" };
 	private BookDAO selectedBook;
 	//private BookDetailView bookDetailView = null;
 	//private JButton btnRefresh;

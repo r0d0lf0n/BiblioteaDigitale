@@ -46,6 +46,7 @@ public class LoanView extends JFrame implements Observer{
 	UpdateLoanView updateLoanView = null;
 	//List<LoanDAO> loans = null;
 	private CustomDialog dialog;
+	private final Object[] columns = { "Id", "Utente", "Libro", "Inizio Prestito", "Fine Prestito" };
 	int centerX;
 	int centerY;
 	private LandingPageController landingPageController = null;
@@ -265,7 +266,7 @@ public class LoanView extends JFrame implements Observer{
 
 	
 	private void initializeTable() {
-		Object[] columns = { "Id", "User", "Book", "Start Date", "End Date" };
+		//Object[] columns = { "Id", "User", "Book", "Start Date", "End Date" };
 		DefaultTableModel model = new DefaultTableModel();
 		model.setColumnIdentifiers(columns);
 		
@@ -284,7 +285,7 @@ public class LoanView extends JFrame implements Observer{
 	}	
 	
 	private void filteredLoansByTessera(String criteria) {
-		Object[] columns = { "Id", "User", "Book", "Start Date", "End Date" };
+		//Object[] columns = { "Id", "User", "Book", "Start Date", "End Date" };
 		DefaultTableModel model = new DefaultTableModel();
 		model.setColumnIdentifiers(columns);	
 		
@@ -304,7 +305,7 @@ public class LoanView extends JFrame implements Observer{
 	}
 	
 	private void filteredLoansByUser(String criteria) {
-		Object[] columns = { "Id", "User", "Book", "Start Date", "End Date" };
+		//Object[] columns = { "Id", "User", "Book", "Start Date", "End Date" };
 		DefaultTableModel model = new DefaultTableModel();
 		model.setColumnIdentifiers(columns);	
 		
@@ -324,7 +325,7 @@ public class LoanView extends JFrame implements Observer{
 	}
 	
 	private void filteredLoansByTitle(String criteria) {
-		Object[] columns = { "Id", "User", "Book", "Start Date", "End Date" };
+		//Object[] columns = { "Id", "User", "Book", "Start Date", "End Date" };
 		DefaultTableModel model = new DefaultTableModel();
 		model.setColumnIdentifiers(columns);	
 		

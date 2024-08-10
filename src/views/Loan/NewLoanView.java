@@ -376,8 +376,8 @@ public class NewLoanView extends JDialog implements Observer {
 		
     	List<UserDAO> list = controller.getUsersByRegex(criteria);
 		for (UserDAO u : list) {
-			System.out.println("*************************");
-			System.out.println(u.getName());
+			//System.out.println("*************************");
+			//System.out.println(u.getName());
 			modelUsers.addRow(new Object[] {u.getId(), u.getName(), u.getSurname(), u.getNumTessera()});
 		}
 		

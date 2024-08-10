@@ -1,8 +1,5 @@
 package views.Catalog;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -26,19 +23,14 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 import controllers.views.CatalogController;
 import controllers.views.LandingPageController;
 import models.db.BookDAO;
-import models.db.LoanDAO;
 import models.users.Utente;
 import utils.Observer;
-import views.Loan.UpdateLoanView;
-import views.Loan.NewLoanView.BooksRowSelectionListener;
 
 public class CatalogView extends JFrame implements Observer{
 
@@ -48,7 +40,7 @@ public class CatalogView extends JFrame implements Observer{
 	private JButton btnLoadData;
 	private CatalogController controller = null;
 	//private List<BookDAO> book_catalog = null;
-	private Object[] columns = {"Book ID", "Titolo", "Autore", "Casa Editrice", "Anno", "Descrizione", "ISBN" };
+	private final Object[] columns = {"Book ID", "Titolo", "Autore", "Casa Editrice", "Anno", "Descrizione", "ISBN" };
 	private BookDAO selectedBook;
 	private BookDetailView bookDetailView = null;
 	//private JButton btnRefresh;
@@ -246,24 +238,6 @@ public class CatalogView extends JFrame implements Observer{
 
 		catalogTable.setModel(model);
 	}
-	
-/*	private void refreshTable() {
-		System.out.println("Refreshing catalog");
-		List<BookDAO> book_catalog = controller.getBookCatalog();
-		
-		int c = 0;
-		for(int i = 0; i < book_catalog.size(); i++) {
-			if (c <= 10) {
-				System.out.println(book_catalog.get(i).getTitle());
-			}
-			c++;
-			model.addRow(new Object[] {book_catalog.get(i).getId(), book_catalog.get(i).getTitle(), book_catalog.get(i).getAuthor(), book_catalog.get(i).getEditor(), book_catalog.get(i).getYear(), book_catalog.get(i).getDescription(), book_catalog.get(i).getIsbn()});
-		}
-//		
-////		model.fireTableDataChanged();
-		catalogTable.setModel(model);
-		model.fireTableDataChanged();
-	} */
 	
 	
 	@Override

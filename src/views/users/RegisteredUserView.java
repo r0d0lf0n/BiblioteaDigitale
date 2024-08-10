@@ -20,7 +20,6 @@ import models.db.BookDAO;
 import models.users.Utente;
 import utils.Observer;
 import views.Catalog.CatalogViewLite;
-import views.Loan.LoanView;
 import views.Loan.LoanViewForUser;
 
 public class RegisteredUserView extends JFrame implements Observer {
@@ -153,7 +152,7 @@ public class RegisteredUserView extends JFrame implements Observer {
          JButton manageLoansButton = new JButton("Gestione Prestiti");
          manageLoansButton.addActionListener(e -> {
              //if (loansDetailView == null)
-             LoanViewForUser loansView = new LoanViewForUser(landingPageController, user.getIdTessera());
+             LoanViewForUser loansView = new LoanViewForUser(landingPageController, user);
              loansView.setVisible(true);
          });
 

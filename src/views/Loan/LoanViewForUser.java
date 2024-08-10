@@ -8,6 +8,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
 import java.util.List;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -16,13 +17,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+
 import controllers.views.LandingPageController;
 import controllers.views.LoansController;
 import models.db.BookDAO;
@@ -49,15 +48,17 @@ public class LoanViewForUser extends JFrame implements Observer{
 	private LandingPageController landingPageController = null;
 	private int idTessera = -1;
 	private UserDAO selectedUser;
+	private Utente user;
 	
 
 	/**
 	 * Create the frame.
 	 * @param landingPageController 
 	 */
-	public LoanViewForUser(LandingPageController landingPageController, int id) {
+	public LoanViewForUser(LandingPageController landingPageController, Utente user) {
 //		this.user = u;
-		this.idTessera = id;
+		this.user = user;
+		this.idTessera = user.getIdTessera();
 		this.landingPageController = landingPageController;
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int screenWidth = screenSize.width;
@@ -68,7 +69,7 @@ public class LoanViewForUser extends JFrame implements Observer{
 	    
 		controller = new LoansController();
 		dialog = new CustomDialog();
-		setTitle("Gestione Prestiti");
+		setTitle("Gestione Prestiti - "+user.getNome()+" "+user.getCognome());
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
 		contentPane = new JPanel();
@@ -95,7 +96,7 @@ public class LoanViewForUser extends JFrame implements Observer{
 		btnNewLoan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//if(newLoanView == null)
-				newLoanView = new NewLoanViewForUser(controller, selectedUser);
+				newLoanView = new NewLoanViewForUser(controller, user);
 				newLoanView.setVisible(true);
 			}
 		});
@@ -164,7 +165,7 @@ public class LoanViewForUser extends JFrame implements Observer{
 		controller.addObserver(this);
 		landingPageController.addObserver(this);
 		
-		UserDAO selectedUser = controller.getUserByTesseraId(idTessera);
+		selectedUser = controller.getUserByTesseraId(idTessera);
 		filteredLoansByTessera(String.valueOf(selectedUser.getId()));
 		
 	}
@@ -182,7 +183,7 @@ public class LoanViewForUser extends JFrame implements Observer{
 	}	
 	
 	private void filteredLoansByTessera(String criteria) {
-		Object[] columns = { "Id", "User", "Book", "Start Date", "End Date" };
+		Object[] columns = { "Id", "Utente", "Libro", "Inizio Prestito", "Fine Prestito" };
 		DefaultTableModel model = new DefaultTableModel();
 		model.setColumnIdentifiers(columns);	
 		
@@ -218,7 +219,7 @@ public class LoanViewForUser extends JFrame implements Observer{
 						d.setVisible(false);
 						d.dispose();
 						landingPageController.openLandingPanel();
-						newLoanView = new NewLoanViewForUser(controller, selectedUser);
+						newLoanView = new NewLoanViewForUser(controller, user);
 						controller.openNewLoan();
 						//controller.setChanged("OPEN_NEW_LOAN", null);
 						//LoanModel loanModel = new LoanModel();

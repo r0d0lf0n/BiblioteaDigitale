@@ -68,29 +68,17 @@ public class NewLoanViewForUser extends JDialog implements Observer {
 	int centerX;
 	int centerY;
 	private BooksRowSelectionListener tableBooksListener = new BooksRowSelectionListener();
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-////					NewLoanView frame = new NewLoanView();
-////					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+	private Utente user = null;
+
 
 	/**
 	 * Create the frame.
 	 */
-	public NewLoanViewForUser(LoansController loanController, UserDAO user) {
+	public NewLoanViewForUser(LoansController loanController, Utente user) {
 //		cleanTextFields();
-		super((Frame)null, "Nuovo prestito", true);
+		super((Frame)null, "Nuovo prestito - "+user.getNome()+" "+user.getCognome(), true);
 		controller = loanController;
+		this.user = user;
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int screenWidth = screenSize.width;
         int screenHeight = screenSize.height;
@@ -292,14 +280,14 @@ public class NewLoanViewForUser extends JDialog implements Observer {
 		contentPane.add(lblSelectedUserId);
 
 		
-		this.selectedUser = controller.getUserByTesseraId(selectedUser.getNumTessera());
+		this.selectedUser = controller.getUserByTesseraId(user.getIdTessera());
 		setTextFieldsForUser();
 		controller.addObserver(this);
 	}
 
 	@Override
 	public void update(String type, Object arg) {
-		System.out.println("New loan user!");
+		//System.out.println("New loan user!");
 		if(type.equals("OPEN_NEW_LOAN_USER")) {
 			tableBooks.addMouseListener(tableBooksListener);
 			this.setVisible(true);
@@ -327,6 +315,9 @@ public class NewLoanViewForUser extends JDialog implements Observer {
 	}
 	
 	private void setTextFieldsForUser() {
+		lblSelectedUserId.setText(String.valueOf(user.getIdTessera()));
+		lblSelectedUserValueName.setText(user.getNome());
+		lblSelectedUserValueSurname.setText(user.getCognome());
 	}
 	
 	private void cleanTextFields() {

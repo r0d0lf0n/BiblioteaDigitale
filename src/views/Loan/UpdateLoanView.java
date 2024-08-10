@@ -161,7 +161,6 @@ public class UpdateLoanView extends JFrame implements Observer {
 	         }
 	     });
 		 
-
 		initFields();
 		
 	    setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -198,7 +197,7 @@ public class UpdateLoanView extends JFrame implements Observer {
 	
 	@Override
 	public void update(String type, Object arg) {
-		System.out.println("Loan details!");
+		//System.out.println("Loan details!");
 		if(type.equals("OPEN_LOANS_DETAIL")) {
 			this.setVisible(true);
 		}
