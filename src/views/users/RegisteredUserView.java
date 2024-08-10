@@ -186,8 +186,8 @@ public class RegisteredUserView extends JFrame implements Observer {
         	Object[] couple = (Object[])arg;
         	List<BookDAO> books = (List<BookDAO>)couple[0];
         	Utente user = (Utente)couple[1];
-        	if(user == this.user)
-        		System.out.println("UPDATE "+books);
+        	//if(user == this.user)
+        	//	System.out.println("UPDATE "+books);
         	this.searchView = new CatalogViewLite(user, null, books);
         	searchView.setVisible(true);
         }
