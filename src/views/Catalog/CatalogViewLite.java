@@ -28,7 +28,6 @@ public class CatalogViewLite extends JFrame implements Observer{
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTable catalogTable;
-	private CatalogController controller = null;
 	//private List<BookDAO> book_catalog = null;
 	private Object[] columns = {"Book ID", "Titolo", "Autore", "Casa Editrice", "Anno", "Descrizione", "ISBN" };
 	private BookDAO selectedBook;
@@ -36,7 +35,7 @@ public class CatalogViewLite extends JFrame implements Observer{
 	//private JButton btnRefresh;
 	private DefaultTableModel model;
 	private CatalogRowSelectionListener catalogRowSelectionListener = new CatalogRowSelectionListener();
-	private Utente user;
+	//private Utente user;
 	private List<BookDAO> books_catalog = null;
 	
 	/**
@@ -45,8 +44,7 @@ public class CatalogViewLite extends JFrame implements Observer{
 	 */
 	public CatalogViewLite(Utente user, CatalogController catalogController, List<BookDAO> books) {
 		
-		controller = catalogController;
-		this.user = user;
+		//this.user = user;
 		this.books_catalog = books;
 		this.setTitle("Risultati Ricerca - "+user.getNome()+" "+user.getCognome());
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -69,19 +67,14 @@ public class CatalogViewLite extends JFrame implements Observer{
 		contentPane.add(btnClose);
 
 		JScrollPane scrollPane = new JScrollPane();
-		sl_contentPane.putConstraint(SpringLayout.NORTH, scrollPane, 20, SpringLayout.NORTH, contentPane);  // Posiziona più in alto
-		sl_contentPane.putConstraint(SpringLayout.WEST, scrollPane, 20, SpringLayout.WEST, contentPane);   // Posiziona più a sinistra
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, scrollPane, -100, SpringLayout.SOUTH, contentPane); // Riduce lo spazio in basso
-		sl_contentPane.putConstraint(SpringLayout.EAST, scrollPane, -20, SpringLayout.EAST, contentPane);   // Riduce lo spazio a destra
+		sl_contentPane.putConstraint(SpringLayout.NORTH, scrollPane, 20, SpringLayout.NORTH, contentPane);  
+		sl_contentPane.putConstraint(SpringLayout.WEST, scrollPane, 20, SpringLayout.WEST, contentPane);   
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, scrollPane, -100, SpringLayout.SOUTH, contentPane); 
+		sl_contentPane.putConstraint(SpringLayout.EAST, scrollPane, -20, SpringLayout.EAST, contentPane);   
 		contentPane.add(scrollPane);
 
 		catalogTable = new JTable();
 		scrollPane.setViewportView(catalogTable);
-
-		// Rimuovi o aggiusta questi vincoli se non sono necessari
-		// sl_contentPane.putConstraint(SpringLayout.WEST, catalogTable, 350, SpringLayout.WEST, contentPane); // Rimuovi o modifica
-		// sl_contentPane.putConstraint(SpringLayout.SOUTH, catalogTable, -211, SpringLayout.NORTH, btnClose); // Rimuovi o modifica
-		// sl_contentPane.putConstraint(SpringLayout.EAST, catalogTable, -320, SpringLayout.EAST, contentPane); // Rimuovi o modifica
 
 		model = new DefaultTableModel();
 		model.setColumnIdentifiers(columns);
@@ -98,12 +91,10 @@ public class CatalogViewLite extends JFrame implements Observer{
 		
 		new LoadBooksThread().start();
 	}
-
-
 	
 	@Override
 	public void update(String type, Object arg) {
-
+		//empty
 	}
 	
 	private class LoadBooksThread extends Thread {
