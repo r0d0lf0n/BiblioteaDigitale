@@ -100,14 +100,10 @@ public class LoanModel {
 //// join with the order query
 //List<Account> results = accountQb.join(orderQb).query();
 
-	public List<LoanDAO> getLoansByRegex(String criteria) {
+	public List<LoanDAO> getLoansByUser(String criteria) {
 		List<UserDAO> userList = null;
 		Dao<UserDAO, String> userDao = GestoreUtenti.getInstance().getUserDao();
 		QueryBuilder<UserDAO, String> userQB = userDao.queryBuilder();
-		
-		List<BookDAO> bookList = null;
-		Dao<BookDAO, String> bookDao = GestoreCatalogo.getInstance().getBookDao();
-		QueryBuilder<BookDAO, String> bookQB = bookDao.queryBuilder();
 		
 		List<LoanDAO> list = null;
 		loanDao = GestorePrestiti.getInstance().getLoanDao();
@@ -121,14 +117,32 @@ public class LoanModel {
 			.like("surname", "%"+criteria+"%")
 			.query();
 			
-			
+			list = loanQB
+					.join(userQB)
+					.query();	
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	public List<LoanDAO> getLoansByTitle(String criteria) {
+		Dao<BookDAO, String> bookDao = GestoreCatalogo.getInstance().getBookDao();
+		QueryBuilder<BookDAO, String> bookQB = bookDao.queryBuilder();
+		
+		List<LoanDAO> list = null;
+		loanDao = GestorePrestiti.getInstance().getLoanDao();
+		QueryBuilder<LoanDAO, String> loanQB = loanDao.queryBuilder();
+		
+		try {			
 			bookQB
 			.where()
 			.like("title", "%"+criteria+"%")
 			.query();
 			
 			list = loanQB
-					.join(userQB)
+					.join(bookQB)
 					.query();	
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
