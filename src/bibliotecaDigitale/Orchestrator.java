@@ -11,7 +11,6 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
-import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 
 import controllers.bl.DatabaseConfig;
@@ -180,17 +179,17 @@ public class Orchestrator {
 	private void setDataBaseForFirstTime() {
 		try {
 			books = GestoreCatalogo.getInstance().getBookDao().queryForAll();
-			if (books.size() == 0) {
-				createBasicBookCatalog(GestoreCatalogo.getInstance().getBookDao());
+		/*	if (books.size() == 0) {
+			//	createBasicBookCatalog(GestoreCatalogo.getInstance().getBookDao());
 			} else {
 				System.out.println("Basic book catalog already loaded!");
-			}
+			} */
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void createBasicBookCatalog(Dao<BookDAO, String> bookDao) {
+	/*private void createBasicBookCatalog(Dao<BookDAO, String> bookDao) {
 		System.out.println("Inserting 100 book for the first time....");
 		List<String[]> book_catalog = new ArrayList<String[]>();
 		try {
@@ -215,7 +214,7 @@ public class Orchestrator {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+	} */
 
 	public boolean usersExist() {
 		try {

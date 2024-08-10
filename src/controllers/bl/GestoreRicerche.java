@@ -38,15 +38,15 @@ public class GestoreRicerche {
 			String[] params = {"","","","",""};
 			
 			if(isbnValid)
-				params[0]=isbn.trim();
+				params[0]=isbn.trim().toLowerCase();
 			if(autoreValid)
-				params[1]=autore.trim();
+				params[1]=autore.trim().toLowerCase();
 			if(titoloValid)
-				params[2]=titolo.trim();
+				params[2]=titolo.trim().toLowerCase();
 			if(casaEditriceValid)
-				params[3]=casaEditrice.trim();
+				params[3]=casaEditrice.trim().toLowerCase();
 			if(annoValid)
-				params[4]=anno.trim();
+				params[4]=anno.trim().toLowerCase();
 			
 			if(user != null) 
 				new SearchThread(user, params).start();
@@ -67,17 +67,31 @@ public class GestoreRicerche {
 
 	    @Override
 	    public void run() {
-	        List<BookDAO> results = model.getAllBooks().stream()
-	            .filter(book -> 
-	                (!params[0].equals("") && book.getIsbn().contains(params[0])) ||
-	                (!params[1].equals("") && book.getAuthor().contains(params[1])) ||
-	                (!params[2].equals("") && book.getTitle().contains(params[2])) ||
-	                (!params[3].equals("") && book.getEditor().contains(params[3])) ||
-	                (!params[4].equals("") && book.getYear().equals(params[4]))
-	            )
-	            .collect(Collectors.toList());
+	    	List<BookDAO> results = model.getAllBooks().stream()
+		        .filter(book -> {
+		            boolean matches = true;
+	
+		            if (params[0] != null) {
+		                matches = matches && book.getIsbn().contains(params[0]);
+		            }
+		            if (params[1] != null) {
+		                matches = matches && book.getAuthor().contains(params[1]);
+		            }
+		            if (params[2] != null) {
+		                matches = matches && book.getTitle().contains(params[2]);
+		            }
+		            if (params[3] != null) {
+		                matches = matches && book.getEditor().contains(params[3]);
+		            }
+		            if (params[4] != null) {
+		                matches = matches && book.getYear().equals(params[4]);
+		            }
+	
+		            return matches;
+		        })
+		        .collect(Collectors.toList());
 
-	        processResults(results);
+    		    processResults(results);
 	    }
 
 	    private void processResults(List<BookDAO> results) {
