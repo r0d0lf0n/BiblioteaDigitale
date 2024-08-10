@@ -132,7 +132,7 @@ public class Orchestrator {
 			unregisteredUsers.add(user1);
 
 			System.out.println("USER " + user1.getNome() + " " + user1.getCognome() + ", " + user1.getCodiceFiscale()
-					+ ". TESSERA NUM: " + user1.getIdTessera());
+					+ ". KEY: " + ((UtenteEsterno)user1).getRandomKey());
 		}
 	}	
 

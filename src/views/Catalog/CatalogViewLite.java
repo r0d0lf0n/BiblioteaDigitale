@@ -6,59 +6,47 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 import controllers.views.CatalogController;
-import controllers.views.LandingPageController;
 import models.db.BookDAO;
-import models.db.LoanDAO;
 import models.users.Utente;
 import utils.Observer;
-import views.Loan.UpdateLoanView;
-import views.Loan.NewLoanView.BooksRowSelectionListener;
 
 public class CatalogViewLite extends JFrame implements Observer{
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTable catalogTable;
-	private CatalogController controller = null;
 	//private List<BookDAO> book_catalog = null;
 	private Object[] columns = {"Book ID", "Titolo", "Autore", "Casa Editrice", "Anno", "Descrizione", "ISBN" };
 	private BookDAO selectedBook;
-	private BookDetailView bookDetailView = null;
+	//private BookDetailView bookDetailView = null;
 	//private JButton btnRefresh;
 	private DefaultTableModel model;
-	private Utente admin = null;
 	private CatalogRowSelectionListener catalogRowSelectionListener = new CatalogRowSelectionListener();
-	private List<BookDAO> books_found = null;
+	//private Utente user;
+	private List<BookDAO> books_catalog = null;
 	
 	/**
 	 * Create the frame.
+	 * @param user 
 	 */
-	public CatalogViewLite(LandingPageController landingPageController, List<BookDAO> books) {
+	public CatalogViewLite(Utente user, CatalogController catalogController, List<BookDAO> books) {
 		
-		controller = new CatalogController();
-		this.setTitle("Gestione Catalogo");
+		//this.user = user;
+		this.books_catalog = books;
+		this.setTitle("Risultati Ricerca - "+user.getNome()+" "+user.getCognome());
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
 		contentPane = new JPanel();
@@ -68,99 +56,45 @@ public class CatalogViewLite extends JFrame implements Observer{
 		SpringLayout sl_contentPane = new SpringLayout();
 		contentPane.setLayout(sl_contentPane);
 
-		// Riorganizzazione dei pulsanti e della tabella
 		JButton btnClose = new JButton("Close");
 		btnClose.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		    	catalogTable.removeMouseListener(catalogRowSelectionListener);
-		        landingPageController.openLandingPanel();
+		        dispose();
 		    }
 		});
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnClose, 0, SpringLayout.WEST, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnClose, -10, SpringLayout.SOUTH, contentPane);
 		contentPane.add(btnClose);
 
-		// Pulsante "Insert new book"
-		JButton btnInsertNewBook = new JButton("Gestione Libro");
-		sl_contentPane.putConstraint(SpringLayout.NORTH, btnInsertNewBook, 10, SpringLayout.NORTH, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.WEST, btnInsertNewBook, 0, SpringLayout.WEST, btnClose);
-		btnInsertNewBook.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {	    	
-				if (!catalogTable.getSelectionModel().isSelectionEmpty()) {		
-			        BookDetailView insertBook = new BookDetailView(CatalogViewLite.this.controller, selectedBook);
-			        insertBook.setVisible(true);
-				} else {
-	       			JOptionPane.showMessageDialog(CatalogViewLite.this, "Select book to edit!");
-				}
-		    }
-		});
-		contentPane.add(btnInsertNewBook);
-
-		// ScrollPane e JTable
 		JScrollPane scrollPane = new JScrollPane();
-		sl_contentPane.putConstraint(SpringLayout.NORTH, scrollPane, 4, SpringLayout.NORTH, btnInsertNewBook);
-		sl_contentPane.putConstraint(SpringLayout.WEST, scrollPane, 30, SpringLayout.EAST, btnInsertNewBook);
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, scrollPane, -42, SpringLayout.SOUTH, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.EAST, scrollPane, -15, SpringLayout.EAST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, scrollPane, 20, SpringLayout.NORTH, contentPane);  
+		sl_contentPane.putConstraint(SpringLayout.WEST, scrollPane, 20, SpringLayout.WEST, contentPane);   
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, scrollPane, -100, SpringLayout.SOUTH, contentPane); 
+		sl_contentPane.putConstraint(SpringLayout.EAST, scrollPane, -20, SpringLayout.EAST, contentPane);   
 		contentPane.add(scrollPane);
 
 		catalogTable = new JTable();
 		scrollPane.setViewportView(catalogTable);
-		sl_contentPane.putConstraint(SpringLayout.WEST, catalogTable, 350, SpringLayout.WEST, contentPane); // Allineata con lo scrollPane
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, catalogTable, -211, SpringLayout.NORTH, btnClose);
-		sl_contentPane.putConstraint(SpringLayout.EAST, catalogTable, -320, SpringLayout.EAST, contentPane);
 
+		model = new DefaultTableModel();
+		model.setColumnIdentifiers(columns);
+		catalogTable.setModel(model);
 		catalogTable.addMouseListener(catalogRowSelectionListener);
 	
 		
 		this.addWindowListener(new WindowAdapter() {
 	         @Override
 	         public void windowClosing(WindowEvent e) {
-	        	 landingPageController.openLandingPanel();
+	        	 dispose();
 	         }
 	     });
 		
-//		if(getBookCatalog().size() == 0)
-		initializeTable();
-		this.books_found = books;
-		controller.addObserver(this);
-		landingPageController.addObserver(this);
-	}
-
-	protected void loadCSV(File selectedFile) {
-		controller.loadCSV(selectedFile.getPath());
-	}
-
-
-	private void initializeTable() {
-	    model = new DefaultTableModel();
-		model.setColumnIdentifiers(columns);
-		List<BookDAO> book_catalog = controller.getBookCatalog();
-//		List<BookDAO> book_catalog = this.books_found;
-		
-		for(int i = 0; i < book_catalog.size(); i++) {
-			model.addRow(new Object[] {book_catalog.get(i).getId(), book_catalog.get(i).getTitle(), book_catalog.get(i).getAuthor(), book_catalog.get(i).getEditor(), book_catalog.get(i).getYear(), book_catalog.get(i).getDescription(), book_catalog.get(i).getIsbn()});
-		}
-
-		catalogTable.setModel(model);
+		new LoadBooksThread().start();
 	}
 	
 	@Override
 	public void update(String type, Object arg) {
-		if(type.equals("CLOSE_CATALOG_LITE")){
-			this.setVisible(false);
-		}
-		
-		if(type.equals("NEW_SEARCH_RESULTS")) {
-			this.setVisible(true);
-			this.books_found = (List<BookDAO>) arg;
-			System.out.println("Opening catalogview lite");
-//			System.out.println(this.books_found);
-		}
-		
-		if(type.equals("REFRESH_BOOK_DETAIL")) {
-			initializeTable();
-		}
+		//empty
 	}
 	
 	private class LoadBooksThread extends Thread {
@@ -169,7 +103,7 @@ public class CatalogViewLite extends JFrame implements Observer{
 
 	        SwingUtilities.invokeLater(new Runnable() {
 	            public void run() {
-	                for (BookDAO book : controller.getBookCatalog()) {
+	                for (BookDAO book : CatalogViewLite.this.books_catalog) {
 	                    currentModel.addRow(new Object[]{
 	                        book.getId(),
 	                        book.getTitle(),
@@ -180,18 +114,11 @@ public class CatalogViewLite extends JFrame implements Observer{
 	                        book.getIsbn()
 	                    });
 	                }
-	    			JOptionPane.showMessageDialog(CatalogViewLite.this, 
-	                        "Aggiornamento completato, presenti: "+ controller.getBookCatalog().size()+" testi in archivio");
 	    			catalogTable.setModel(currentModel);
 	    			catalogTable.setEnabled(true);
-	    			CatalogViewLite.this.setTitle("Gestione Catalogo");
 	            }
 	        });
 	    }
-	}
-
-	public void addUser(Utente admin) {
-		this.admin = admin;
 	}
 	
 	public class CatalogRowSelectionListener implements MouseListener {
@@ -243,8 +170,9 @@ public class CatalogViewLite extends JFrame implements Observer{
         selectedBook.setDescription(desc);
         selectedBook.setIsbn(ISBN);
         
-        bookDetailView = new BookDetailView(controller, selectedBook);
-        bookDetailView.setVisible(true);
+        BookDetailView detailView = new BookDetailView(null, selectedBook);
+        detailView.setVisible(true);
+        
 	}
 }
 

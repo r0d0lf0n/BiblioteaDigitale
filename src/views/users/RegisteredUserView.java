@@ -5,6 +5,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -15,8 +16,10 @@ import javax.swing.JTextField;
 
 import controllers.views.LandingPageController;
 import controllers.views.RegisteredUserController;
+import models.db.BookDAO;
 import models.users.Utente;
 import utils.Observer;
+import views.Catalog.CatalogViewLite;
 import views.Loan.LoanView;
 import views.Loan.LoanViewForUser;
 
@@ -28,6 +31,7 @@ public class RegisteredUserView extends JFrame implements Observer {
     //private DefaultComboBoxModel<String> comboGenereModel = null;
 	//public LoansDetailView loansDetailView = null;
 	private Utente user = null;
+	private CatalogViewLite searchView = null;
 
     
     public RegisteredUserView(LandingPageController landingPageController, Utente user) {
@@ -178,6 +182,16 @@ public class RegisteredUserView extends JFrame implements Observer {
 	@Override
     public void update(String type, Object arg) {
         
+        if(type.equals("NEW_SEARCH_READY")) {
+        	Object[] couple = (Object[])arg;
+        	List<BookDAO> books = (List<BookDAO>)couple[0];
+        	Utente user = (Utente)couple[1];
+        	//if(user == this.user)
+        	//	System.out.println("UPDATE "+books);
+        	this.searchView = new CatalogViewLite(user, null, books);
+        	searchView.setVisible(true);
+        }
+		
 		if(type.equals("OPEN_SEARCH")) {
 			this.setVisible(true);
 		}
