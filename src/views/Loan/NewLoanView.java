@@ -249,13 +249,15 @@ public class NewLoanView extends JDialog implements Observer {
 				String name = lblSelectedUserValueName.getText();
 				String surname = lblSelectedUserValueSurname.getText();
 				
-				String endDateString = datePickerEnd.getModel().getValue() != null ? datePickerEnd.getModel().getValue().toString() : "";
+				String endDateString = datePickerEnd.getModel().getValue() != null ? 
+						datePickerEnd.getModel().getValue().toString() : 
+							new Date().toString();
 				
 									
 				if (bookId.length() == 0 || title.length() == 0 || 
 						author.length() == 0 || editor.length() == 0 ||
 								id.length() == 0 || name.length() == 0 ||
-						surname.length() == 0) {
+						surname.length() == 0 || endDateString.length() == 0) {
 	       			JOptionPane.showMessageDialog(NewLoanView.this, 
                             "All field are required!");
 				} else {

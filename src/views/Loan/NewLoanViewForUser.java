@@ -202,6 +202,8 @@ public class NewLoanViewForUser extends JDialog implements Observer {
 						//System.out.println("saving loans");
 						cleanTextFields();
 						controller.saveLoan(loan);
+						dispose();
+						controller.closeNewLoan();
 					} else {
 						System.out.println("End date equals to start date");
 					}
