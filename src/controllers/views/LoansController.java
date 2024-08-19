@@ -79,6 +79,10 @@ public class LoansController implements Observable{
 		return loanModel.getLoansByUserId(id);
 	}
 	
+	public List<LoanDAO> getLoansByBookId(int id) {
+		return loanModel.getLoansByBookId(id);
+	}
+	
 	public List<UserDAO> getUsersByRegex(String criteria) {
 		return userModel.getUsersByRegex(criteria);
 	}

@@ -72,6 +72,8 @@ public class NewLoanView extends JDialog implements Observer {
 	int centerY;
 	private BooksRowSelectionListener tableBooksListener = new BooksRowSelectionListener();
 	private UsersRowSelectionListener tableUsersListener = new UsersRowSelectionListener();
+	private boolean bookIsNotReserved = true;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -94,6 +96,7 @@ public class NewLoanView extends JDialog implements Observer {
 	public NewLoanView(LoansController loanController) {
 //		cleanTextFields();
 		super((Frame)null, "Nuovo prestito", true);
+		bookIsNotReserved = true;
 		controller = loanController;
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int screenWidth = screenSize.width;
@@ -253,14 +256,15 @@ public class NewLoanView extends JDialog implements Observer {
 						datePickerEnd.getModel().getValue().toString() : 
 							new Date().toString();
 				
+				bookIsNotReserved = checkIfBookIsReserved(bookId);
+				
 									
 				if (bookId.length() == 0 || title.length() == 0 || 
 						author.length() == 0 || editor.length() == 0 ||
 								id.length() == 0 || name.length() == 0 ||
 						surname.length() == 0 || endDateString.length() == 0) {
-	       			JOptionPane.showMessageDialog(NewLoanView.this, 
-                            "All field are required!");
-				} else {
+	       			JOptionPane.showMessageDialog(NewLoanView.this, "All field are required!");
+				} else if (bookIsNotReserved) {
 					loan = new LoanDAO();
 					loan.setBook_id(selectedBook);
 					loan.setUser_id(selectedUser);
@@ -276,6 +280,9 @@ public class NewLoanView extends JDialog implements Observer {
 					} else {
 						System.out.println("End date equals to start date");
 					}
+				} else {
+	       			JOptionPane.showMessageDialog(NewLoanView.this, "Book already reserved, you can try another one.");
+	       			bookIsNotReserved = true;
 				}
 			}
 		});
@@ -432,6 +439,7 @@ public class NewLoanView extends JDialog implements Observer {
 		tableBooks.clearSelection();
 		textFieldBook.setText("");
 		textFieldUser.setText("");
+		bookIsNotReserved = true;
 	}
 	
 	public class BooksRowSelectionListener implements MouseListener {
@@ -543,5 +551,17 @@ public class NewLoanView extends JDialog implements Observer {
 		lblSelectedUserid.setText(String.valueOf(tessera));
 		lblSelectedUserValueName.setText(selectedUser.getName());
 		lblSelectedUserValueSurname.setText(selectedUser.getSurname());
+	}
+	
+	private boolean checkIfBookIsReserved(String id) {
+		boolean reserved = true;
+		
+		List<LoanDAO> list = controller.getLoansByBookId(Integer.valueOf(id));
+		
+		if (list.size() > 0) {
+			reserved = false;
+		} 
+		
+		return reserved;
 	}
 }
