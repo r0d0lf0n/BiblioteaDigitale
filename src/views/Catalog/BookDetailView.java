@@ -28,7 +28,7 @@ public class BookDetailView extends JDialog implements Observer {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private CatalogController controller = null;
-	private CatalogModel catalogModel;
+	//private CatalogModel catalogModel;
 	//private BookDAO selectedBook;
 	//private UserDAO selectedUser;
 	//private LoanDAO loan;
@@ -54,10 +54,11 @@ public class BookDetailView extends JDialog implements Observer {
 		super((Frame)null, "Dettaglio Libro", true);
 		if(book != null)
 			this.book = book;
+		else 
+			isNewBook = true;
 		//System.out.println(book.getId());
 		controller = catalogController;
-		catalogModel = new CatalogModel();
-	
+
 
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setBounds(100, 100, 600, 400);
@@ -97,7 +98,7 @@ public class BookDetailView extends JDialog implements Observer {
 
         JButton btnClose = new JButton("Close");
         JButton btnEdit = new JButton("Edit");
-        JButton btnNew = new JButton("Aggiungi nuovo");
+        JButton btnNew = new JButton("Inserisci");
         JButton btnDelete = new JButton("Elimina");
 
 
@@ -208,37 +209,38 @@ public class BookDetailView extends JDialog implements Observer {
 		
 		btnNew.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		    	if(isNewBook) {
-                    // Salva il nuovo libro
-                    BookDAO newBook = new BookDAO(); 
-                    newBook.setTitle(textFieldTitle.getText());
-                    newBook.setAuthor(textFieldAuthor.getText());
-                    newBook.setEditor(textFieldEditor.getText());
-                    newBook.setYear(textFieldYear.getText());
-                    newBook.setIsbn(textFieldISBN.getText());
-                    newBook.setDescription(textFieldDescription.getText());
-                    
-                    catalogController.addNewBook(newBook); 
-                    isNewBook = false;
-		    	}
+		    	//if(isNewBook) {
+		    		if(checkBookData()) {
+	                    // Salva il nuovo libro
+	                    BookDAO newBook = new BookDAO(); 
+	                    newBook.setTitle(textFieldTitle.getText());
+	                    newBook.setAuthor(textFieldAuthor.getText());
+	                    newBook.setEditor(textFieldEditor.getText());
+	                    newBook.setYear(textFieldYear.getText());
+	                    newBook.setIsbn(textFieldISBN.getText());
+	                    newBook.setDescription(textFieldDescription.getText());
+	                    
+	                    catalogController.addNewBook(newBook); 
+	                    isNewBook = false;
+		    		}
+		    		else
+		    			JOptionPane.showMessageDialog(BookDetailView.this, 
+		        				"Tutti i campi sono obbligatori tranne Descrizione",
+		                        "COMPILAZIONE INCOMPLETA",
+		                        JOptionPane.INFORMATION_MESSAGE);
+		    //	}
 		    	
-		        // Imposta tutti i campi vuoti
-		        textFieldId.setText("");
-		        textFieldTitle.setText("");
-		        textFieldAuthor.setText("");
-		        textFieldEditor.setText("");
-		        textFieldYear.setText("");
-		        textFieldISBN.setText("");
-		        textFieldDescription.setText("");
 
-		        // Abilita l'editing su tutti i campi eccetto il campo Book ID
-		        toggleTextFieldEditing(true);
-		        textFieldId.setEditable(false);
-                btnNew.setText("Inserisci");
-                
-		        editing = false;
-		        isNewBook = true;
 		    }
+
+			private boolean checkBookData() {
+                return !textFieldTitle.getText().equals("") &&
+                !textFieldAuthor.getText().equals("") &&
+                !textFieldEditor.getText().equals("") &&
+                !textFieldYear.getText().equals("") &&
+                !textFieldISBN.getText().equals("");
+			
+			}
 		});
 
 		btnDelete.addActionListener(new ActionListener() {
@@ -282,9 +284,30 @@ public class BookDetailView extends JDialog implements Observer {
 		else{
 			btnDelete.setEnabled(false);
 			btnEdit.setEnabled(false);
+			confPaneForNewBook();
 		}
 	}
 	
+	private void confPaneForNewBook() {
+        // Imposta tutti i campi vuoti
+        textFieldId.setText("");
+        textFieldTitle.setText("");
+        textFieldAuthor.setText("");
+        textFieldEditor.setText("");
+        textFieldYear.setText("");
+        textFieldISBN.setText("");
+        textFieldDescription.setText("");
+
+        // Abilita l'editing su tutti i campi eccetto il campo Book ID
+        toggleTextFieldEditing(true);
+        textFieldId.setEditable(false);
+        //btnNew.setText("Inserisci");
+        
+        editing = false;
+        isNewBook = true;
+		
+	}
+
 	private boolean isBookEdited() {
 		
 		if(!isNewBook && !editing)
@@ -316,7 +339,7 @@ public class BookDetailView extends JDialog implements Observer {
 	}
 	
 	private void saveBook() {
-		catalogModel.saveBook(newBook);
+		controller.saveBook(newBook);
 	}
 	
 	private void setTextFieldValues() {
@@ -348,6 +371,20 @@ public class BookDetailView extends JDialog implements Observer {
 		}
 		if(type.equals("CLOSE_BOOK_DETAIL")){
 			this.setVisible(false);
+		}
+		if(type.equals("BOOK_DELETED")){
+		/*	JOptionPane.showMessageDialog(BookDetailView.this, 
+    				"Libro eliminato correttamente",
+                    "LIBRO ELIMINATO",
+                    JOptionPane.INFORMATION_MESSAGE);*/
+			this.dispose();
+		}
+		if(type.equals("BOOK_ADDED")){
+		/*	JOptionPane.showMessageDialog(BookDetailView.this, 
+    				"Libro aggiunto al catalogo",
+                    "LIBRO AGGIUNTO",
+                    JOptionPane.INFORMATION_MESSAGE);*/
+			this.dispose();
 		}
 	}
 }

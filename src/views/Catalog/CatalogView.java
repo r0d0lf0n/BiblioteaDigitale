@@ -162,17 +162,17 @@ public class CatalogView extends JFrame implements Observer{
 		contentPane.add(btnLoadData);
 
 		// Pulsante "Insert new book"
-		JButton btnInsertNewBook = new JButton("Gestione Libro");
+		JButton btnInsertNewBook = new JButton("Aggiungi Libro");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, btnInsertNewBook, 17, SpringLayout.SOUTH, btnLoadData);
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnInsertNewBook, 0, SpringLayout.WEST, contentPane);
 		btnInsertNewBook.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {	    	
-				if (!catalogTable.getSelectionModel().isSelectionEmpty()) {		
-			        BookDetailView insertBook = new BookDetailView(CatalogView.this.controller, selectedBook);
+			//	if (!catalogTable.getSelectionModel().isSelectionEmpty()) {		
+			        BookDetailView insertBook = new BookDetailView(CatalogView.this.controller, null);
 			        insertBook.setVisible(true);
-				} else {
-	       			JOptionPane.showMessageDialog(CatalogView.this, "Select book to edit!");
-				}
+			//	} else {
+	       	//		JOptionPane.showMessageDialog(CatalogView.this, "Select book to edit!");
+			//	}
 		    }
 		});
 		contentPane.add(btnInsertNewBook);
@@ -299,13 +299,14 @@ public class CatalogView extends JFrame implements Observer{
 	public class CatalogRowSelectionListener implements MouseListener {
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			getDataFromDatble();
+			if(catalogTable.getSelectedRow() != -1)
+				getDataFromTable();
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
-			getDataFromDatble();
+			if(catalogTable.getSelectedRow() != -1)
+				getDataFromTable();
 		}
 
 		@Override
@@ -327,7 +328,7 @@ public class CatalogView extends JFrame implements Observer{
 		}
 	}
 	
-	private void getDataFromDatble() {
+	private void getDataFromTable() {
         String bookId = catalogTable.getValueAt(catalogTable.getSelectedRow(), 0).toString();
         String title = catalogTable.getValueAt(catalogTable.getSelectedRow(), 1).toString();
         String author = catalogTable.getValueAt(catalogTable.getSelectedRow(), 2).toString();

@@ -77,9 +77,18 @@ public class CatalogController implements Observable{
 
 	public void deleteBook(BookDAO book) {
 		GestoreCatalogo.getInstance().removeBook(book);
+		setChanged("BOOK_DELETED", null);
+		setChanged("REFRESH_BOOK_DETAIL", null);	
 	}
 
 	public void addNewBook(BookDAO newBook) {
 		GestoreCatalogo.getInstance().addNewBook(newBook);
+		setChanged("BOOK_ADDED", null);
+		setChanged("REFRESH_BOOK_DETAIL", null);	
+	}
+
+	public void saveBook(BookDAO newBook) {
+		catalogModel.saveBook(newBook);
+		setChanged("REFRESH_BOOK_DETAIL", null);	
 	}
 }
