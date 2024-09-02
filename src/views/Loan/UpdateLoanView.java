@@ -168,6 +168,10 @@ public class UpdateLoanView extends JFrame implements Observer {
 		btnDelete.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	System.out.println("Deleting loan!");
+            	controller.deleteLoanForUser(loan); 
+            	controller.closeLoansDetailPanel();
+                WindowEvent windowClosing = new WindowEvent(UpdateLoanView.this, WindowEvent.WINDOW_CLOSING);
+                Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(windowClosing);
             }
         });
 		contentPane.add(btnDelete);

@@ -58,6 +58,12 @@ public class LoansController implements Observable{
 
 	}
 	
+	public void deleteLoanForUser(LoanDAO loan) {
+		loanModel.deleteLoan(loan);
+		setChanged("CLOSE_NEW_LOAN_USER", null);
+
+	}
+	
 	public void closeNewLoan() {
 		setChanged("CLOSE_NEW_LOAN", null);
 

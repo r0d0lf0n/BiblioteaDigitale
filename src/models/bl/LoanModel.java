@@ -75,6 +75,15 @@ public class LoanModel {
 		}
 	}
 	
+	public void deleteLoan(LoanDAO loan) {
+		try {
+			GestorePrestiti.getInstance().getLoanDao().delete(loan);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public List<LoanDAO> getLoansByRegex(String criteria) {
 		List<LoanDAO> list = null;
 		try {
