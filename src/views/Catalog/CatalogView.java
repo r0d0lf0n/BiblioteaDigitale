@@ -116,7 +116,7 @@ public class CatalogView extends JFrame implements Observer{
 		txtCodiceFiscale.setEditable(false);
 
 		// Riorganizzazione dei pulsanti e della tabella
-		JButton btnClose = new JButton("Close");
+		JButton btnClose = new JButton("Chiudi");
 		btnClose.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		    	catalogTable.removeMouseListener(catalogRowSelectionListener);
@@ -127,7 +127,7 @@ public class CatalogView extends JFrame implements Observer{
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnClose, -10, SpringLayout.SOUTH, contentPane);
 		contentPane.add(btnClose);
 
-		btnLoadData = new JButton("Load data");
+		btnLoadData = new JButton("Caricare data");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, btnLoadData, 20, SpringLayout.SOUTH, txtCodiceFiscale);
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnLoadData, 0, SpringLayout.WEST, btnClose);
 		btnLoadData.addActionListener(new ActionListener() {
