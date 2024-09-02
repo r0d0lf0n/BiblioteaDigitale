@@ -7,6 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -26,6 +29,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
+import org.jdatepicker.DateModel;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -73,6 +77,7 @@ public class NewLoanView extends JDialog implements Observer {
 	private BooksRowSelectionListener tableBooksListener = new BooksRowSelectionListener();
 	private UsersRowSelectionListener tableUsersListener = new UsersRowSelectionListener();
 	private boolean bookIsNotReserved = true;
+	private Date endDate = null;
 	
 	/**
 	 * Launch the application.
@@ -114,7 +119,14 @@ public class NewLoanView extends JDialog implements Observer {
 		SpringLayout sl_contentPane = new SpringLayout();
 		contentPane.setLayout(sl_contentPane);
 		
-		modelEnd = new UtilDateModel();
+		
+		
+		Calendar c = Calendar.getInstance(); 
+		c.setTime(new Date()); 
+		c.add(Calendar.DATE, 10);
+		endDate = c.getTime();
+		
+		modelEnd = new UtilDateModel(endDate);
 		Properties p=new Properties();
 		p.put("text.today","Today");
 		p.put("text.month","Month");
@@ -256,34 +268,44 @@ public class NewLoanView extends JDialog implements Observer {
 						datePickerEnd.getModel().getValue().toString() : 
 							new Date().toString();
 				
-				bookIsNotReserved = checkIfBookIsReserved(bookId);
+				Date endDate = datePickerEnd.getModel().getValue() != null ? 
+						(Date) datePickerEnd.getModel().getValue() : 
+							new Date();
 				
 									
-				if (bookId.length() == 0 || title.length() == 0 || 
-						author.length() == 0 || editor.length() == 0 ||
-								id.length() == 0 || name.length() == 0 ||
-						surname.length() == 0 || endDateString.length() == 0) {
-	       			JOptionPane.showMessageDialog(NewLoanView.this, "All field are required!");
-				} else if (bookIsNotReserved) {
-					loan = new LoanDAO();
-					loan.setBook_id(selectedBook);
-					loan.setUser_id(selectedUser);
-					Date startDate = new Date(); 
-					loan.setStart_date(startDate);
-					Date endDate = (Date) datePickerEnd.getModel().getValue();
-					loan.setEnd_date(endDate);
-					
-					if (endDate.after(startDate)) {
-						//System.out.println("saving loans");
-						cleanTextFields();
-						controller.saveLoan(loan);
-					} else {
-						System.out.println("End date equals to start date");
-					}
+				if (bookId == "none" || title == "none" || 
+						author == "none" || editor == "none" ||
+								id == "none" || name == "none" ||
+						surname == "none" || endDate == null) {
+	       			JOptionPane.showMessageDialog(NewLoanView.this, "Tutti i campi sono obbligatori!");
 				} else {
-	       			JOptionPane.showMessageDialog(NewLoanView.this, "Book already reserved, you can try another one.");
-	       			bookIsNotReserved = true;
-				}
+					bookIsNotReserved = checkIfBookIsReserved(bookId);	
+					
+					if (bookIsNotReserved) {
+						loan = new LoanDAO();
+						loan.setBook_id(selectedBook);
+						loan.setUser_id(selectedUser);
+						Date startDate = new Date(); 
+						loan.setStart_date(startDate);
+						loan.setEnd_date(endDate);
+						
+						if (startDate == null || endDate == null ) {
+							JOptionPane.showMessageDialog(NewLoanView.this, "Il campo data non può essere nullo!");
+						} else {
+							if (endDate.after(startDate)) {
+								//System.out.println("saving loans");
+								cleanTextFields();
+								controller.saveLoan(loan);
+							} else {
+								System.out.println("La data di fine è uguale alla data di inizio");
+								JOptionPane.showMessageDialog(NewLoanView.this, "La data di fine è uguale alla data di inizio.");
+							}
+						}
+					} else {
+		       			JOptionPane.showMessageDialog(NewLoanView.this, "Questo libro è già prenotato, puoi provarne un altro.");
+		       			bookIsNotReserved = true;
+					}
+				} 
 			}
 		});
 		
