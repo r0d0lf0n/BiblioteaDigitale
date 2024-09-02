@@ -264,13 +264,13 @@ public class NewLoanView extends JDialog implements Observer {
 				String name = lblSelectedUserValueName.getText();
 				String surname = lblSelectedUserValueSurname.getText();
 				
-				String endDateString = datePickerEnd.getModel().getValue() != null ? 
-						datePickerEnd.getModel().getValue().toString() : 
-							new Date().toString();
+//				String endDateString = datePickerEnd.getModel().getValue() != null ? 
+//						datePickerEnd.getModel().getValue().toString() : 
+//							new Date().toString();
 				
-				Date endDate = datePickerEnd.getModel().getValue() != null ? 
-						(Date) datePickerEnd.getModel().getValue() : 
-							new Date();
+//				Date endDate = datePickerEnd.getModel().getValue() != null ? 
+//						(Date) datePickerEnd.getModel().getValue() : 
+//							new Date();
 				
 									
 				if (bookId == "none" || title == "none" || 

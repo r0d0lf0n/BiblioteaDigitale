@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -69,6 +70,8 @@ public class NewLoanViewForUser extends JDialog implements Observer {
 	int centerY;
 	private BooksRowSelectionListener tableBooksListener = new BooksRowSelectionListener();
 	private Utente user = null;
+	private boolean bookIsNotReserved = true;
+	private Date endDate = null;
 
 
 	/**
@@ -95,7 +98,12 @@ public class NewLoanViewForUser extends JDialog implements Observer {
 		SpringLayout sl_contentPane = new SpringLayout();
 		contentPane.setLayout(sl_contentPane);
 		
-		modelEnd = new UtilDateModel();
+		Calendar c = Calendar.getInstance(); 
+		c.setTime(new Date()); 
+		c.add(Calendar.DATE, 10);
+		endDate = c.getTime();
+		
+		modelEnd = new UtilDateModel(endDate);
 		Properties p=new Properties();
 		p.put("text.today","Today");
 		p.put("text.month","Month");
@@ -117,7 +125,7 @@ public class NewLoanViewForUser extends JDialog implements Observer {
 			}
 		});
 		
-		JLabel lblBook = new JLabel("Titolo:");
+		JLabel lblBook = new JLabel("Ricerca per titolo:");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, lblBook, 26, SpringLayout.NORTH, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.WEST, lblBook, 10, SpringLayout.WEST, contentPane);
 		contentPane.add(lblBook);
@@ -181,31 +189,46 @@ public class NewLoanViewForUser extends JDialog implements Observer {
 				String name = lblSelectedUserValueName.getText();
 				String surname = lblSelectedUserValueSurname.getText();
 				
-				String endDateString = datePickerEnd.getModel().getValue() != null ? datePickerEnd.getModel().getValue().toString() : "";
+//				String endDateString = datePickerEnd.getModel().getValue() != null ? datePickerEnd.getModel().getValue().toString() : "";
 									
-				if (bookId.length() == 0 || title.length() == 0 || 
-						author.length() == 0 || year.length() == 0 ||
-								id.length() == 0 || name.length() == 0 ||
-						surname.length() == 0 || endDateString.length() == 0) {
-	       			JOptionPane.showMessageDialog(NewLoanViewForUser.this, 
-                            "All field are required!");
-				} else {
-					loan = new LoanDAO();
-					loan.setBook_id(selectedBook);
-					loan.setUser_id(selectedUser);
-					Date startDate = new Date(); 
-					loan.setStart_date(startDate);
-					Date endDate = (Date) datePickerEnd.getModel().getValue();
-					loan.setEnd_date(endDate);
+//				if (bookId.length() == 0 || title.length() == 0 || 
+//						author.length() == 0 || year.length() == 0 ||
+//								id.length() == 0 || name.length() == 0 ||
+//						surname.length() == 0 || endDate ==  null) {
 					
-					if (endDate.after(startDate)) {
-						//System.out.println("saving loans");
-						cleanTextFields();
-						controller.saveLoan(loan);
-						dispose();
-						controller.closeNewLoan();
+				if (bookId == "none" || title == "none" || 
+							author == "none" || year == "none" ||
+									id == "none" || name == "none" ||
+							surname == "none" || endDate == null) {						
+	       			JOptionPane.showMessageDialog(NewLoanViewForUser.this, "Tutti i campi sono obbligatori!");
+				} else {
+					bookIsNotReserved = checkIfBookIsReserved(bookId);	
+					
+					if (bookIsNotReserved) {
+						loan = new LoanDAO();
+						loan.setBook_id(selectedBook);
+						loan.setUser_id(selectedUser);
+						Date startDate = new Date(); 
+						loan.setStart_date(startDate);
+						loan.setEnd_date(endDate);
+						
+						if (startDate == null || endDate == null ) {
+							JOptionPane.showMessageDialog(NewLoanViewForUser.this, "Il campo data non può essere nullo!");
+						} else {
+							if (endDate.after(startDate)) {
+								//System.out.println("saving loans");
+								cleanTextFields();
+								controller.saveLoan(loan);
+								dispose();
+								controller.closeNewLoan();
+							} else {
+								System.out.println("La data di fine è uguale alla data di inizio");
+								JOptionPane.showMessageDialog(NewLoanViewForUser.this, "La data di fine è uguale alla data di inizio.");
+							}
+						}
 					} else {
-						System.out.println("End date equals to start date");
+		       			JOptionPane.showMessageDialog(NewLoanViewForUser.this, "Questo libro è già prenotato, puoi provarne un altro.");
+		       			bookIsNotReserved = true;
 					}
 				}
 			}
@@ -343,6 +366,7 @@ public class NewLoanViewForUser extends JDialog implements Observer {
 	
 		tableBooks.clearSelection();
 		textFieldBook.setText("");
+		bookIsNotReserved = true;
 	}
 	
 	public class BooksRowSelectionListener implements MouseListener {
@@ -406,5 +430,17 @@ public class NewLoanViewForUser extends JDialog implements Observer {
 		lblSelectedBookValueAuthor.setText(selectedBook.getAuthor());
 		lblSelectedBookValueYear.setText(selectedBook.getYear());
 //    	}
+	}
+	
+	private boolean checkIfBookIsReserved(String id) {
+		boolean reserved = true;
+		
+		List<LoanDAO> list = controller.getLoansByBookId(Integer.valueOf(id));
+		
+		if (list.size() > 0) {
+			reserved = false;
+		} 
+		
+		return reserved;
 	}
 }
