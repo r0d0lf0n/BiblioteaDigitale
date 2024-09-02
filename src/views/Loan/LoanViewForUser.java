@@ -114,7 +114,7 @@ public class LoanViewForUser extends JFrame implements Observer{
 	        	    updateLoanView = new UpdateLoanView(controller, selectedLoan);
 	        	    updateLoanView.setVisible(true);
 				} else {
-	       			JOptionPane.showMessageDialog(updateLoanView, "Select loan to edit!");
+	       			JOptionPane.showMessageDialog(updateLoanView, "Selezionare il prestito per modificare!");
 				}
 			}
 		});
@@ -188,6 +188,9 @@ public class LoanViewForUser extends JFrame implements Observer{
 		model.setColumnIdentifiers(columns);	
 		
     	List<LoanDAO> list = controller.getLoansByTessera(Integer.valueOf(criteria));
+    	if (list.size() > 0) {
+    		//lblNoLoans.setText("");
+    	}
 		for (LoanDAO l : list) {
 //		    selectedUser  = controller.getUserById(idTessera);
 			BookDAO b  = controller.getBookById(l.getBook_id().getId());

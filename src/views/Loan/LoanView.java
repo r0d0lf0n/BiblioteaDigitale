@@ -114,7 +114,7 @@ public class LoanView extends JFrame implements Observer{
 	        	    updateLoanView = new UpdateLoanView(controller, selectedLoan);
 	        	    updateLoanView.setVisible(true);
 				} else {
-	       			JOptionPane.showMessageDialog(updateLoanView, "Select loan to edit!");
+	       			JOptionPane.showMessageDialog(updateLoanView, "Selezionare il prestito per modificare!");
 				}
 			}
 		});

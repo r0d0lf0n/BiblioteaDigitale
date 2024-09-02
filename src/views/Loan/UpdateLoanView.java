@@ -58,7 +58,7 @@ public class UpdateLoanView extends JFrame implements Observer {
 		this.controller = controller;
 		this.loan = loan;
 		setTitle("Modifica prestito");
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 450, 340);
         setLocationRelativeTo(null);
 
 
@@ -78,10 +78,9 @@ public class UpdateLoanView extends JFrame implements Observer {
 		p.put("text.year","Year");
 		JDatePanelImpl datePanel = new JDatePanelImpl(modelStart, p);
 		datePickerStart = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+		sl_contentPane.putConstraint(SpringLayout.NORTH, datePickerStart, 161, SpringLayout.NORTH, contentPane);
 		JDatePanelImpl datePanel2 = new JDatePanelImpl(modelEnd, p);
 		datePickerEnd = new JDatePickerImpl(datePanel2, new DateLabelFormatter());
-		
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, datePickerEnd, -28, SpringLayout.SOUTH, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.EAST, datePickerEnd, 0, SpringLayout.EAST, datePickerStart);
 
 		JLabel lblUser = new JLabel("Utente:");
@@ -105,8 +104,8 @@ public class UpdateLoanView extends JFrame implements Observer {
 		contentPane.add(textFieldBook);
 
 		lblBook = new JLabel("Libro:");
-		sl_contentPane.putConstraint(SpringLayout.NORTH, lblBook, 11, SpringLayout.SOUTH, textFieldUser);
 		sl_contentPane.putConstraint(SpringLayout.NORTH, textFieldBook, 6, SpringLayout.SOUTH, lblBook);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, lblBook, 6, SpringLayout.SOUTH, textFieldUser);
 		sl_contentPane.putConstraint(SpringLayout.WEST, lblBook, 0, SpringLayout.WEST, lblUser);
 		lblBook.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblBook);
@@ -115,25 +114,24 @@ public class UpdateLoanView extends JFrame implements Observer {
 		contentPane.add(datePickerEnd);
 		
 		lblStartDate = new JLabel("Data inizio (dd/MM/yyyy):");
-		sl_contentPane.putConstraint(SpringLayout.NORTH, datePickerStart, 5, SpringLayout.SOUTH, lblStartDate);
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, lblStartDate, -107, SpringLayout.SOUTH, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.WEST, lblStartDate, 10, SpringLayout.WEST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.WEST, lblStartDate, 0, SpringLayout.WEST, lblUser);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, lblStartDate, -6, SpringLayout.NORTH, datePickerStart);
 		lblStartDate.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblStartDate);
 
 		lblEndDate = new JLabel("Data fine (dd/MM/yyyy):");
+		sl_contentPane.putConstraint(SpringLayout.NORTH, datePickerEnd, 6, SpringLayout.SOUTH, lblEndDate);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, lblEndDate, 6, SpringLayout.SOUTH, datePickerStart);
 		sl_contentPane.putConstraint(SpringLayout.WEST, lblEndDate, 0, SpringLayout.WEST, lblUser);
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, lblEndDate, -6, SpringLayout.NORTH, datePickerEnd);
 		lblEndDate.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblEndDate);
 
 		btnSave = new JButton("Salva");
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnSave, 0, SpringLayout.SOUTH, contentPane);
 		btnSave.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                saveLoan();
                if (rowsUpdated>0){
-            	   	JOptionPane.showMessageDialog(null, "Loan saved successfully!", "Loan saved", JOptionPane.PLAIN_MESSAGE);
+            	   	JOptionPane.showMessageDialog(null, "Prestito salvato con successo!", "Prestito salvato", JOptionPane.PLAIN_MESSAGE);
       		   } else {
    	   				JOptionPane.showMessageDialog(null, "Save failed!", "Warning", JOptionPane.PLAIN_MESSAGE);
       		   }
@@ -143,8 +141,8 @@ public class UpdateLoanView extends JFrame implements Observer {
 		contentPane.add(btnSave);
 		
 		btnClose = new JButton("Chiudi");
-		sl_contentPane.putConstraint(SpringLayout.EAST, btnSave, -11, SpringLayout.WEST, btnClose);
-		sl_contentPane.putConstraint(SpringLayout.NORTH, btnClose, 0, SpringLayout.NORTH, btnSave);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, btnSave, 0, SpringLayout.NORTH, btnClose);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnClose, 0, SpringLayout.SOUTH, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.EAST, btnClose, -10, SpringLayout.EAST, contentPane);
         btnClose.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -153,6 +151,12 @@ public class UpdateLoanView extends JFrame implements Observer {
             }
         });
 		contentPane.add(btnClose);
+		
+		JButton btnDelete = new JButton("Cancella");
+		sl_contentPane.putConstraint(SpringLayout.EAST, btnSave, -6, SpringLayout.WEST, btnDelete);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, btnDelete, 0, SpringLayout.NORTH, btnClose);
+		sl_contentPane.putConstraint(SpringLayout.EAST, btnDelete, -6, SpringLayout.WEST, btnClose);
+		contentPane.add(btnDelete);
 				
 		 this.addWindowListener(new WindowAdapter() {
 	         @Override
@@ -205,6 +209,5 @@ public class UpdateLoanView extends JFrame implements Observer {
 			this.setVisible(false);
 		}
 	}
-	
 }
 
