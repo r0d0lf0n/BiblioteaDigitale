@@ -79,7 +79,7 @@ public class LoanViewForUser extends JFrame implements Observer{
 		SpringLayout sl_contentPane = new SpringLayout();
 		contentPane.setLayout(sl_contentPane);
 
-		JButton btnClose = new JButton("Close");
+		JButton btnClose = new JButton("Chiudi");
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnClose, -60, SpringLayout.SOUTH, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.EAST, btnClose, -15, SpringLayout.EAST, contentPane);
 		btnClose.addActionListener(new ActionListener() {

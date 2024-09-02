@@ -135,7 +135,7 @@ public class NewLoanView extends JDialog implements Observer {
 		datePickerEnd = new JDatePickerImpl(datePanel2, new DateLabelFormatter());
 		contentPane.add(datePickerEnd);
 	
-		JButton btnClose = new JButton("Close");
+		JButton btnClose = new JButton("Chiudi");
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnClose, -10, SpringLayout.SOUTH, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.EAST, btnClose, -10, SpringLayout.EAST, contentPane);
 		contentPane.add(btnClose);
@@ -248,7 +248,7 @@ public class NewLoanView extends JDialog implements Observer {
 		sl_contentPane.putConstraint(SpringLayout.NORTH, lblTableLabelUsers, 17, SpringLayout.SOUTH, textFieldUser);
 		contentPane.add(lblTableLabelUsers);
 		
-		btnSave = new JButton("Save");
+		btnSave = new JButton("Salvare");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, btnSave, 0, SpringLayout.NORTH, btnClose);
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnSave, 0, SpringLayout.WEST, contentPane);
 		contentPane.add(btnSave);
