@@ -111,7 +111,7 @@ public class LoanView extends JFrame implements Observer{
 				if (!loanTable.getSelectionModel().isSelectionEmpty()) {		
 					String loanId = loanTable.getValueAt(loanTable.getSelectedRow(), 0) != null ? loanTable.getValueAt(loanTable.getSelectedRow(), 0).toString() : "-1";
 	        		LoanDAO selectedLoan = controller.getLoanById(Integer.valueOf(loanId));
-	        	    updateLoanView = new UpdateLoanView(controller, selectedLoan);
+	        	    updateLoanView = new UpdateLoanView(controller, selectedLoan, false);
 	        	    updateLoanView.setVisible(true);
 				} else {
 	       			JOptionPane.showMessageDialog(updateLoanView, "Selezionare il prestito per modificare!");

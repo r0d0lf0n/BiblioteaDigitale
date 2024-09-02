@@ -50,13 +50,15 @@ public class UpdateLoanView extends JFrame implements Observer {
 	private LoansController controller = null;
 	private LoanDAO loan = null;
 	private int rowsUpdated = -1;
+	private boolean isUserRegistered = false;
 	
 	/**
 	 * Create the frame.
 	 */
-	public UpdateLoanView(LoansController controller, LoanDAO loan) {
+	public UpdateLoanView(LoansController controller, LoanDAO loan, boolean registered) {
 		this.controller = controller;
 		this.loan = loan;
+		this.isUserRegistered = registered;
 		setTitle("Modifica prestito");
 		setBounds(100, 100, 450, 340);
         setLocationRelativeTo(null);
@@ -153,9 +155,21 @@ public class UpdateLoanView extends JFrame implements Observer {
 		contentPane.add(btnClose);
 		
 		JButton btnDelete = new JButton("Cancella");
+		if (isUserRegistered) {
+			btnDelete.setEnabled(true);
+		} else {
+			btnDelete.setEnabled(false);
+		}
+		
 		sl_contentPane.putConstraint(SpringLayout.EAST, btnSave, -6, SpringLayout.WEST, btnDelete);
 		sl_contentPane.putConstraint(SpringLayout.NORTH, btnDelete, 0, SpringLayout.NORTH, btnClose);
 		sl_contentPane.putConstraint(SpringLayout.EAST, btnDelete, -6, SpringLayout.WEST, btnClose);
+		
+		btnDelete.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	System.out.println("Deleting loan!");
+            }
+        });
 		contentPane.add(btnDelete);
 				
 		 this.addWindowListener(new WindowAdapter() {
