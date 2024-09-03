@@ -56,7 +56,7 @@ public class CatalogViewLite extends JFrame implements Observer{
 		SpringLayout sl_contentPane = new SpringLayout();
 		contentPane.setLayout(sl_contentPane);
 
-		JButton btnClose = new JButton("Close");
+		JButton btnClose = new JButton("Chiudi");
 		btnClose.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		        dispose();

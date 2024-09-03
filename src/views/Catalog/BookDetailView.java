@@ -96,7 +96,7 @@ public class BookDetailView extends JDialog implements Observer {
             textField.setMinimumSize(new Dimension(240, 30)); 
         }
 
-        JButton btnClose = new JButton("Close");
+        JButton btnClose = new JButton("Chiudi");
         JButton btnEdit = new JButton("Edit");
         JButton btnNew = new JButton("Inserisci");
         JButton btnDelete = new JButton("Elimina");
@@ -173,7 +173,7 @@ public class BookDetailView extends JDialog implements Observer {
                 if (!editing) {
                     toggleTextFieldEditing(true);
                     textFieldId.setEditable(false); // ID non editabile
-                    btnEdit.setText("Save");
+                    btnEdit.setText("Salvare");
                     btnDelete.setEnabled(false);
                     editing = true;
                 } else {

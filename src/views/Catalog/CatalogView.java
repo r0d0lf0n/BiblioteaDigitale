@@ -155,7 +155,7 @@ public class CatalogView extends JFrame implements Observer{
 		            }
 		        } else if (result == JFileChooser.CANCEL_OPTION) {
 		            JOptionPane.showMessageDialog(CatalogView.this, 
-		                "File selection cancelled.");
+		                "Selezione del file annullata.");
 		        }
 		    }
 		});
